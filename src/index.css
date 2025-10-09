@@ -23,11 +23,20 @@ a:hover {
 }
 
 body {
-  margin: 0;
+  /* --- Propiedades para centrar el contenido (Flexbox) --- */
   display: flex;
-  place-items: center;
-  min-width: 320px;
+  place-items: center; /* Es un atajo para align-items y justify-content */
   min-height: 100vh;
+  margin: 0;
+
+  /* --- Propiedades para la nueva imagen de fondo --- */
+  /* Reemplaza 'background.jpg' con el nombre de tu imagen */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/oso5.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 h1 {

@@ -1,0 +1,139 @@
+/* inicio.css */
+
+/* --- VARIABLES DE COLOR (Optimizado para Café y Blanco) --- */
+:root {
+  /* Colores de acento cálido */
+  --color-principal: #FFA07A;       /* Rosa Durazno (Botón, Tierno y Cálido) */
+  --color-hover: #F08060;           /* Tono de hover más oscuro */
+  --color-sombra-suave: rgba(255, 160, 122, 0.5); /* Sombra suave durazno */
+  
+  /* Colores neutros y de foco */
+  --color-fondo-card: #ffffff;      /* Blanco puro para la tarjeta */
+  --color-celeste-claro: #a3e0f9;  /* Borde sutil del input */
+  --color-celeste-foco: #007bff;   /* Foco del input (estándar limpio) */
+  --color-texto-gris: #6c757d;      /* Gris para los párrafos */
+  --color-texto-oscuro: #343a40;    /* Casi negro para etiquetas */
+}
+
+/* --- CONTENEDOR PRINCIPAL DEL FORMULARIO --- */
+.form-container {
+  max-width: 500px;
+  width: 90%; 
+  padding: 50px 30px; 
+  
+  /* Fondo y Borde */
+  background-color: var(--color-fondo-card);
+  border-radius: 20px;
+  border: 1px solid var(--color-celeste-claro); 
+  
+  /* Sombra profesional y elevada */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05); 
+  
+  /* Centrado Flexbox */
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+}
+
+/* --- TEXTOS Y TÍTULOS --- */
+.form-container h2 {
+  color: var(--color-texto-oscuro); /* Título en color oscuro para contraste */
+  font-weight: 800;
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+}
+
+.form-container p {
+  margin-bottom: 30px;
+  color: var(--color-texto-gris); 
+  font-size: 1rem;
+}
+
+/* --- GRUPOS DE CAMPO Y ETIQUETAS --- */
+.form-group-spacing {
+  margin-bottom: 25px;
+  width: 100%; 
+  max-width: 400px; 
+}
+
+.form-label {
+  display: block;
+  text-align: left;
+  font-weight: 700; 
+  color: var(--color-texto-oscuro); 
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+/* --- INPUTS Y FOCO (Más grandes y nítidos) --- */
+.input-icon-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.form-container .form-control {
+  background-color: #f8f9fa; /* Fondo muy claro */
+  border: 2px solid var(--color-celeste-claro); 
+  height: 54px; 
+  padding-left: 50px; 
+  transition: all 0.3s ease-in-out;
+  border-radius: 12px;
+  width: 100%;
+  color: var(--color-texto-oscuro); 
+}
+
+.form-container .form-control:focus {
+  border-color: var(--color-celeste-foco);
+  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.15); /* Sombra de foco celeste */
+  background-color: var(--color-fondo-card); 
+}
+
+.input-icon {
+  position: absolute;
+  left: 18px; 
+  top: 50%;
+  transform: translateY(-50%);
+  color: #adb5bd;
+  font-size: 1.1rem; 
+  transition: color 0.3s ease-in-out;
+}
+
+.form-container .form-control:focus ~ .input-icon {
+  color: var(--color-celeste-foco);
+}
+
+/* --- BOTÓN DE ENVÍO (Rosa Durazno) --- */
+.btn-submit {
+  background: var(--color-principal); 
+  border: none;
+  font-weight: 700; 
+  font-size: 1.1rem;
+  padding: 15px; 
+  border-radius: 12px; 
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease; 
+  width: 100%; 
+  max-width: 400px;
+  margin-top: 15px;
+}
+
+.btn-submit:hover {
+  transform: translateY(-3px); 
+  box-shadow: 0 6px 20px var(--color-sombra-suave); 
+  background: var(--color-hover); 
+}
+
+/* --- ENLACE DE CONTRASEÑA OLVIDADA --- */
+.forgot-password-link {
+  display: block;
+  margin-top: 30px; 
+  text-align: center;
+  color: var(--color-principal); /* Usamos el celeste para el acento del enlace */
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.forgot-password-link:hover {
+    color: #0056b3; /* Un celeste más oscuro al pasar el mouse */
+    text-decoration: underline;
+}
