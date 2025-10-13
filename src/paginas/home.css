@@ -1,0 +1,45 @@
+/* src/paginas/home.css */
+
+.home-container {
+  /* Hacemos que el contenedor ocupe el 100% del alto de la pantalla */
+  min-height: 100vh; 
+  width: 100%;
+
+  /* ¡La clave del centrado! */
+  display: flex;
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center;    /* Centra verticalmente */
+  
+  /* Un poco de padding por si el contenido se acerca a los bordes */
+  padding: 2rem;
+}
+
+.content-card {
+  /* Estilo del rectángulo blanco */
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 20px; /* Bordes redondeados como en tu login */
+  
+  /* Sombra sutil para darle profundidad */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  
+  /* Limitamos el ancho para que no se estire demasiado en pantallas grandes */
+  max-width: 800px; 
+  width: 100%;
+
+  /* Centramos el texto dentro de la tarjeta */
+  text-align: center;
+}
+
+/* Estilos para los textos dentro de la tarjeta */
+.content-card h1 {
+  color: #343a40;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.content-card p {
+  color: #6c757d;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}

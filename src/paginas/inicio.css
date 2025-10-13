@@ -137,3 +137,14 @@
     color: #0056b3; /* Un celeste más oscuro al pasar el mouse */
     text-decoration: underline;
 }
+.login-container-wrapper {
+  /* Hacemos que ocupe toda la pantalla para poder centrar verticalmente */
+  width: 100%;
+  min-height: 100vh; /* Ocupa el 100% del alto de la vista */
+  padding: 2rem; /* Mantenemos un espacio en los bordes */
+
+  /* Y aplicamos la misma magia de Flexbox que en home.css */
+  display: flex;
+  align-items: center;    /* ¡Centra verticalmente! */
+  justify-content: center; /* ¡Centra horizontalmente! */
+}
