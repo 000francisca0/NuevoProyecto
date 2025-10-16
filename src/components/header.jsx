@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './header.css';
 
 function Header() {
@@ -11,7 +12,7 @@ function Header() {
   return (
     <header className="main-header">
       <div className="logo-container">
-        <a href="/home">🧸</a>
+        <Link to="/home">🧸</Link>
       </div>
 
       {/* Navegación para escritorio */}
@@ -47,10 +48,10 @@ function Header() {
           <Link to="/blog" onClick={handleLinkClick}>Blog</Link>
           
           {/* Enlace del carrito añadido para la vista móvil */}
-          <a href="/carrito" onClick={handleLinkClick}>
+          <Link to="/carrito" onClick={handleLinkClick}>
             <img src="/carro.jpg" alt="Carrito de compras" className="cart-icon" />
             <span>Carrito</span>
-          </a>
+          </Link>
         </nav>
       )}
     </header>
