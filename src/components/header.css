@@ -111,3 +111,77 @@
     background-color: #f9f9f9;
   }
 }
+
+
+
+
+/* --- NUEVOS ESTILOS PARA EL ÍCONO DEL CARRITO --- */
+
+/* Contenedor del enlace del carrito */
+.cart-link {
+  display: flex;
+  align-items: center;
+  color: #333; /* Color inicial del ícono */
+}
+
+/* Estilo del ícono en sí */
+.cart-icon {
+  font-size: 28px; /* Tamaño del ícono */
+  transition: color 0.2s ease;
+}
+
+/* Efecto al pasar el mouse */
+.cart-link:hover .cart-icon {
+  color: #E57373;
+}
+
+/* Estilos para el carrito en el menú desplegable móvil */
+.mobile-cart-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Espacio entre el ícono y el texto */
+}
+
+.cart-icon-mobile {
+  font-size: 22px; /* Un poco más pequeño para el menú */
+}
+
+/* --- ESTILOS PARA LA INSIGNIA DEL CARRITO --- */
+
+/* El contenedor del enlace necesita ser relativo para posicionar la insignia */
+.cart-link {
+  position: relative;
+}
+
+/* La insignia o "burbuja" roja */
+.cart-badge {
+  position: absolute;
+  top: -5px;      /* Un poco arriba del ícono */
+  right: -10px;   /* Un poco a la derecha del ícono */
+  background-color: #dc3545; /* Un color rojo llamativo */
+  color: white;
+  border-radius: 50%; /* Para que sea un círculo perfecto */
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Estilos para la insignia en el menú móvil */
+.mobile-cart-link {
+  position: relative; /* También necesita ser relativo */
+}
+
+.cart-badge-mobile {
+  background-color: #dc3545;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: bold;
+  /* Se posiciona al lado, no encima, en el menú móvil */
+}

@@ -1,25 +1,22 @@
-import React from 'react';
-import './productCard.css'; // Enlazamos su hoja de estilos
+// 1. Importamos las herramientas de React que necesitamos
+import React, { useContext } from 'react';
+import { CartContext } from '../../context/cartContext'; // Importamos nuestro contexto del carrito
+import './productCard.css'; // Mantenemos el enlace a su hoja de estilos
 
-// Este componente recibe un 'producto' con sus datos (nombre, precio, etc.)
+// Este componente recibe un 'producto' con sus datos
 function ProductCard({ producto }) {
-  
-  // Función para simular "Ver Detalles"
+  // 2. Obtenemos la función addToCart de nuestro contexto global
+  const { addToCart } = useContext(CartContext);
+
+  // La función "Ver Detalles" se mantiene igual por ahora
   const handleViewDetails = () => {
     console.log(`Viendo detalles de: ${producto.nombre}`);
-    // Más adelante, esto podría llevar a una página nueva: navigate(`/producto/${producto.id}`);
   };
 
-  // Función para simular "Agregar al Carrito"
-  const handleAddToCart = () => {
-    console.log(`Agregando al carrito: ${producto.nombre}`);
-    // Aquí irá la lógica para el carrito de compras
-  };
-
-  // Damos formato al precio para que se vea como moneda ($19.990)
+  // La función para formatear el precio también se mantiene
   const formattedPrice = new Intl.NumberFormat('es-CL', {
     style: 'currency',
-    currency: 'CLP'
+    currency: 'CLP',
   }).format(producto.precio);
 
   return (
@@ -31,7 +28,10 @@ function ProductCard({ producto }) {
       </div>
       <div className="product-actions">
         <button className="btn-details" onClick={handleViewDetails}>Ver Detalle</button>
-        <button className="btn-add-cart" onClick={handleAddToCart}>Agregar</button>
+        {/* 3. Conectamos el botón para que llame a la función del contexto */}
+        <button className="btn-add-cart" onClick={() => addToCart(producto)}>
+          Agregar
+        </button>
       </div>
     </div>
   );

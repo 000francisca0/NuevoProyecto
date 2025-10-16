@@ -1,14 +1,14 @@
+// src/paginas/nosotros.jsx
 import React from 'react';
+import './nosotros.css';
 
-// El nombre de la función, "Nosotros", debe coincidir con el export.
 function Nosotros() {
   return (
-    <div>
+    // Añade la clase aquí
+    <div className="page-background-theme">
       <h1>Sobre Nosotros</h1>
-      <p>Esta es la página de "Nosotros".</p>
+      {/* ... tu contenido de nosotros ... */}
     </div>
   );
 }
-
-// --- AÑADE ESTA LÍNEA AL FINAL ---
 export default Nosotros;

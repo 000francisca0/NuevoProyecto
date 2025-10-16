@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { CartContext } from '../context/cartContext'; // 1. Importa el contexto del carrito
+import { BsCart4 } from 'react-icons/bs'; 
 import './header.css';
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  // 2. Usa el contexto para obtener los productos del carrito
+  const { cartItems } = useContext(CartContext); 
+
+  // 3. Calcula el número total de productos sumando las cantidades
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const handleLinkClick = () => {
     setMenuOpen(false);
@@ -11,10 +19,11 @@ function Header() {
   return (
     <header className="main-header">
       <div className="logo-container">
-        <a href="/home">🧸</a>
+        <Link to="/home">
+          <img src="/oso5.jpg" alt="Logo Peluchemania" className="logo" />
+        </Link>
       </div>
 
-      {/* Navegación para escritorio */}
       <nav className="nav-links">
         <Link to="/home">Home</Link>
         <Link to="/productos">Productos</Link>
@@ -23,34 +32,32 @@ function Header() {
       </nav>
 
       <div className="right-container">
-        {/* Este carrito solo se verá en la versión de escritorio  <img src="/oso5.jpg" alt="Logo Peluchemania" className="logo" />*/}
         <div className="cart-container">
-          <img src="/carro.jpg" alt="Carrito de compras" className="cart-icon" />
+          <Link to="/carro" className="cart-link">
+            <BsCart4 className="cart-icon" />
+            {/* 4. Muestra la "burbuja" con el total solo si es mayor a 0 */}
+            {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
+          </Link>
         </div>
 
-        {/* Icono de hamburguesa (visible solo en móvil) */}
         <div className="mobile-menu-icon" onClick={() => setMenuOpen(!menuOpen)}>
-          <div className="bar"></div>
           <div className="bar"></div>
           <div className="bar"></div>
           <div className="bar"></div>
         </div>
       </div>
 
-      {/* --- CAMBIO AQUÍ --- */}
-      {/* 2. Añadimos el enlace del carrito al menú desplegable */}
       {menuOpen && (
-      <nav className="mobile-nav-links">
+        <nav className="mobile-nav-links">
           <Link to="/home" onClick={handleLinkClick}>Home</Link>
           <Link to="/productos" onClick={handleLinkClick}>Productos</Link>
           <Link to="/nosotros" onClick={handleLinkClick}>Nosotros</Link>
           <Link to="/blog" onClick={handleLinkClick}>Blog</Link>
-          
-          {/* Enlace del carrito añadido para la vista móvil */}
-          <a href="/carrito" onClick={handleLinkClick}>
-            <img src="/carro.jpg" alt="Carrito de compras" className="cart-icon" />
+          <Link to="/carro" className="mobile-cart-link" onClick={handleLinkClick}>
+            <BsCart4 className="cart-icon-mobile" />
             <span>Carrito</span>
-          </a>
+            {totalItems > 0 && <span className="cart-badge-mobile">{totalItems}</span>}
+          </Link>
         </nav>
       )}
     </header>
