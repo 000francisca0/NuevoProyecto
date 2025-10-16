@@ -1,7 +1,6 @@
 // src/pages/Productos.jsx
 
 import React, { useEffect } from 'react';
-import './productos.css';
 import productosData from './productos.js';
 import ProductCard from "../components/ProductCard/productCard.jsx";
 

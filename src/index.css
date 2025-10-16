@@ -1,38 +1,44 @@
-/* --- Estilos Raíz Globales --- */
+/* ============================================== */
+/* === 1. ESTILOS GLOBALES Y VARIABLES (ROOT) === */
+/* ============================================== */
+
+/* Variables de color de inicio.css (más completas) */
 :root {
+  --color-principal: #FFA07A;
+  --color-hover: #F08060;
+  --color-sombra-suave: rgba(255, 160, 122, 0.5);
+  --color-fondo-card: #ffffff;
+  --color-celeste-claro: #a3e0f9;
+  --color-celeste-foco: #007bff;
+  --color-texto-gris: #6c757d;
+  --color-texto-oscuro: #343a40;
+  
+  /* Estilos Raíz Generales de index.css */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  /* Colores base para la aplicación (modo claro) */
   color: #213547;
   background-color: #ffffff;
 }
 
-/* --- Estilos del Body --- */
+/* --- Estilos del Body y Fondo Base --- */
 body {
   /* ¡MUY IMPORTANTE! Elimina los márgenes por defecto del navegador */
   margin: 0; 
   
-  /* Mantenemos tu imagen de fondo para toda la aplicación */
-  background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url('/oso5.jpg');
-  background-size: cover;       /* Cubre todo el espacio disponible */
-  background-position: center;  /* Centra la imagen */
-  background-repeat: no-repeat; /* Evita que la imagen se repita */
-  background-attachment: fixed; /* Fija el fondo para que no se mueva con el scroll */
+  /* FONDO BASE: Imagen oso5.jpg con capa blanca CLARA (0.2 de opacidad) */
+  background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url('/oso5.jpg'); /* */
+  background-size: cover;      
+  background-position: center; 
+  background-repeat: no-repeat;
+  background-attachment: fixed; 
   
-  /* Asegura que el body ocupe al menos toda la altura de la pantalla */
   min-height: 100vh;
+  /* Asegura una transición suave al cambiar de fondo (Ej: Home -> Productos) */
+  transition: background-image 0.5s ease; 
 }
 
-/* --- Aseguramos que el div raíz de React ocupe todo el espacio --- */
-/* Esto es importante para que los componentes de página puedan usar el 100% de la altura */
-#root {
-  width: 100%;
-  min-height: 100vh;
-}
-
-/* --- Estilos generales para enlaces (opcional pero recomendado) --- */
+/* Estilos generales para enlaces */
 a {
   font-weight: 500;
   color: #646cff;
@@ -42,16 +48,597 @@ a:hover {
   color: #535bf2;
 }
 
-/* src/index.css */
 
-/* --- TEMA DE FONDO PARA PÁGINAS INTERIORES --- */
-.page-background-theme {
-  /* 🎨 Capa blanca semi-transparente sobre la imagen */
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
-    url('/oso5.jpg'); /* Usamos /oso5.jpg porque la imagen está en la carpeta 'public' */
+/* ================================= */
+/* === 2. ESTILOS DE ESTRUCTURA === */
+/* ================================= */
 
+/* Estilos de App.css (#root) */
+#root {
+  /* Aseguramos que ocupe el ancho completo para que Home funcione bien */
+  width: 100%;
+  min-height: 100vh; 
+  padding: 0; 
+  text-align: initial; 
+}
+
+/* Estilos de MainLoyout.css (main) */
+.main-content {
+  /* ❌ ELIMINAR O COMENTAR ESTA LÍNEA para que la imagen del <body> se vea */
+  /* background-color: #f8f9fa; */
+  
+  /* Crea el espacio necesario para el header fijo de 70px */
+  padding-top: 70px;
+  
+  /* Puedes reducir esta altura si quieres, pero por ahora déjala */
+  min-height: calc(100vh - 70px); 
+  box-sizing: border-box;
+}
+/* ============================ */
+/* === 3. ESTILOS DE HEADER === */
+/* ============================ */
+
+/* Contenido de header.css */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding: 10px 40px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  box-sizing: border-box;
+  height: 70px;
+}
+
+.logo {
+  height: 50px;
+}
+
+.nav-links a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.nav-links a:hover {
+  color: #E57373;
+}
+
+.right-container {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+/* Estilo del ícono en sí */
+.cart-icon {
+  font-size: 28px; 
+  transition: color 0.2s ease;
+}
+
+/* Efecto al pasar el mouse */
+.cart-link:hover .cart-icon {
+  color: #E57373;
+}
+
+/* El contenedor del enlace necesita ser relativo para posicionar la insignia */
+.cart-link {
+  position: relative;
+}
+
+/* La insignia o "burbuja" roja */
+.cart-badge {
+  position: absolute;
+  top: -5px;      
+  right: -10px;  
+  background-color: #dc3545; 
+  color: white;
+  border-radius: 50%; 
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Estilos para el carrito en el menú desplegable móvil */
+.mobile-cart-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; 
+}
+
+.cart-icon-mobile {
+  font-size: 22px; 
+}
+
+.mobile-menu-icon {
+  display: none;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mobile-menu-icon .bar {
+  width: 25px;
+  height: 3px;
+  background-color: #333;
+  border-radius: 2px;
+}
+
+.mobile-nav-links {
+  display: none;
+}
+
+/* --- MEDIA QUERY PARA DISPOSITIVOS MÓVILES (continúa de header.css) --- */
+@media (max-width: 768px) {
+  .main-header {
+    padding: 10px 20px;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .mobile-menu-icon {
+    display: flex;
+  }
+
+  /* Estilos para el menú desplegable */
+  .mobile-nav-links {
+    position: absolute;
+    top: 70px; /* Debajo del header */
+    left: 0;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+    z-index: 999;
+    display: flex; /* Se muestra al estar 'open' */
+  }
+
+  .mobile-nav-links a {
+    margin: 10px 0;
+    padding: 5px 0;
+    width: 90%;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+  }
+
+  .mobile-nav-links a:last-child {
+    border-bottom: none;
+  }
+}
+
+/* ================================== */
+/* === 4. ESTILOS DE COMPONENTES === */
+/* ================================== */
+
+/* Contenido de productCard.css */
+.product-card {
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden; 
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+}
+
+.product-image {
+  width: 100%;
+  height: 250px;           
+  object-fit: cover;       
+}
+
+.product-info {
+  padding: 20px;
+  flex-grow: 1; 
+}
+
+.product-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+  color: #343a40;
+}
+
+.product-price {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #E57373;
+  margin: 0 0 15px 0;
+}
+
+.product-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px 20px 20px;
+}
+
+.btn-details {
+  background: none;
+  border: 2px solid var(--color-principal);
+  color: var(--color-principal);
+  font-weight: 700;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.btn-details:hover {
+  background: var(--color-principal);
+  color: white;
+}
+
+.btn-add-cart {
+  background: var(--color-principal);
+  border: none;
+  color: white;
+  font-weight: 700;
+  padding: 12px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-add-cart:hover {
+  background: var(--color-hover);
+  transform: translateY(-2px);
+}
+
+/* =========================== */
+/* === 5. ESTILOS DE PÁGINA === */
+/* =========================== */
+
+/* --- Inicio / Login (Fondo Oscuro) --- */
+/* Contenido de inicio.css (Background más oscuro) */
+.login-container-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  padding: 2rem;
+
+  /* FONDO DE LOGIN: Imagen oso5.jpg con capa de degradado negra OSCURA (0.4 de opacidad) */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/oso5.jpg');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed; /* Fija el fondo para que no se mueva con el scroll */
+  background-repeat: no-repeat;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.form-container {
+  max-width: 500px;
+  width: 90%;
+  padding: 50px 30px;
+  background-color: var(--color-fondo-card);
+  border-radius: 20px; 
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2); 
+}
+
+/* Estilos de inputs, botones de login, etc. (continúa de inicio.css) */
+.form-container h2 {
+  text-align: center;
+  color: var(--color-texto-oscuro); 
+  margin-bottom: 30px;
+  font-weight: 700;
+}
+
+.form-group-spacing {
+  margin-bottom: 25px; 
+}
+
+.form-label {
+  font-weight: 600;
+  color: var(--color-texto-oscuro); 
+  margin-bottom: 8px;
+}
+
+.input-icon-wrapper {
+  position: relative;
+}
+
+.form-container .form-control {
+  padding: 12px 15px 12px 45px; /* Más padding a la izquierda para el icono */
+  border-radius: 10px;
+  border: 1px solid var(--color-celeste-claro);
+  box-shadow: none; /* Eliminar el box-shadow de Bootstrap por defecto */
+}
+
+.form-container .form-control:focus {
+  border-color: var(--color-celeste-foco);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #adb5bd;
+  font-size: 1.1rem; 
+  transition: color 0.3s ease-in-out;
+}
+
+.form-container .form-control:focus ~ .input-icon {
+  color: var(--color-celeste-foco);
+}
+
+.btn-submit {
+  background: var(--color-principal); 
+  border: none;
+  font-weight: 700; 
+  font-size: 1.1rem;
+  padding: 15px; 
+  border-radius: 12px; 
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease; 
+  width: 100%; 
+  max-width: 400px;
+  margin-top: 15px;
+}
+
+.btn-submit:hover {
+  transform: translateY(-3px); 
+  box-shadow: 0 6px 20px var(--color-sombra-suave); 
+  background: var(--color-hover); 
+}
+
+.forgot-password-link {
+  display: block;
+  margin-top: 30px; 
+  text-align: center;
+  color: var(--color-texto-gris);
+  text-decoration: none;
+}
+
+.forgot-password-link:hover {
+  color: var(--color-texto-oscuro);
+  text-decoration: underline;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
+
+/* --- Home (Fondo Sin Opacidad Adicional) --- */
+/* Contenido de home.css */
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: calc(100vh - 70px); 
+}
+
+.short-page-container {
+  /* Mantener el centrado horizontal y el padding */
+  padding: 40px 2rem; /* Aumenta el padding vertical si lo necesitas */
+  width: 100%;
+  box-sizing: border-box;
+  
+  /* Centrado horizontal de la tarjeta (si no lo hace content-card) */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Alinea arriba en lugar de al centro vertical */
+  
+  /* IMPORTANTE: ELIMINA el min-height excesivo */
+  min-height: auto; 
+}
+
+/* ESTILO DEL BODY PARA HOME (Sin capa de opacidad adicional) */
+body.home-background {
+  /* Al no definir un linear-gradient aquí, usa el fondo base del body */
+}
+
+.content-card {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  max-width: 800px; 
+  width: 100%;
+  text-align: center;
+}
+
+.content-card h1 {
+  color: #343a40;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.content-card p {
+  color: #6c757d;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.btn-products {
+  background: #FFA07A;
+  color: white;
+  border: none;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 15px 30px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-products:hover {
+  transform: translateY(-3px);
+  background: #F08060;
+  box-shadow: 0 6px 20px rgba(255, 160, 122, 0.5);
+}
+
+/* --- Productos (Fondo con Opacidad Blanca Fuerte) --- */
+/* Contenido de productos.css */
+.productos-page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem; 
+  box-sizing: border-box;
+}
+
+.productos-title {
+  text-align: center;
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #343a40;
+  margin-bottom: 2.5rem;
+}
+
+.productos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+/* ESTILO DEL BODY PARA PRODUCTOS (Capa blanca fuerte) */
+body.productos-background {
+  /* 🎨 Capa blanca semi-transparente sobre la imagen */
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), /* Capa blanca con 85% de opacidad */
+    url('/oso5.jpg'); /* Tu imagen de fondo */
+  
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* --- Carro / Carrito de Compras --- */
+/* Contenido de carro.css */
+.cart-page-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  /* Espacio para el header (70px) + margen */
+  padding: 100px 2rem 2rem 2rem; 
+}
+.cart-title {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.empty-cart {
+  text-align: center;
+  padding: 4rem;
+  background-color: #fff;
+  border-radius: 15px;
+}
+.btn-go-products {
+  background: #FFA07A;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+}
+.cart-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+.cart-item {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+.cart-item-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 1rem;
+}
+.cart-item-details {
+  flex-grow: 1;
+}
+.cart-item-name {
+  font-weight: bold;
+  display: block;
+}
+.cart-item-quantity {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.cart-item-quantity button {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  background-color: #f8f9fa;
+  cursor: pointer;
+}
+.cart-summary {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  height: fit-content;
+}
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 1rem 0;
+  padding-top: 10px;
+  border-top: 1px dashed #eee;
+}
+.btn-checkout {
+  width: 100%;
+  background: #4CAF50; /* Un color de confirmación, puedes usar el principal si quieres */
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.btn-checkout:hover {
+  background: #43A047;
+}
+
+/* === Estilos para Nosotros y Blog (Usan el .main-content de MainLayout) === */
+.page-background-theme {
+  /* Este es el contenedor que ya tienes en nosotros.jsx y blog.jsx. */
+  /* El fondo se lo da el MainLayout (.main-content) */
+  padding: 2rem;
+  /* Asegura que ocupe todo el espacio dentro del MainLayout */
+  min-height: calc(100vh - 70px - 4rem); 
 }

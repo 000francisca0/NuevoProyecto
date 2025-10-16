@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { CartContext } from '../context/cartContext'; // 1. Importa el contexto del carrito
 import { BsCart4 } from 'react-icons/bs'; 
-import './header.css';
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);

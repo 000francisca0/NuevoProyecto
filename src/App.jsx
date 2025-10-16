@@ -14,6 +14,8 @@ import Productos from './paginas/productos.jsx';
 import Nosotros from './paginas/nosotros.jsx';
 import Blog from './paginas/blog.jsx';
 import Carro from './paginas/carro.jsx'; // <-- Se importa la nueva página
+import CuidadoPeluches from './paginas/blogs/CuidadoPeluches.jsx';
+import HistoriaOsoTeddy from './paginas/blogs/HistoriaOsoTeddy.jsx';
 
 function App() {
   return (
@@ -29,8 +31,11 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/productos" element={<Productos />} />
             <Route path="/nosotros" element={<Nosotros />} />
-            <Route path="/blog" element={<Blog />} />
             <Route path="/carro" element={<Carro />} /> {/* <-- 3. Se añade la ruta para el carrito */}
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/cuidado-de-peluches" element={<CuidadoPeluches />} />
+            <Route path="/blog/historia-oso-teddy" element={<HistoriaOsoTeddy />} />
+
           </Route>
           
           {/* Ruta para páginas no encontradas */}

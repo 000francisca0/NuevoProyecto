@@ -4,7 +4,6 @@ import Button from "react-bootstrap/Button";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 
-import "./inicio.css";
 
 function LoginForm() {
   const navigate = useNavigate();

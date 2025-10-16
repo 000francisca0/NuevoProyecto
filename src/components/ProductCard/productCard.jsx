@@ -1,7 +1,6 @@
 // 1. Importamos las herramientas de React que necesitamos
 import React, { useContext } from 'react';
 import { CartContext } from '../../context/cartContext'; // Importamos nuestro contexto del carrito
-import './productCard.css'; // Mantenemos el enlace a su hoja de estilos
 
 // Este componente recibe un 'producto' con sus datos
 function ProductCard({ producto }) {

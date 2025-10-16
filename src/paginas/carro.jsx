@@ -2,7 +2,6 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { CartContext } from '../context/cartContext';
-import './carro.css';
 
 function Carro() {
   const { cartItems, addToCart, removeFromCart } = useContext(CartContext);
