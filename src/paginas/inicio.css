@@ -1,35 +1,45 @@
-/* inicio.css */
-
-/* --- VARIABLES DE COLOR (Optimizado para Café y Blanco) --- */
+/* --- VARIABLES DE COLOR --- */
 :root {
-  /* Colores de acento cálido */
-  --color-principal: #FFA07A;       /* Rosa Durazno (Botón, Tierno y Cálido) */
-  --color-hover: #F08060;           /* Tono de hover más oscuro */
-  --color-sombra-suave: rgba(255, 160, 122, 0.5); /* Sombra suave durazno */
-  
-  /* Colores neutros y de foco */
-  --color-fondo-card: #ffffff;      /* Blanco puro para la tarjeta */
-  --color-celeste-claro: #a3e0f9;  /* Borde sutil del input */
-  --color-celeste-foco: #007bff;   /* Foco del input (estándar limpio) */
-  --color-texto-gris: #6c757d;      /* Gris para los párrafos */
-  --color-texto-oscuro: #343a40;    /* Casi negro para etiquetas */
+  --color-principal: #FFA07A;
+  --color-hover: #F08060;
+  --color-sombra-suave: rgba(255, 160, 122, 0.5);
+  --color-fondo-card: #ffffff;
+  --color-celeste-claro: #a3e0f9;
+  --color-celeste-foco: #007bff;
+  --color-texto-gris: #6c757d;
+  --color-texto-oscuro: #343a40;
 }
 
-/* --- CONTENEDOR PRINCIPAL DEL FORMULARIO --- */
+/* --- CONTENEDOR PRINCIPAL (CON FONDO OSCURECIDO) --- */
+.login-container-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  padding: 2rem;
+
+  /* --- CAMBIO AQUÍ: FONDO OSCURO --- */
+  /* 1. La primera capa es un degradado negro semitransparente. */
+  /* 2. La segunda capa es tu imagen de ositos. */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/oso5.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+  /* Centrado con Flexbox */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* --- CONTENEDOR DEL FORMULARIO --- */
 .form-container {
   max-width: 500px;
   width: 90%; 
   padding: 50px 30px; 
-  
-  /* Fondo y Borde */
   background-color: var(--color-fondo-card);
   border-radius: 20px;
   border: 1px solid var(--color-celeste-claro); 
-  
-  /* Sombra profesional y elevada */
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05); 
-  
-  /* Centrado Flexbox */
   display: flex;
   flex-direction: column;
   align-items: center; 
@@ -37,16 +47,18 @@
 
 /* --- TEXTOS Y TÍTULOS --- */
 .form-container h2 {
-  color: var(--color-texto-oscuro); /* Título en color oscuro para contraste */
+  color: var(--color-texto-oscuro);
   font-weight: 800;
   font-size: 2.2rem;
   margin-bottom: 10px;
+  text-align: center; /* Centramos el título */
 }
 
 .form-container p {
   margin-bottom: 30px;
   color: var(--color-texto-gris); 
   font-size: 1rem;
+  text-align: center; /* Centramos el párrafo */
 }
 
 /* --- GRUPOS DE CAMPO Y ETIQUETAS --- */
@@ -65,14 +77,14 @@
   width: 100%;
 }
 
-/* --- INPUTS Y FOCO (Más grandes y nítidos) --- */
+/* --- INPUTS Y FOCO --- */
 .input-icon-wrapper {
   position: relative;
   width: 100%;
 }
 
 .form-container .form-control {
-  background-color: #f8f9fa; /* Fondo muy claro */
+  background-color: #f8f9fa;
   border: 2px solid var(--color-celeste-claro); 
   height: 54px; 
   padding-left: 50px; 
@@ -84,7 +96,7 @@
 
 .form-container .form-control:focus {
   border-color: var(--color-celeste-foco);
-  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.15); /* Sombra de foco celeste */
+  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.15);
   background-color: var(--color-fondo-card); 
 }
 
@@ -102,7 +114,7 @@
   color: var(--color-celeste-foco);
 }
 
-/* --- BOTÓN DE ENVÍO (Rosa Durazno) --- */
+/* --- BOTÓN DE ENVÍO --- */
 .btn-submit {
   background: var(--color-principal); 
   border: none;
@@ -122,29 +134,44 @@
   background: var(--color-hover); 
 }
 
-/* --- ENLACE DE CONTRASEÑA OLVIDADA --- */
+/* --- ENLACE DE CONTRASEÑA --- */
 .forgot-password-link {
   display: block;
   margin-top: 30px; 
   text-align: center;
-  color: var(--color-principal); /* Usamos el celeste para el acento del enlace */
+  color: var(--color-principal);
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease;
 }
 
 .forgot-password-link:hover {
-    color: #0056b3; /* Un celeste más oscuro al pasar el mouse */
-    text-decoration: underline;
+  color: #0056b3;
+  text-decoration: underline;
 }
-.login-container-wrapper {
-  /* Hacemos que ocupe toda la pantalla para poder centrar verticalmente */
-  width: 100%;
-  min-height: 100vh; /* Ocupa el 100% del alto de la vista */
-  padding: 2rem; /* Mantenemos un espacio en los bordes */
 
-  /* Y aplicamos la misma magia de Flexbox que en home.css */
-  display: flex;
-  align-items: center;    /* ¡Centra verticalmente! */
-  justify-content: center; /* ¡Centra horizontalmente! */
+/* --- MENSAJES DE ERROR --- */
+.error-message {
+  color: #dc3545;
+  font-size: 0.875em;
+  text-align: left;
+  width: 100%;
+  margin-top: 5px;
+}
+
+/* --- MEDIA QUERY PARA MÓVILES --- */
+@media screen and (max-width: 480px) {
+  .login-container-wrapper {
+    padding: 1rem;
+  }
+  .form-container {
+    padding: 30px 20px;
+    width: 100%;
+  }
+  .form-container h2 {
+    font-size: 1.8rem;
+  }
+  .forgot-password-link {
+    margin-top: 20px;
+  }
 }

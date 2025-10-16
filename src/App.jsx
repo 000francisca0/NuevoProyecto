@@ -1,25 +1,37 @@
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
-import './App.css';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-// *** Importaciones actualizadas para la carpeta 'paginas' ***
-import LoginForm from './paginas/inicio.jsx'; 
+// 1. Importa tu Layout
+// Este componente ya contiene el <Header />
+import MainLayout from './components/layout/MainLayout';
+
+// 2. Importa TODAS tus páginas
+import LoginForm from './paginas/inicio.jsx'; // Renombrado de 'inicio' a 'LoginForm' para claridad
 import Home from './paginas/home.jsx'; 
+import Productos from './paginas/productos.jsx';
+import Nosotros from './paginas/nosotros.jsx';
+import Blog from './paginas/blog.jsx';
 
 function App() {
   return (
     <BrowserRouter>
-      <div className="App">
-        <Routes>
-          {/* Ruta principal: Muestra el formulario de inicio de sesión */}
-          <Route path="/" element={<LoginForm />} />
-          
-          {/* Ruta de destino: Muestra la página principal después del login */}
+      <Routes>
+        {/* --- RUTA SIN HEADER --- */}
+        {/* La ruta raíz "/" muestra tu formulario de login, sin el Layout. */}
+        <Route path="/" element={<LoginForm />} />
+
+        {/* --- RUTAS CON HEADER --- */}
+        {/* Usamos MainLayout como plantilla para todas las rutas que necesitan el header. */}
+        <Route element={<MainLayout />}>
           <Route path="/home" element={<Home />} />
-          
-          {/* Ruta 404 para URLs no encontradas */}
-          <Route path="*" element={<h1>404 | Página no encontrada</h1>} />
-        </Routes>
-      </div>
+          <Route path="/productos" element={<Productos />} />
+          <Route path="/nosotros" element={<Nosotros />} />
+          <Route path="/blog" element={<Blog />} />
+        </Route>
+        
+        {/* Ruta para páginas no encontradas */}
+        <Route path="*" element={<h1>404 | Página no encontrada</h1>} />
+      </Routes>
     </BrowserRouter>
   );
 }

@@ -1,18 +1,38 @@
+/* --- Estilos Raíz Globales --- */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Colores base para la aplicación (modo claro) */
+  color: #213547;
+  background-color: #ffffff;
 }
 
+/* --- Estilos del Body --- */
+body {
+  /* ¡MUY IMPORTANTE! Elimina los márgenes por defecto del navegador */
+  margin: 0; 
+  
+  /* Mantenemos tu imagen de fondo para toda la aplicación */
+  background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url('/oso5.jpg');
+  background-size: cover;       /* Cubre todo el espacio disponible */
+  background-position: center;  /* Centra la imagen */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+  background-attachment: fixed; /* Fija el fondo para que no se mueva con el scroll */
+  
+  /* Asegura que el body ocupe al menos toda la altura de la pantalla */
+  min-height: 100vh;
+}
+
+/* --- Aseguramos que el div raíz de React ocupe todo el espacio --- */
+/* Esto es importante para que los componentes de página puedan usar el 100% de la altura */
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* --- Estilos generales para enlaces (opcional pero recomendado) --- */
 a {
   font-weight: 500;
   color: #646cff;
@@ -20,58 +40,4 @@ a {
 }
 a:hover {
   color: #535bf2;
-}
-
-body {
-  /* --- Propiedades para centrar el contenido (Flexbox) --- */
-  display: flex;
-  place-items: center; /* Es un atajo para align-items y justify-content */
-  min-height: 100vh;
-  margin: 0;
-
-  /* --- Propiedades para la nueva imagen de fondo --- */
-  /* Reemplaza 'background.jpg' con el nombre de tu imagen */
-  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/oso5.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }

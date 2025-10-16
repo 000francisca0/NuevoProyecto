@@ -1,0 +1,113 @@
+/* --- ESTILOS GENERALES (SIN CAMBIOS) --- */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding: 10px 40px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  box-sizing: border-box;
+  height: 70px;
+}
+
+.logo {
+  height: 50px;
+}
+
+.nav-links a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.nav-links a:hover {
+  color: #E57373;
+}
+
+.right-container {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.cart-icon {
+  height: 30px;
+}
+
+.mobile-menu-icon {
+  display: none;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mobile-menu-icon .bar {
+  width: 25px;
+  height: 3px;
+  background-color: #333;
+  border-radius: 2px;
+}
+
+.mobile-nav-links {
+  display: none;
+}
+
+/* --- MEDIA QUERY PARA DISPOSITIVOS MÓVILES --- */
+@media screen and (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+  
+  /* --- CAMBIO AQUÍ --- */
+  /* 1. Ocultamos el ícono del carrito en la cabecera principal en móvil */
+  .right-container .cart-container {
+    display: none;
+  }
+
+  .mobile-menu-icon {
+    display: flex;
+  }
+
+  .mobile-nav-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 999;
+  }
+
+  .mobile-nav-links a {
+    padding: 15px 0;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    border-bottom: 1px solid #f0f0f0;
+    /* Añadimos flex para alinear el ícono del carrito (si lo tuviera) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Espacio entre el ícono y el texto */
+  }
+  
+  .mobile-nav-links a:last-child {
+    border-bottom: none;
+  }
+
+  .mobile-nav-links a:hover {
+    background-color: #f9f9f9;
+  }
+}
