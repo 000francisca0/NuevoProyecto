@@ -16,10 +16,10 @@ function Header() {
 
       {/* Navegación para escritorio */}
       <nav className="nav-links">
-        <a href="/home">Home</a>
-        <a href="/productos">Productos</a>
-        <a href="/nosotros">Nosotros</a>
-        <a href="/blog">Blog</a>
+        <Link to="/home">Home</Link>
+        <Link to="/productos">Productos</Link>
+        <Link to="/nosotros">Nosotros</Link>
+        <Link to="/blog">Blog</Link>
       </nav>
 
       <div className="right-container">
@@ -40,11 +40,11 @@ function Header() {
       {/* --- CAMBIO AQUÍ --- */}
       {/* 2. Añadimos el enlace del carrito al menú desplegable */}
       {menuOpen && (
-        <nav className="mobile-nav-links">
-          <a href="/home" onClick={handleLinkClick}>Home</a>
-          <a href="/productos" onClick={handleLinkClick}>Productos</a>
-          <a href="/nosotros" onClick={handleLinkClick}>Nosotros</a>
-          <a href="/blog" onClick={handleLinkClick}>Blog</a>
+      <nav className="mobile-nav-links">
+          <Link to="/home" onClick={handleLinkClick}>Home</Link>
+          <Link to="/productos" onClick={handleLinkClick}>Productos</Link>
+          <Link to="/nosotros" onClick={handleLinkClick}>Nosotros</Link>
+          <Link to="/blog" onClick={handleLinkClick}>Blog</Link>
           
           {/* Enlace del carrito añadido para la vista móvil */}
           <a href="/carrito" onClick={handleLinkClick}>
