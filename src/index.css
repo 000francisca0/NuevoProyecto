@@ -319,7 +319,7 @@ a:hover {
 .login-container-wrapper {
   width: 100%;
   min-height: 100vh;
-  padding: 2rem;
+  padding: 20px;
 
   /* FONDO DE LOGIN: Imagen oso5.jpg con capa de degradado negra OSCURA (0.4 de opacidad) */
   background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/oso5.jpg');
@@ -444,20 +444,6 @@ a:hover {
   min-height: calc(100vh - 70px); 
 }
 
-.short-page-container {
-  /* Mantener el centrado horizontal y el padding */
-  padding: 40px 2rem; /* Aumenta el padding vertical si lo necesitas */
-  width: 100%;
-  box-sizing: border-box;
-  
-  /* Centrado horizontal de la tarjeta (si no lo hace content-card) */
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* Alinea arriba en lugar de al centro vertical */
-  
-  /* IMPORTANTE: ELIMINA el min-height excesivo */
-  min-height: auto; 
-}
 
 /* ESTILO DEL BODY PARA HOME (Sin capa de opacidad adicional) */
 body.home-background {
@@ -739,3 +725,62 @@ body.productos-background {
     margin: 10px 0;
   }
 }
+
+/* ============================================== */
+/* === ESTILOS PARA HEADER (AUTENTICACION) === */
+/* ============================================== */
+
+/* 1. ESTILOS DE ESCRITORIO (Separación) */
+.auth-links {
+  display: flex;
+  align-items: center;
+  gap: 25px; /* Más espacio entre Login y Registro */
+  margin-right: 30px; /* Separación del carrito */
+}
+
+.auth-link {
+  text-decoration: none;
+  color: var(--color-texto-oscuro); 
+  font-weight: 500;
+  transition: color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 5px; 
+  white-space: nowrap;
+}
+
+/* Estilo para el botón de Registro */
+.btn-register {
+  background-color: var(--color-celeste-foco); 
+  color: white !important;
+  padding: 8px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.1s;
+  border: 1px solid var(--color-celeste-foco);
+}
+
+.btn-register:hover {
+  background-color: #0056b3; 
+  color: white !important;
+  transform: translateY(-1px);
+}
+
+/* 2. MEDIA QUERY: OCULTAR EN PANTALLAS PEQUEÑAS (Móvil) */
+@media (max-width: 768px) {
+  /* ESTA ES LA REGLA CLAVE */
+  .auth-links {
+    /* Ocultar este contenedor por completo cuando el menú hamburguesa es visible */
+    display: none; 
+  }
+}
+
+/* ---------------------------------------------------- */
+/* OPCIONAL: Si el carrito también se ve mal en móvil, asegúrate que esté en el "right-container" */
+
+.right-container {
+  display: flex;
+  align-items: center;
+}
+
+/* Y si quieres que el carrito se mantenga visible y solo se oculten los links de auth,  
+   la regla de .auth-links: { display: none; } es suficiente. */

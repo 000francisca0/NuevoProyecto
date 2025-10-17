@@ -10,10 +10,12 @@ const Footer = () => {
       <div className="footer-content">
         
         {/* Sección 1: Navegación */}
+        {/* Sección 1: Navegación */}
         <div className="footer-section">
           <h3>Navegación</h3>
           <ul>
-            <li><Link to="/home">Home</Link></li>
+            {/* 💡 Cambia to="/home" a to="/" */}
+            <li><Link to="/">Home</Link></li> 
             <li><Link to="/productos">Productos</Link></li>
             <li><Link to="/nosotros">Nosotros</Link></li>
             <li><Link to="/blog">Blog</Link></li>

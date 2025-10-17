@@ -1,37 +1,40 @@
+// src/App.jsx
+
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-// 1. Importa el proveedor del carrito que creamos
 import { CartProvider } from './context/cartContext'; 
 
 // Importa el Layout
 import MainLayout from './components/layout/MainLayout';
 
-// Importa TODAS tus páginas, incluyendo la nueva del carrito
+// Importa TODAS tus páginas
 import LoginForm from './paginas/inicio.jsx';
+import RegisterForm from './paginas/registro.jsx'; // Nuevo componente de registro
 import Home from './paginas/home.jsx'; 
 import Productos from './paginas/productos.jsx';
 import Nosotros from './paginas/nosotros.jsx';
 import Blog from './paginas/blog.jsx';
-import Carro from './paginas/carro.jsx'; // <-- Se importa la nueva página
-import CuidadoPeluches from './paginas/blogs/CuidadoPeluches.jsx';
-import HistoriaOsoTeddy from './paginas/blogs/HistoriaOsoTeddy.jsx';
+import Carro from './paginas/carro.jsx'; 
+import CuidadoPeluches from './paginas/blogs/cuidadoPeluches.jsx';
+import HistoriaOsoTeddy from './paginas/blogs/historiaOsoTeddy.jsx';
+
 
 function App() {
   return (
-    // 2. Envuelve toda la aplicación con el CartProvider
     <CartProvider>
       <BrowserRouter>
         <Routes>
-          {/* --- RUTA SIN HEADER --- */}
-          <Route path="/" element={<LoginForm />} />
+          {/* 💡 RUTAS DE AUTENTICACIÓN (SIN HEADER/FOOTER) */}
+          <Route path="/inicio" element={<LoginForm />} />
+          <Route path="/registro" element={<RegisterForm />} /> 
 
-          {/* --- RUTAS CON HEADER --- */}
+          {/* 💡 RUTAS CON LAYOUT (Ahora Home está aquí) */}
           <Route element={<MainLayout />}>
-            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Home />} /> {/* RUTA RAÍZ es ahora Home */}
             <Route path="/productos" element={<Productos />} />
             <Route path="/nosotros" element={<Nosotros />} />
-            <Route path="/carro" element={<Carro />} /> {/* <-- 3. Se añade la ruta para el carrito */}
+            <Route path="/carro" element={<Carro />} /> 
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/cuidado-de-peluches" element={<CuidadoPeluches />} />
             <Route path="/blog/historia-oso-teddy" element={<HistoriaOsoTeddy />} />
