@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom';
 // La ruta '../header/header' sube un nivel desde 'layout' a 'components',
 // y luego entra a la carpeta 'header' para encontrar el archivo 'header.jsx'
 import Header from '../header.jsx';
+import Footer from '../footer.jsx';
 
 function MainLayout() {
   return (
@@ -13,6 +14,7 @@ function MainLayout() {
         {/* Aquí se renderizará el contenido de cada página (Productos, Nosotros, etc.) */}
         <Outlet />
       </main>
+      <Footer />
     </>
   );
 }

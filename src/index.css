@@ -12,6 +12,7 @@
   --color-celeste-foco: #007bff;
   --color-texto-gris: #6c757d;
   --color-texto-oscuro: #343a40;
+  --color-fondo-footer: #fffafa; /* Blanco con un toque rosa (similar al tono de un peluche) */
   
   /* Estilos Raíz Generales de index.css */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -333,12 +334,16 @@ a:hover {
 }
 
 .form-container {
-  max-width: 500px;
-  width: 90%;
-  padding: 50px 30px;
   background-color: var(--color-fondo-card);
-  border-radius: 20px; 
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2); 
+  border: 1px solid var(--color-celeste-claro);
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1),
+              0 5px 15px rgba(0, 0, 0, 0.05);
+  max-width: 420px;
+  width: 90%;
+  padding: 50px 40px;
+  box-sizing: border-box;
+  text-align: center; /* títulos centrados */
 }
 
 /* Estilos de inputs, botones de login, etc. (continúa de inicio.css) */
@@ -504,13 +509,16 @@ body.home-background {
 /* --- Productos (Fondo con Opacidad Blanca Fuerte) --- */
 /* Contenido de productos.css */
 .productos-page-container {
+  /* Ya no necesitamos el background-color ni el padding-top aquí */
   max-width: 1200px;
   margin: 0 auto;
+  /* Solo necesitamos el padding para los lados y abajo */
   padding: 2rem; 
   box-sizing: border-box;
 }
 
 .productos-title {
+  padding: 15px 30px;
   text-align: center;
   font-size: 2.8rem;
   font-weight: 800;
@@ -523,17 +531,16 @@ body.home-background {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
 }
+/* Añade esto al final de tu archivo productos.css */
 
-/* ESTILO DEL BODY PARA PRODUCTOS (Capa blanca fuerte) */
 body.productos-background {
   /* 🎨 Capa blanca semi-transparente sobre la imagen */
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), /* Capa blanca con 85% de opacidad */
-    url('/oso5.jpg'); /* Tu imagen de fondo */
-  
+    url('./oso5.jpg'); /* Tu imagen de fondo */
+
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
   background-attachment: fixed;
 }
 
@@ -641,4 +648,94 @@ body.productos-background {
   padding: 2rem;
   /* Asegura que ocupe todo el espacio dentro del MainLayout */
   min-height: calc(100vh - 70px - 4rem); 
+}
+
+
+.footer-container {
+  /* Fondo muy claro, similar al del cuerpo de la página */
+
+  background-color: var(--color-fondo-footer); /* Asegura que el footer tenga un color de fondo definido */
+  border-top: 3px solid var(--color-borde-superior); /* Un borde superior más notorio */  
+  /* Estilos que ya tenías */
+  padding: 40px 20px 20px;
+  color: #333;
+  font-family: 'Arial', sans-serif;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap; /* Para que se adapte bien en móviles */
+  justify-content: space-around;
+  max-width: 1200px;
+  margin: 0 auto; /* Centra el contenido */
+  padding-bottom: 20px;
+}
+
+.footer-section {
+  flex: 1; /* Distribuye el espacio */
+  min-width: 200px; /* Ancho mínimo para cada columna */
+  margin: 15px;
+}
+
+.footer-section h3 {
+  color: var(--color-texto-principal);
+  font-size: 1.2em;
+  margin-bottom: 15px;
+  border-bottom: 1px dashed var(--color-borde); /* Un separador juguetón */
+  padding-bottom: 5px;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section li {
+  margin-bottom: 8px;
+}
+
+.footer-section a {
+  text-decoration: none;
+  color: var(--color-texto-principal);
+  transition: color 0.3s;
+}
+
+.footer-section a:hover {
+  color: #ff69b4; /* Un rosa amigable al pasar el ratón */
+}
+
+/* Enlaces de redes sociales */
+.social-links a {
+  font-size: 1.5em;
+  margin-right: 15px;
+  display: inline-block;
+  transform: scale(1);
+  transition: transform 0.2s;
+}
+
+.social-links a:hover {
+  transform: scale(1.15); /* Efecto de "rebote" */
+}
+
+/* Sección de Copyright */
+.footer-bottom {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid var(--color-borde);
+  font-size: 0.9em;
+  color: #666; /* Un gris suave */
+}
+
+/* Estilos de adaptación para móviles */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+  }
+  .footer-section {
+    text-align: center;
+    min-width: 100%;
+    margin: 10px 0;
+  }
 }
