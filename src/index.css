@@ -1,786 +1,251 @@
-/* ============================================== */
-/* === 1. ESTILOS GLOBALES Y VARIABLES (ROOT) === */
-/* ============================================== */
-
-/* Variables de color de inicio.css (más completas) */
-:root {
-  --color-principal: #FFA07A;
-  --color-hover: #F08060;
-  --color-sombra-suave: rgba(255, 160, 122, 0.5);
-  --color-fondo-card: #ffffff;
-  --color-celeste-claro: #a3e0f9;
-  --color-celeste-foco: #007bff;
-  --color-texto-gris: #6c757d;
-  --color-texto-oscuro: #343a40;
-  --color-fondo-footer: #fffafa; /* Blanco con un toque rosa (similar al tono de un peluche) */
-  
-  /* Estilos Raíz Generales de index.css */
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color: #213547;
-  background-color: #ffffff;
+/* ===================================
+   GLOBAL VARIABLES + BASE RESET
+   =================================== */
+:root{
+  --brand: #FFA07A;
+  --brand-hover: #F08060;
+  --accent: #007bff;
+  --muted: #6c757d;
+  --text: #213547;
+  --card-bg: #fff;
+  --shadow-soft: rgba(0,0,0,0.08);
+  --shadow-strong: rgba(0,0,0,0.12);
+  --bg-footer: #fffafa;
+  --max-width: 1200px;
+  --header-h: 70px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Open Sans", "Helvetica Neue", sans-serif;
+  color-scheme: light;
 }
 
-/* --- Estilos del Body y Fondo Base --- */
-body {
-  /* ¡MUY IMPORTANTE! Elimina los márgenes por defecto del navegador */
-  margin: 0; 
-  
-  /* FONDO BASE: Imagen oso5.jpg con capa blanca CLARA (0.2 de opacidad) */
-  background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url('/oso5.jpg'); /* */
-  background-size: cover;      
-  background-position: center; 
-  background-repeat: no-repeat;
-  background-attachment: fixed; 
-  
-  min-height: 100vh;
-  /* Asegura una transición suave al cambiar de fondo (Ej: Home -> Productos) */
-  transition: background-image 0.5s ease; 
+/* Reset small defaults */
+*{box-sizing: border-box}
+html,body,#root{height:100%}
+body{
+  margin:0;
+  color:var(--text);
+  line-height:1.45;
+  background: url('/oso5.jpg') center/cover no-repeat fixed;
+  background-color: #fff; 
+  min-height: 100vh;  transition: background-image .4s ease;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
 
-/* Estilos generales para enlaces */
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-
-/* ================================= */
-/* === 2. ESTILOS DE ESTRUCTURA === */
-/* ================================= */
-
-/* Estilos de App.css (#root) */
-#root {
-  /* Aseguramos que ocupe el ancho completo para que Home funcione bien */
-  width: 100%;
-  min-height: 100vh; 
-  padding: 0; 
-  text-align: initial; 
-}
-
-/* Estilos de MainLoyout.css (main) */
-.main-content {
-  /* ❌ ELIMINAR O COMENTAR ESTA LÍNEA para que la imagen del <body> se vea */
-  /* background-color: #f8f9fa; */
-  
-  /* Crea el espacio necesario para el header fijo de 70px */
-  padding-top: 70px;
-  
-  /* Puedes reducir esta altura si quieres, pero por ahora déjala */
-  min-height: calc(100vh - 70px); 
-  box-sizing: border-box;
-}
-/* ============================ */
-/* === 3. ESTILOS DE HEADER === */
-/* ============================ */
-
-/* Contenido de header.css */
-.main-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: white;
-  padding: 10px 40px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  box-sizing: border-box;
-  height: 70px;
-}
-
-.logo {
-  height: 50px;
-}
-
-.nav-links a {
-  margin: 0 15px;
-  text-decoration: none;
-  color: #333;
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.nav-links a:hover {
-  color: #E57373;
-}
-
-.right-container {
-  display: flex;
-  align-items: center;
-  gap: 25px;
-}
-
-/* Estilo del ícono en sí */
-.cart-icon {
-  font-size: 28px; 
-  transition: color 0.2s ease;
-}
-
-/* Efecto al pasar el mouse */
-.cart-link:hover .cart-icon {
-  color: #E57373;
-}
-
-/* El contenedor del enlace necesita ser relativo para posicionar la insignia */
-.cart-link {
-  position: relative;
-}
-
-/* La insignia o "burbuja" roja */
-.cart-badge {
-  position: absolute;
-  top: -5px;      
-  right: -10px;  
-  background-color: #dc3545; 
-  color: white;
-  border-radius: 50%; 
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-/* Estilos para el carrito en el menú desplegable móvil */
-.mobile-cart-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px; 
-}
-
-.cart-icon-mobile {
-  font-size: 22px; 
-}
-
-.mobile-menu-icon {
-  display: none;
-  cursor: pointer;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.mobile-menu-icon .bar {
-  width: 25px;
-  height: 3px;
-  background-color: #333;
-  border-radius: 2px;
-}
-
-.mobile-nav-links {
-  display: none;
-}
-
-/* --- MEDIA QUERY PARA DISPOSITIVOS MÓVILES (continúa de header.css) --- */
-@media (max-width: 768px) {
-  .main-header {
-    padding: 10px 20px;
-  }
-
-  .nav-links {
-    display: none;
-  }
-
-  .mobile-menu-icon {
-    display: flex;
-  }
-
-  /* Estilos para el menú desplegable */
-  .mobile-nav-links {
-    position: absolute;
-    top: 70px; /* Debajo del header */
-    left: 0;
-    width: 100%;
-    background-color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    flex-direction: column;
-    align-items: center;
-    padding: 10px 0;
-    z-index: 999;
-    display: flex; /* Se muestra al estar 'open' */
-  }
-
-  .mobile-nav-links a {
-    margin: 10px 0;
-    padding: 5px 0;
-    width: 90%;
-    text-align: center;
-    border-bottom: 1px solid #eee;
-  }
-
-  .mobile-nav-links a:last-child {
-    border-bottom: none;
-  }
-}
-
-/* ================================== */
-/* === 4. ESTILOS DE COMPONENTES === */
-/* ================================== */
-
-/* Contenido de productCard.css */
-.product-card {
-  background-color: white;
-  border-radius: 15px;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
-  overflow: hidden; 
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
-}
-
-.product-image {
-  width: 100%;
-  height: 250px;           
-  object-fit: cover;       
-}
-
-.product-info {
-  padding: 20px;
-  flex-grow: 1; 
-}
-
-.product-name {
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin: 0 0 10px 0;
-  color: #343a40;
-}
-
-.product-price {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #E57373;
-  margin: 0 0 15px 0;
-}
-
-.product-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px 20px 20px;
-}
-
-.btn-details {
-  background: none;
-  border: 2px solid var(--color-principal);
-  color: var(--color-principal);
-  font-weight: 700;
-  padding: 10px 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease, color 0.3s ease;
-}
-
-.btn-details:hover {
-  background: var(--color-principal);
-  color: white;
-}
-
-.btn-add-cart {
-  background: var(--color-principal);
-  border: none;
-  color: white;
-  font-weight: 700;
-  padding: 12px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.btn-add-cart:hover {
-  background: var(--color-hover);
-  transform: translateY(-2px);
-}
-
-/* =========================== */
-/* === 5. ESTILOS DE PÁGINA === */
-/* =========================== */
-
-/* --- Inicio / Login (Fondo Oscuro) --- */
-/* Contenido de inicio.css (Background más oscuro) */
-.login-container-wrapper {
-  width: 100%;
-  min-height: 100vh;
-  padding: 20px;
-
-  /* FONDO DE LOGIN: Imagen oso5.jpg con capa de degradado negra OSCURA (0.4 de opacidad) */
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/oso5.jpg');
+/* Background variants (use by adding class on <body> or top container) */
+.bg-base {
+  background-image: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)), url('/oso5.jpg');
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-  
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
+  background-attachment: fixed;
 }
-
-.form-container {
-  background-color: var(--color-fondo-card);
-  border: 1px solid var(--color-celeste-claro);
-  border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1),
-              0 5px 15px rgba(0, 0, 0, 0.05);
-  max-width: 420px;
-  width: 90%;
-  padding: 50px 40px;
-  box-sizing: border-box;
-  text-align: center; /* títulos centrados */
+.bg-dark-layer {
+  background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/oso5.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
-
-/* Estilos de inputs, botones de login, etc. (continúa de inicio.css) */
-.form-container h2 {
-  text-align: center;
-  color: var(--color-texto-oscuro); 
-  margin-bottom: 30px;
-  font-weight: 700;
-}
-
-.form-group-spacing {
-  margin-bottom: 25px; 
-}
-
-.form-label {
-  font-weight: 600;
-  color: var(--color-texto-oscuro); 
-  margin-bottom: 8px;
-}
-
-.input-icon-wrapper {
-  position: relative;
-}
-
-.form-container .form-control {
-  padding: 12px 15px 12px 45px; /* Más padding a la izquierda para el icono */
-  border-radius: 10px;
-  border: 1px solid var(--color-celeste-claro);
-  box-shadow: none; /* Eliminar el box-shadow de Bootstrap por defecto */
-}
-
-.form-container .form-control:focus {
-  border-color: var(--color-celeste-foco);
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-
-.input-icon {
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #adb5bd;
-  font-size: 1.1rem; 
-  transition: color 0.3s ease-in-out;
-}
-
-.form-container .form-control:focus ~ .input-icon {
-  color: var(--color-celeste-foco);
-}
-
-.btn-submit {
-  background: var(--color-principal); 
-  border: none;
-  font-weight: 700; 
-  font-size: 1.1rem;
-  padding: 15px; 
-  border-radius: 12px; 
-  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease; 
-  width: 100%; 
-  max-width: 400px;
-  margin-top: 15px;
-}
-
-.btn-submit:hover {
-  transform: translateY(-3px); 
-  box-shadow: 0 6px 20px var(--color-sombra-suave); 
-  background: var(--color-hover); 
-}
-
-.forgot-password-link {
-  display: block;
-  margin-top: 30px; 
-  text-align: center;
-  color: var(--color-texto-gris);
-  text-decoration: none;
-}
-
-.forgot-password-link:hover {
-  color: var(--color-texto-oscuro);
-  text-decoration: underline;
-}
-
-.error-message {
-  color: #dc3545;
-  font-size: 0.85rem;
-  margin-top: 5px;
-}
-
-/* --- Home (Fondo Sin Opacidad Adicional) --- */
-/* Contenido de home.css */
-.home-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-  width: 100%;
-  box-sizing: border-box;
-  min-height: calc(100vh - 70px); 
-}
-
-
-/* ESTILO DEL BODY PARA HOME (Sin capa de opacidad adicional) */
-body.home-background {
-  /* Al no definir un linear-gradient aquí, usa el fondo base del body */
-}
-
-.content-card {
-  background-color: #ffffff;
-  padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  max-width: 800px; 
-  width: 100%;
-  text-align: center;
-}
-
-.content-card h1 {
-  color: #343a40;
-  font-size: 2.5rem;
-  font-weight: 800;
-  margin-bottom: 1rem;
-}
-
-.content-card p {
-  color: #6c757d;
-  font-size: 1.1rem;
-  line-height: 1.6;
-  margin-bottom: 2rem;
-}
-
-.btn-products {
-  background: #FFA07A;
-  color: white;
-  border: none;
-  font-weight: 700;
-  font-size: 1.1rem;
-  padding: 15px 30px;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
-}
-
-.btn-products:hover {
-  transform: translateY(-3px);
-  background: #F08060;
-  box-shadow: 0 6px 20px rgba(255, 160, 122, 0.5);
-}
-
-/* --- Productos (Fondo con Opacidad Blanca Fuerte) --- */
-/* Contenido de productos.css */
-.productos-page-container {
-  /* Ya no necesitamos el background-color ni el padding-top aquí */
-  max-width: 1200px;
-  margin: 0 auto;
-  /* Solo necesitamos el padding para los lados y abajo */
-  padding: 2rem; 
-  box-sizing: border-box;
-}
-
-.productos-title {
-  padding: 15px 30px;
-  text-align: center;
-  font-size: 2.8rem;
-  font-weight: 800;
-  color: #343a40;
-  margin-bottom: 2.5rem;
-}
-
-.productos-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-}
-/* Añade esto al final de tu archivo productos.css */
-
-body.productos-background {
-  /* 🎨 Capa blanca semi-transparente sobre la imagen */
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), /* Capa blanca con 85% de opacidad */
-    url('./oso5.jpg'); /* Tu imagen de fondo */
-
+.bg-white-layer {
+  background-image: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), url('/oso5.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
 }
 
-/* --- Carro / Carrito de Compras --- */
-/* Contenido de carro.css */
-.cart-page-container {
-  max-width: 1000px;
+/* Layout helpers */
+.container {
+  max-width: var(--max-width);
   margin: 0 auto;
-  /* Espacio para el header (70px) + margen */
-  padding: 100px 2rem 2rem 2rem; 
-}
-.cart-title {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-.empty-cart {
-  text-align: center;
-  padding: 4rem;
-  background-color: #fff;
-  border-radius: 15px;
-}
-.btn-go-products {
-  background: #FFA07A;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: bold;
-}
-.cart-content {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 2rem;
-}
-.cart-item {
-  display: flex;
-  align-items: center;
-  background-color: #fff;
-  padding: 1rem;
-  border-radius: 10px;
-  margin-bottom: 1rem;
-}
-.cart-item-image {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 5px;
-  margin-right: 1rem;
-}
-.cart-item-details {
-  flex-grow: 1;
-}
-.cart-item-name {
-  font-weight: bold;
-  display: block;
-}
-.cart-item-quantity {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.cart-item-quantity button {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 1px solid #ccc;
-  background-color: #f8f9fa;
-  cursor: pointer;
-}
-.cart-summary {
-  background-color: #fff;
-  padding: 1.5rem;
-  border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  height: fit-content;
-}
-.summary-total {
-  display: flex;
-  justify-content: space-between;
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin: 1rem 0;
-  padding-top: 10px;
-  border-top: 1px dashed #eee;
-}
-.btn-checkout {
-  width: 100%;
-  background: #4CAF50; /* Un color de confirmación, puedes usar el principal si quieres */
-  color: white;
-  border: none;
-  padding: 15px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-.btn-checkout:hover {
-  background: #43A047;
-}
-
-/* === Estilos para Nosotros y Blog (Usan el .main-content de MainLayout) === */
-.page-background-theme {
-  /* Este es el contenedor que ya tienes en nosotros.jsx y blog.jsx. */
-  /* El fondo se lo da el MainLayout (.main-content) */
   padding: 2rem;
-  /* Asegura que ocupe todo el espacio dentro del MainLayout */
-  min-height: calc(100vh - 70px - 4rem); 
+  width: 100%;
+}
+.main-content {
+  padding-top: var(--header-h); /* space for fixed header */
+  min-height: calc(100vh - var(--header-h));
 }
 
-
-.footer-container {
-  /* Fondo muy claro, similar al del cuerpo de la página */
-
-  background-color: var(--color-fondo-footer); /* Asegura que el footer tenga un color de fondo definido */
-  border-top: 3px solid var(--color-borde-superior); /* Un borde superior más notorio */  
-  /* Estilos que ya tenías */
-  padding: 40px 20px 20px;
-  color: #333;
-  font-family: 'Arial', sans-serif;
-}
-
-.footer-content {
-  display: flex;
-  flex-wrap: wrap; /* Para que se adapte bien en móviles */
-  justify-content: space-around;
-  max-width: 1200px;
-  margin: 0 auto; /* Centra el contenido */
-  padding-bottom: 20px;
-}
-
-.footer-section {
-  flex: 1; /* Distribuye el espacio */
-  min-width: 200px; /* Ancho mínimo para cada columna */
-  margin: 15px;
-}
-
-.footer-section h3 {
-  color: var(--color-texto-principal);
-  font-size: 1.2em;
-  margin-bottom: 15px;
-  border-bottom: 1px dashed var(--color-borde); /* Un separador juguetón */
-  padding-bottom: 5px;
-}
-
-.footer-section ul {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-section li {
-  margin-bottom: 8px;
-}
-
-.footer-section a {
-  text-decoration: none;
-  color: var(--color-texto-principal);
-  transition: color 0.3s;
-}
-
-.footer-section a:hover {
-  color: #ff69b4; /* Un rosa amigable al pasar el ratón */
-}
-
-/* Enlaces de redes sociales */
-.social-links a {
-  font-size: 1.5em;
-  margin-right: 15px;
-  display: inline-block;
-  transform: scale(1);
-  transition: transform 0.2s;
-}
-
-.social-links a:hover {
-  transform: scale(1.15); /* Efecto de "rebote" */
-}
-
-/* Sección de Copyright */
-.footer-bottom {
+/* Centered card commonly used in Home / Nosotros / Forms */
+.center-card {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 25px var(--shadow-soft);
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
   text-align: center;
-  margin-top: 20px;
-  padding-top: 15px;
-  border-top: 1px solid var(--color-borde);
-  font-size: 0.9em;
-  color: #666; /* Un gris suave */
 }
 
-/* Estilos de adaptación para móviles */
-@media (max-width: 768px) {
-  .footer-content {
-    flex-direction: column;
-    align-items: center;
-  }
-  .footer-section {
-    text-align: center;
-    min-width: 100%;
-    margin: 10px 0;
-  }
+/* Generic grid for products / posts */
+.grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
 }
 
-/* ============================================== */
-/* === ESTILOS PARA HEADER (AUTENTICACION) === */
-/* ============================================== */
-
-/* 1. ESTILOS DE ESCRITORIO (Separación) */
-.auth-links {
+/* ===================================
+   CARD (single reusable component)
+   =================================== */
+.card {
+  background: var(--card-bg);
+  border-radius: 15px;
+  overflow: hidden;
   display: flex;
-  align-items: center;
-  gap: 25px; /* Más espacio entre Login y Registro */
-  margin-right: 30px; /* Separación del carrito */
+  flex-direction: column;
+  transition: transform .25s ease, box-shadow .25s ease;
+  box-shadow: 0 8px 15px var(--shadow-soft);
+  text-decoration: none; /* links using .card should remove default link styles */
+  color: inherit;
+}
+.card:hover{ transform: translateY(-5px); box-shadow: 0 12px 20px var(--shadow-strong); }
+
+.card-media{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+  display:block;
+}
+.card-body{
+  padding: 1.25rem;
+  flex-grow:1;
+}
+.card-title{ font-size: 1.2rem; font-weight: 700; margin:0 0 .5rem; color:#343a40; }
+.card-sub{ color:var(--muted); margin-bottom: .75rem; font-size: .98rem; }
+
+/* actions area placed at bottom */
+.card-actions{
+  padding: .75rem 1.25rem 1.25rem;
+  display:flex;
+  gap:.75rem;
+  justify-content: space-between;
+  align-items:center;
 }
 
-.auth-link {
-  text-decoration: none;
-  color: var(--color-texto-oscuro); 
-  font-weight: 500;
-  transition: color 0.3s;
-  display: flex;
-  align-items: center;
-  gap: 5px; 
-  white-space: nowrap;
+/* ===================================
+   BUTTONS (reusable)
+   =================================== */
+.btn {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  padding: .65rem 1rem;
+  border-radius:var(--radius-md);
+  cursor:pointer;
+  border: none;
+  text-decoration:none;
+}
+.btn-ghost {
+  background: transparent;
+  border: 2px solid var(--brand);
+  color: var(--brand);
+}
+.btn-ghost:hover{ background:var(--brand); color:#fff; }
+.btn-primary {
+  background: var(--brand);
+  color: #fff;
+}
+.btn-primary:hover{ background: var(--brand-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,160,122,.45); }
+
+/* small utility for product list primary CTA */
+.btn-block{ width:100%; }
+
+/* ===================================
+   FORM STYLES (single form style reused for login & register)
+   =================================== */
+.form-shell{
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 2.5rem;
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+  border: 1px solid rgba(163,224,249,.6);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+  text-align:left;
+}
+.form-shell h2{ text-align:center; margin-top:0; margin-bottom:1rem; font-weight:700; color:#343a40; }
+.form-group{ margin-bottom: 1.25rem; display:flex; flex-direction:column; gap:.5rem;}
+.form-label{ font-weight:600; color:#343a40;}
+.input-icon-wrapper{ position:relative; }
+.form-control{
+  padding: 12px 14px 12px 44px;
+  border-radius: 10px;
+  border:1px solid rgba(163,224,249,.6);
+  outline:none;
+  font-size:1rem;
+}
+.form-control:focus{ box-shadow: 0 0 0 .2rem rgba(0,123,255,.12); border-color: var(--accent); }
+.input-icon{
+  position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#adb5bd; font-size:1.05rem;
+}
+.error-message{ color: #dc3545; font-size:.9rem; margin-top:.25rem; }
+.server-error-message{ color:#b02a37; background: rgba(220,53,69,.06); padding:.5rem; border-radius:8px; margin-bottom:1rem; }
+
+/* ===================================
+   CART LAYOUT (small, composable pieces)
+   =================================== */
+.cart-layout{ max-width:1000px; margin:0 auto; padding: 4rem 1rem 2rem; }
+.cart-grid{ display:grid; grid-template-columns: 2fr 1fr; gap:1.25rem; }
+.cart-item{
+  display:flex; gap:1rem; align-items:center; background:var(--card-bg);
+  padding:1rem; border-radius:10px;
+}
+.cart-item img{ width:80px; height:80px; object-fit:cover; border-radius:6px; }
+.qty-controls{ display:flex; gap:.5rem; align-items:center; }
+
+/* cart summary box */
+.summary{
+  background:var(--card-bg); padding:1.25rem; border-radius:12px; box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+}
+.summary-total{ display:flex; justify-content:space-between; font-weight:700; margin-top:1rem; border-top:1px dashed #eee; padding-top:.75rem; }
+
+/* ===================================
+   HEADER / NAV (single header style)
+   =================================== */
+.header-fixed{
+  position:fixed; left:0; right:0; top:0; height:var(--header-h);
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
+  padding: .6rem 2.5rem; background: #fff; box-shadow:0 2px 5px rgba(0,0,0,.08); z-index:1000;
+}
+.header-left{ display:flex; align-items:center; gap:1rem; }
+.logo{ height:50px; display:block; }
+.nav{ display:flex; gap: .9rem; align-items:center; }
+.nav a{ text-decoration:none; color:#333; font-weight:600; font-size:0.98rem; }
+.nav a:hover{ color: var(--brand-hover); }
+.right-controls{ display:flex; align-items:center; gap:1rem; }
+.cart-link{ position:relative; display:inline-flex; align-items:center; gap:.35rem; text-decoration:none; color:inherit; }
+.badge{ position:absolute; top:-6px; right:-8px; background:#dc3545; color:#fff; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; }
+
+/* Mobile header behavior */
+.mobile-toggle{ display:none; cursor:pointer; }
+@media (max-width:768px){
+  .nav{ display:none; }
+  .mobile-toggle{ display:flex; align-items:center; gap:6px; }
+  .grid{ gap:1rem; }
+  .cart-grid{ grid-template-columns: 1fr; }
+  .container{ padding:1rem; }
+  .form-shell{ padding:1.5rem; }
 }
 
-/* Estilo para el botón de Registro */
-.btn-register {
-  background-color: var(--color-celeste-foco); 
-  color: white !important;
-  padding: 8px 15px;
-  border-radius: 5px;
-  transition: background-color 0.3s, transform 0.1s;
-  border: 1px solid var(--color-celeste-foco);
+/* ===================================
+   FOOTER
+   =================================== */
+.footer{
+  background: var(--bg-footer); padding: 2.5rem 1rem; margin-top:2rem; border-top:1px solid rgba(0,0,0,0.04);
 }
+.footer-inner{ max-width:var(--max-width); margin:0 auto; display:flex; gap:2rem; justify-content:space-between; flex-wrap:wrap;}
+.footer-section{ min-width:200px; flex:1; margin: .5rem 0; }
+.footer h3{ margin-top:0; color:#333; font-size:1.05rem; }
+.footer a{ color:inherit; text-decoration:none; }
+.footer .social a{ margin-right: .6rem; font-size:1.15rem; }
 
-.btn-register:hover {
-  background-color: #0056b3; 
-  color: white !important;
-  transform: translateY(-1px);
-}
-
-/* 2. MEDIA QUERY: OCULTAR EN PANTALLAS PEQUEÑAS (Móvil) */
-@media (max-width: 768px) {
-  /* ESTA ES LA REGLA CLAVE */
-  .auth-links {
-    /* Ocultar este contenedor por completo cuando el menú hamburguesa es visible */
-    display: none; 
-  }
-}
-
-/* ---------------------------------------------------- */
-/* OPCIONAL: Si el carrito también se ve mal en móvil, asegúrate que esté en el "right-container" */
-
-.right-container {
-  display: flex;
-  align-items: center;
-}
-
-/* Y si quieres que el carrito se mantenga visible y solo se oculten los links de auth,  
-   la regla de .auth-links: { display: none; } es suficiente. */
+/* tiny utility classes */
+.text-center{ text-align:center; }
+.mb-1{ margin-bottom: .5rem; }
+.mb-2{ margin-bottom: 1rem; }
+.p-0{ padding:0; }
+.hidden-sm{ display:inline; }
+@media (max-width:768px){ .hidden-sm{ display:none; } }

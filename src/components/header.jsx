@@ -1,86 +1,99 @@
-// src/components/header.jsx (VERSIÓN CORREGIDA Y COMPLETA)
-
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { CartContext } from '../context/cartContext'; 
-import { BsCart4 } from 'react-icons/bs'; 
-// 💡 Importamos el ícono de Usuario
-import { FaUser } from 'react-icons/fa'; 
+import { CartContext } from '../context/cartContext';
+import { BsCart4 } from 'react-icons/bs';
+import { FaUser } from 'react-icons/fa';
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { cartItems } = useContext(CartContext); 
-
+  const { cartItems } = useContext(CartContext);
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
-  const handleLinkClick = () => {
-    setMenuOpen(false);
-  };
+  const handleLinkClick = () => setMenuOpen(false);
 
   return (
-    <header className="main-header">
-      <div className="logo-container">
-        {/* Usamos "/" como la nueva ruta Home */}
-        <Link to="/"> 
-          <img src="/oso5.jpg" alt="Logo Peluchemania" className="logo" />
-        </Link>
-      </div>
-
-      <nav className="nav-links">
-        {/* Links principales */}
-        <Link to="/">Home</Link>
-        <Link to="/productos">Productos</Link>
-        <Link to="/nosotros">Nosotros</Link>
-        <Link to="/blog">Blog</Link>
-      </nav>
-
-      <div className="right-container">
-        
-        {/* 💡 AÑADIMOS ESTE BLOQUE DE CÓDIGO CON LAS CLASES CSS */}
-        <div className="auth-links">
-          <Link to="/inicio" className="auth-link">
-            <FaUser className="auth-icon" /> 
-            <span>Iniciar Sesión</span>
-          </Link>
-          <Link to="/registro" className="auth-link btn-register">
-            <span>Regístrate</span>
-          </Link>
-        </div>
-        
-        <div className="cart-container">
-          <Link to="/carro" className="cart-link">
-            <BsCart4 className="cart-icon" />
-            {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
+    <>
+      <header className="header-fixed" role="banner">
+        <div className="header-left">
+          <Link to="/" onClick={handleLinkClick}>
+            <img src="/oso5.jpg" alt="Logo Peluchemania" className="logo" />
           </Link>
         </div>
 
-        {/* Ícono de menú móvil */}
-        <div className="mobile-menu-icon" onClick={() => setMenuOpen(!menuOpen)}>
-          <div className="bar"></div>
-          <div className="bar"></div>
-          <div className="bar"></div>
-        </div>
-      </div>
+        <nav className="nav" role="navigation" aria-label="Main navigation">
+          <Link to="/">Home</Link>
+          <Link to="/productos">Productos</Link>
+          <Link to="/nosotros">Nosotros</Link>
+          <Link to="/blog">Blog</Link>
+        </nav>
 
-      {/* Menú Móvil Desplegable */}
+        <div className="right-controls">
+          <div className="auth-links hidden-sm" style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+            <Link to="/inicio" className="auth-link" aria-label="Iniciar sesión">
+              <FaUser style={{ marginRight: 6 }} />
+              <span>Iniciar Sesión</span>
+            </Link>
+
+            <Link to="/registro" className="btn btn-primary" style={{ padding: '6px 10px', fontWeight: 600 }}>
+              Regístrate
+            </Link>
+          </div>
+
+          <div>
+            <Link to="/carro" className="cart-link" aria-label="Carrito de compras">
+              <BsCart4 className="cart-icon" />
+              {totalItems > 0 && <span className="badge">{totalItems}</span>}
+            </Link>
+          </div>
+
+          <button
+            className="mobile-toggle"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-expanded={menuOpen}
+            aria-label="Abrir menú"
+            style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
+          >
+            {/* Simple hamburger using CSS bars or text fallback */}
+            <div style={{ width: 22, height: 2, background: '#333', marginBottom: 5 }} />
+            <div style={{ width: 18, height: 2, background: '#333', marginBottom: 5 }} />
+            <div style={{ width: 14, height: 2, background: '#333' }} />
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile dropdown - small inline style so it appears on mobile when open.
+          You can move styles into CSS later (class .mobile-nav). */}
       {menuOpen && (
-        <nav className="mobile-nav-links">
+        <nav
+          className="mobile-nav"
+          style={{
+            position: 'absolute',
+            top: '70px',
+            left: 0,
+            right: 0,
+            background: '#fff',
+            zIndex: 999,
+            boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '12px 10px',
+            gap: 8,
+          }}
+          aria-label="Mobile navigation"
+        >
           <Link to="/" onClick={handleLinkClick}>Home</Link>
           <Link to="/productos" onClick={handleLinkClick}>Productos</Link>
           <Link to="/nosotros" onClick={handleLinkClick}>Nosotros</Link>
           <Link to="/blog" onClick={handleLinkClick}>Blog</Link>
-          
-          {/* Enlaces de Auth en menú móvil */}
           <Link to="/inicio" onClick={handleLinkClick}>Iniciar Sesión</Link>
           <Link to="/registro" onClick={handleLinkClick}>Registrarse</Link>
-          
-          <Link to="/carro" className="mobile-cart-link" onClick={handleLinkClick}>
-            <BsCart4 className="cart-icon-mobile" />
-            <span>Carrito ({totalItems})</span>
+
+          <Link to="/carro" onClick={handleLinkClick} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <BsCart4 /> <span>Carrito ({totalItems})</span>
           </Link>
         </nav>
       )}
-    </header>
+    </>
   );
 }
 

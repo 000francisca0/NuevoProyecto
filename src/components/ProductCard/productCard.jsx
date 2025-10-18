@@ -1,38 +1,44 @@
-// 1. Importamos las herramientas de React que necesitamos
 import React, { useContext } from 'react';
-import { CartContext } from '../../context/cartContext'; // Importamos nuestro contexto del carrito
+import { CartContext } from '../../context/cartContext';
 
-// Este componente recibe un 'producto' con sus datos
 function ProductCard({ producto }) {
-  // 2. Obtenemos la función addToCart de nuestro contexto global
   const { addToCart } = useContext(CartContext);
 
-  // La función "Ver Detalles" se mantiene igual por ahora
   const handleViewDetails = () => {
     console.log(`Viendo detalles de: ${producto.nombre}`);
   };
 
-  // La función para formatear el precio también se mantiene
   const formattedPrice = new Intl.NumberFormat('es-CL', {
     style: 'currency',
     currency: 'CLP',
   }).format(producto.precio);
 
   return (
-    <div className="product-card">
-      <img src={producto.imagen} alt={producto.nombre} className="product-image" />
-      <div className="product-info">
-        <h3 className="product-name">{producto.nombre}</h3>
-        <p className="product-price">{formattedPrice}</p>
+    <article className="card" role="article" aria-label={producto.nombre}>
+      {/* media */}
+      <img src={producto.imagen} alt={producto.nombre} className="card-media" />
+
+      {/* body */}
+      <div className="card-body">
+        <h3 className="card-title">{producto.nombre}</h3>
+        <p className="card-sub">{formattedPrice}</p>
       </div>
-      <div className="product-actions">
-        <button className="btn-details" onClick={handleViewDetails}>Ver Detalle</button>
-        {/* 3. Conectamos el botón para que llame a la función del contexto */}
-        <button className="btn-add-cart" onClick={() => addToCart(producto)}>
+
+      {/* actions */}
+      <div className="card-actions">
+        <button type="button" className="btn btn-ghost" onClick={handleViewDetails}>
+          Ver Detalle
+        </button>
+
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() => addToCart(producto)}
+        >
           Agregar
         </button>
       </div>
-    </div>
+    </article>
   );
 }
 

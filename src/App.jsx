@@ -18,6 +18,7 @@ import Blog from './paginas/blog.jsx';
 import Carro from './paginas/carro.jsx'; 
 import CuidadoPeluches from './paginas/blogs/cuidadoPeluches.jsx';
 import HistoriaOsoTeddy from './paginas/blogs/historiaOsoTeddy.jsx';
+import './index.css';
 
 
 function App() {

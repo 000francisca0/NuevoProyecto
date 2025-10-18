@@ -1,4 +1,3 @@
-// src/paginas/carro.jsx
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { CartContext } from '../context/cartContext';
@@ -13,44 +12,55 @@ function Carro() {
   }).format(price);
 
   return (
-    <div className="cart-page-container">
-      <h1 className="cart-title">Tu Carrito de Compras</h1>
-      {cartItems.length === 0 ? (
-        <div className="empty-cart">
-          <p>Tu carrito está vacío.</p>
-          <Link to="/productos" className="btn-go-products">Ver Productos</Link>
-        </div>
-      ) : (
-        <div className="cart-content">
-          <div className="cart-items-list">
-            {cartItems.map(item => (
-              <div key={item.id} className="cart-item">
-                <img src={item.imagen} alt={item.nombre} className="cart-item-image" />
-                <div className="cart-item-details">
-                  <span className="cart-item-name">{item.nombre}</span>
-                  <span className="cart-item-price">{formatPrice(item.precio)}</span>
-                </div>
-                <div className="cart-item-quantity">
-                  <button onClick={() => removeFromCart(item)}>-</button>
-                  <span>{item.quantity}</span>
-                  <button onClick={() => addToCart(item)}>+</button>
-                </div>
-                <div className="cart-item-subtotal">
-                  {formatPrice(item.precio * item.quantity)}
-                </div>
-              </div>
-            ))}
+    <div className="cart-layout">
+      <div className="container">
+        <h1 className="mb-2">Tu Carrito de Compras</h1>
+
+        {cartItems.length === 0 ? (
+          <div className="card" style={{ padding: '2.5rem', textAlign: 'center' }}>
+            <p>Tu carrito está vacío.</p>
+            <Link to="/productos" className="btn btn-primary" style={{ marginTop: '1rem', display: 'inline-block' }}>
+              Ver Productos
+            </Link>
           </div>
-          <div className="cart-summary">
-            <h2>Resumen de la Compra</h2>
-            <div className="summary-total">
-              <span>Total</span>
-              <span>{formatPrice(total)}</span>
+        ) : (
+          <div className="cart-grid">
+            <div>
+              {cartItems.map(item => (
+                <div key={item.id} className="cart-item">
+                  <img src={item.imagen} alt={item.nombre} style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 6 }} />
+                  <div style={{ flexGrow: 1 }}>
+                    <span className="mb-1" style={{ display: 'block', fontWeight: 700 }}>{item.nombre}</span>
+                    <span style={{ color: '#6c757d' }}>{formatPrice(item.precio)}</span>
+                  </div>
+
+                  <div className="qty-controls">
+                    <button onClick={() => removeFromCart(item)} style={{ width: 30, height: 30, borderRadius: '50%' }}>-</button>
+                    <span>{item.quantity}</span>
+                    <button onClick={() => addToCart(item)} style={{ width: 30, height: 30, borderRadius: '50%' }}>+</button>
+                  </div>
+
+                  <div style={{ marginLeft: 12, fontWeight: 700 }}>
+                    {formatPrice(item.precio * item.quantity)}
+                  </div>
+                </div>
+              ))}
             </div>
-            <button className="btn-checkout">Finalizar Compra</button>
+
+            <aside className="summary">
+              <h2>Resumen de la Compra</h2>
+              <div className="summary-total">
+                <span>Total</span>
+                <span>{formatPrice(total)}</span>
+              </div>
+
+              <button className="btn btn-primary btn-block" style={{ marginTop: 12 }}>
+                Finalizar Compra
+              </button>
+            </aside>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

@@ -1,48 +1,53 @@
-// src/paginas/blogs/HistoriaOsoTeddy.jsx
-
+// Example: CuidadoPeluches.jsx (apply same to HistoriaOsoTeddy.jsx)
 import React from 'react';
 
-function HistoriaOsoTeddy() {
-  // Estilo para el contenedor principal: Elimina la altura forzada y añade padding.
+function CuidadoPeluches() {
   const layoutStyle = {
-    // IMPORTANTE: Quita el min-height: 100vh de home-container
-    minHeight: 'auto', 
-    // Añade un padding superior para despegar del Header (similar al MainLayout)
-    padding: '100px 2rem 40px 2rem', 
+    minHeight: 'auto',
+    padding: '100px 2rem 40px 2rem',
     width: '100%',
     boxSizing: 'border-box',
+    // ✅ Add global background
+    backgroundImage: 'url("/oso5.jpg")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
   };
 
-  // Estilo para la tarjeta: Centrado horizontal y ancho máximo.
   const cardStyle = {
     maxWidth: '900px',
-    // 💡 SOLUCIÓN DE CENTRADO: Centra la tarjeta horizontalmente
-    margin: '0 auto', 
+    margin: '0 auto',
+    // ✅ Add a subtle white background with padding & rounded corners
+    backgroundColor: '#fff',
+    padding: '30px',
+    borderRadius: '12px',
+    boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
   };
 
   return (
-    <div style={layoutStyle}> 
-      
+    <div style={layoutStyle}>
       <div className="content-card" style={cardStyle}>
-        <h1 className="productos-title" style={{ fontSize: '2rem' }}>La Historia del Oso Teddy: Un Clásico Atemporal</h1>
+        <h1 className="productos-title" style={{ fontSize: '2rem' }}>
+          Guía de Cuidado: Cómo Mantener tu Peluche como Nuevo
+        </h1>
         <p>Publicado el 16 de Octubre de 2025</p>
         <hr />
         
-        <h2>Dos Orígenes, Una Leyenda</h2>
+        <h2>El Lavado Suave es la Clave</h2>
         <p>
-          El Oso Teddy tiene dos historias de origen paralelas a principios del siglo XX. 
-          Una involucra a **Morris Michtom** en EE. UU., inspirado por un dibujo animado 
-          sobre el presidente Theodore "Teddy" Roosevelt...
+          Para la mayoría de los peluches, el <strong>lavado a mano</strong> es la opción más segura. 
+          Utiliza agua tibia y un detergente suave para ropa delicada. Nunca uses blanqueadores...
         </p>
 
-        <h2>Un Símbolo de Confort</h2>
+        <h2>Secado Correcto</h2>
         <p>
-          Desde entonces, el Oso Teddy se ha convertido en un símbolo universal de 
-          inocencia y confort. Su diseño clásico ha evolucionado poco, manteniendo su 
-          lugar como el peluche más vendido en la historia.
+          Evita la secadora, ya que el calor puede dañar las fibras y el relleno. 
+          Envuelve el peluche en una toalla limpia para absorber el exceso de agua y luego
+          déjalo secar al aire libre...
         </p>
       </div>
     </div>
   );
 }
-export default HistoriaOsoTeddy;
+
+export default CuidadoPeluches;

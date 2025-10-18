@@ -1,50 +1,38 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-// Ejemplo usando Font Awesome (Fa)
-import { FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa'; 
-// Si usas otra librería, ajusta las importaciones: ej. import { IoLogoFacebook } from 'react-icons/io5';
+import { FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa';
 
 const Footer = () => {
   return (
-    <footer className="footer-container">
-      <div className="footer-content">
-        
-        {/* Sección 1: Navegación */}
-        {/* Sección 1: Navegación */}
+    <footer className="footer">
+      <div className="footer-inner">
         <div className="footer-section">
           <h3>Navegación</h3>
-          <ul>
-            {/* 💡 Cambia to="/home" a to="/" */}
-            <li><Link to="/">Home</Link></li> 
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            <li><Link to="/">Home</Link></li>
             <li><Link to="/productos">Productos</Link></li>
             <li><Link to="/nosotros">Nosotros</Link></li>
             <li><Link to="/blog">Blog</Link></li>
           </ul>
         </div>
 
-        {/* Sección 2: Contacto y Redes (Usando React Icons y Links simulados) */}
         <div className="footer-section">
           <h3>Síguenos</h3>
-          {/* Se usa "Link to" para simular que son enlaces internos o no funcionales */}
-          <div className="social-links">
+          <div className="social">
             <Link to="/social/facebook" aria-label="Facebook"><FaFacebookF /></Link>
             <Link to="/social/instagram" aria-label="Instagram"><FaInstagram /></Link>
             <Link to="/social/twitter" aria-label="Twitter"><FaTwitter /></Link>
           </div>
-          
-          <p className="contact-info">Email: contacto@tiendapeluche.com</p>
+          <p className="mb-2">Email: contacto@tiendapeluche.com</p>
         </div>
-        
-        {/* Sección 3: Logo/Misión Breve */}
-        <div className="footer-section footer-logo">
+
+        <div className="footer-section">
           <h3>Tienda de Peluches</h3>
           <p>Tus amigos suaves te esperan. ¡Abrazos garantizados!</p>
         </div>
-        
       </div>
-      
-      {/* Aviso de Copyright */}
-      <div className="footer-bottom">
+
+      <div className="footer-bottom text-center">
         <p>&copy; {new Date().getFullYear()} Nuestros Adorables Peluches. Todos los derechos reservados.</p>
       </div>
     </footer>

@@ -1,41 +1,41 @@
-// src/paginas/blogs/CuidadoPeluches.jsx
-
 import React from 'react';
 
 function CuidadoPeluches() {
-  // Estilo para el contenedor principal: Elimina la altura forzada y añade padding.
+  // Main container style with bear background
   const layoutStyle = {
-    // IMPORTANTE: Quita el min-height: 100vh de home-container
-    minHeight: 'auto', 
-    // Añade un padding superior para despegar del Header (similar al MainLayout)
-    padding: '100px 2rem 40px 2rem', 
+    minHeight: 'auto',
+    padding: '100px 2rem 40px 2rem',
     width: '100%',
     boxSizing: 'border-box',
-    // Usamos el color de fondo general (si no lo da el MainLayout)
-    };
-  
-  // Estilo para la tarjeta: Centrado horizontal y ancho máximo.
+    backgroundImage: 'url("/oso5.jpg")', // ✅ background image
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+  };
+
+  // Card style with readable white background
   const cardStyle = {
     maxWidth: '900px',
-    // 💡 SOLUCIÓN DE CENTRADO: Centra la tarjeta (que tiene un ancho fijo) horizontalmente
-    margin: '0 auto', 
+    margin: '0 auto',
+    backgroundColor: '#fff', // ✅ readable backdrop
+    padding: '30px',
+    borderRadius: '12px',
+    boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
   };
 
   return (
-    // Reemplazamos home-container por un div con estilo en línea
-    <div style={layoutStyle}> 
-      
-      {/* Aplicamos los estilos de centrado y ancho a la content-card */}
+    <div style={layoutStyle}>
       <div className="content-card" style={cardStyle}>
-        <h1 className="productos-title" style={{ fontSize: '2rem' }}>Guía de Cuidado: Cómo Mantener tu Peluche como Nuevo</h1>
+        <h1 className="productos-title" style={{ fontSize: '2rem' }}>
+          Guía de Cuidado: Cómo Mantener tu Peluche como Nuevo
+        </h1>
         <p>Publicado el 16 de Octubre de 2025</p>
         <hr />
-        
+
         <h2>El Lavado Suave es la Clave</h2>
         <p>
-          Para la mayoría de los peluches, el **lavado a mano** es la opción más segura. 
-          Utiliza agua tibia y un detergente suave para ropa delicada. Nunca uses 
-          blanqueadores...
+          Para la mayoría de los peluches, el <strong>lavado a mano</strong> es la opción más segura. 
+          Utiliza agua tibia y un detergente suave para ropa delicada. Nunca uses blanqueadores...
         </p>
 
         <h2>Secado Correcto</h2>
@@ -48,4 +48,5 @@ function CuidadoPeluches() {
     </div>
   );
 }
+
 export default CuidadoPeluches;
