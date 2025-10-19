@@ -1,3 +1,4 @@
+// src/components/header.jsx
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { CartContext } from '../context/cartContext';
@@ -24,19 +25,20 @@ function Header() {
           <Link to="/">Home</Link>
           <Link to="/productos">Productos</Link>
           <Link to="/categorias">Categorías</Link>
-          <Link to="/ofertas">Ofertas</Link>          
+          <Link to="/ofertas">Ofertas</Link>
           <Link to="/nosotros">Nosotros</Link>
           <Link to="/blog">Blog</Link>
         </nav>
 
         <div className="right-controls">
-          <div className="auth-links hidden-sm" style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-            <Link to="/inicio" className="auth-link" aria-label="Iniciar sesión">
-              <FaUser style={{ marginRight: 6 }} />
-              <span>Iniciar Sesión</span>
+          {/* Desktop auth links (hidden on small screens) */}
+          <div className="auth-links hidden-sm" aria-hidden={menuOpen} style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+            {/* Reuse existing button classes from index.css so no new CSS needed */}
+            <Link to="/inicio" className="btn btn-ghost" aria-label="Iniciar sesión">
+              Iniciar Sesión
             </Link>
 
-            <Link to="/registro" className="btn btn-primary" style={{ padding: '6px 10px', fontWeight: 600 }}>
+            <Link to="/registro" className="btn btn-primary" style={{ whiteSpace: 'nowrap' }}>
               Regístrate
             </Link>
           </div>
@@ -48,48 +50,36 @@ function Header() {
             </Link>
           </div>
 
+          {/* Mobile toggle (pure CSS bars, stacked vertically) */}
           <button
             className="mobile-toggle"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-expanded={menuOpen}
             aria-label="Abrir menú"
-            style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
           >
-            {/* Simple hamburger using CSS bars or text fallback */}
-            <div style={{ width: 22, height: 2, background: '#333', marginBottom: 5 }} />
-            <div style={{ width: 18, height: 2, background: '#333', marginBottom: 5 }} />
-            <div style={{ width: 14, height: 2, background: '#333' }} />
+            <span className={`bar ${menuOpen ? 'open' : ''}`} />
+            <span className={`bar ${menuOpen ? 'open' : ''}`} />
+            <span className={`bar ${menuOpen ? 'open' : ''}`} />
           </button>
         </div>
       </header>
 
-      {/* Mobile dropdown - small inline style so it appears on mobile when open.
-          You can move styles into CSS later (class .mobile-nav). */}
+      {/* Mobile dropdown - styled via CSS. Auth links are duplicated here for mobile use. */}
       {menuOpen && (
-        <nav
-          className="mobile-nav"
-          style={{
-            position: 'absolute',
-            top: '70px',
-            left: 0,
-            right: 0,
-            background: '#fff',
-            zIndex: 999,
-            boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
-            display: 'flex',
-            flexDirection: 'column',
-            padding: '12px 10px',
-            gap: 8,
-          }}
-          aria-label="Mobile navigation"
-        >
+        <nav className="mobile-nav" aria-label="Mobile navigation">
           <Link to="/" onClick={handleLinkClick}>Home</Link>
           <Link to="/productos" onClick={handleLinkClick}>Productos</Link>
           <Link to="/categorias" onClick={handleLinkClick}>Categorías</Link>
           <Link to="/ofertas" onClick={handleLinkClick}>Ofertas</Link>
           <Link to="/nosotros" onClick={handleLinkClick}>Nosotros</Link>
           <Link to="/blog" onClick={handleLinkClick}>Blog</Link>
-          <Link to="/carro" onClick={handleLinkClick} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+
+          <hr style={{ width: '100%', border: 'none', borderTop: '1px solid rgba(0,0,0,0.06)', margin: '8px 0' }} />
+
+          <Link to="/inicio" onClick={handleLinkClick} className="btn btn-ghost">Iniciar Sesión</Link>
+          <Link to="/registro" onClick={handleLinkClick} className="btn btn-ghost">Regístrate</Link>
+
+          <Link to="/carro" onClick={handleLinkClick} className="mobile-cart-link" style={{ marginTop: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
             <BsCart4 /> <span>Carrito ({totalItems})</span>
           </Link>
         </nav>

@@ -219,16 +219,6 @@ body{
 .cart-link{ position:relative; display:inline-flex; align-items:center; gap:.35rem; text-decoration:none; color:inherit; }
 .badge{ position:absolute; top:-6px; right:-8px; background:#dc3545; color:#fff; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; }
 
-/* Mobile header behavior */
-.mobile-toggle{ display:none; cursor:pointer; }
-@media (max-width:768px){
-  .nav{ display:none; }
-  .mobile-toggle{ display:flex; align-items:center; gap:6px; }
-  .grid{ gap:1rem; }
-  .cart-grid{ grid-template-columns: 1fr; }
-  .container{ padding:1rem; }
-  .form-shell{ padding:1.5rem; }
-}
 
 /* ===================================
    FOOTER
@@ -250,3 +240,99 @@ body{
 .hidden-sm{ display:inline; }
 @media (max-width:768px){ .hidden-sm{ display:none; } }
 
+/* -------------------------
+   Mobile navigation & hamburger
+   ------------------------- */
+
+.mobile-toggle {
+  display: none; /* se mostrará por media query */
+  background: transparent;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+/* three simple bars - no transform animation on open */
+.mobile-toggle .bar {
+  display: block;
+  width: 22px;
+  height: 2.5px;
+  background: #333;
+  margin: 4px 0;
+  border-radius: 2px;
+  transition: opacity 120ms ease;
+}
+
+/* no rotation/translate - keep it simple when open */
+.mobile-toggle .bar.open {
+  opacity: 1;
+}
+
+/* Mobile nav dropdown */
+.mobile-nav {
+  position: absolute;
+  top: var(--header-h);
+  left: 0;
+  right: 0;
+  background: var(--card-bg); /* white */
+  z-index: 999;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px;
+  gap: 8px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* links inside mobile nav */
+.mobile-nav a {
+  display: block;
+  padding: 10px 8px;
+  color: var(--brand);
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 6px;
+}
+.mobile-nav a:hover { background: rgba(0,0,0,0.03); color: var(--brand-hover); }
+
+/* auth link style inside mobile nav */
+.mobile-auth-link {
+  color: var(--text);
+  text-decoration: none;
+  padding: 8px 0;
+  font-weight: 700;
+  display: block;
+}
+
+/* small cart link inside mobile nav */
+.mobile-cart-link {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+}
+/* ensure desktop nav remains unchanged on large screens (you already have media queries) */
+@media (max-width: 768px) {
+  .nav { display: none; } /* already present in your CSS; keep for safety */
+  .mobile-toggle { display: flex; flex-direction: column; }
+  .hidden-sm { display: none !important; } /* ensure desktop-only links hide */
+}
+@media (max-width: 768px) {
+  .mobile-nav .btn {
+    background: transparent !important;
+    color: var(--brand) !important;
+    border: 2px solid var(--brand);
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    padding: 8px 12px;
+    display: inline-block;
+    width: fit-content;
+  }
+
+  .mobile-nav .btn:hover {
+    background: var(--brand) !important;
+    color: #fff !important;
+  }
+}
