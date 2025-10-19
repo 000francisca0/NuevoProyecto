@@ -51,17 +51,21 @@ export default function Productos() {
   return (
     <main className="main-content">
       <div className="container">
-        <div className="content-card">
-          <h1 className="productos-title">Nuestros Adorables Peluches</h1>
-          <p className="mb-2" style={{ color: '#6c757d' }}>Explora por categoría o haz clic en "Ver" para ver los detalles.</p>
 
-          {loading && <p>Cargando productos y categorías...</p>}
-          {error && <p style={{ color: 'red' }}>{error}</p>}
+        {/* ===== TOP CARD: Title + Quick links - reusing .card/.card-body from index.css ===== */}
+        <div className="card" style={{ marginBottom: 20 }}>
+          <div className="card-body" style={{ paddingBottom: 16 }}>
+            <h1 className="productos-title" style={{ margin: 0 }}>Nuestros Adorables Peluches</h1>
+            <p className="mb-2" style={{ color: '#6c757d', marginTop: 8 }}>
+              Explora por categoría o haz clic en "Ver" para ver los detalles.
+            </p>
 
-          {!loading && !error && (
-            <>
-              {/* Category quick links */}
-              <div style={{ marginBottom: 20, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            {loading && <p style={{ marginTop: 8 }}>Cargando productos y categorías...</p>}
+            {error && <p style={{ color: 'red', marginTop: 8 }}>{error}</p>}
+
+            {/* Category quick links */}
+            {!loading && !error && (
+              <div style={{ marginTop: 12, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                 <Link to="/productos" className="btn btn-ghost">Todos</Link>
                 {categories.map(cat => (
                   <Link key={cat.id} to={`/categoria/${cat.id}`} className="btn btn-ghost">
@@ -69,42 +73,51 @@ export default function Productos() {
                   </Link>
                 ))}
               </div>
-
-              {/* For each category: show header + grid */}
-              {categories.map(cat => (
-                <section key={cat.id} style={{ marginBottom: 36 }}>
-                  <h2 style={{ margin: '12px 0', fontSize: '1.6rem' }}>{cat.nombre}</h2>
-                  <div className="grid">
-                    {(productsByCategory[cat.id] || []).map(prod => (
-                      <ProductCard key={prod.id} producto={prod} />
-                    ))}
-                    {/* show friendly message when no products */}
-                    {((productsByCategory[cat.id] || []).length === 0) && (
-                      <div className="card" style={{ padding: 20 }}>
-                        <div className="card-body">
-                          <p>No hay productos en esta categoría.</p>
-                          <Link to="/productos" className="btn btn-ghost">Ver todos</Link>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </section>
-              ))}
-
-              {/* Uncategorized products (categoria_id null/0) */}
-              {productsByCategory[0] && productsByCategory[0].length > 0 && (
-                <section style={{ marginBottom: 36 }}>
-                  <h2 style={{ margin: '12px 0', fontSize: '1.6rem' }}>Otros</h2>
-                  <div className="grid">
-                    {productsByCategory[0].map(prod => (
-                      <ProductCard key={prod.id} producto={prod} />
-                    ))}
-                  </div>
-                </section>
-              )}
-            </>
-          )}
+            )}
+          </div>
         </div>
+        {/* ===== end TOP CARD ===== */}
+
+        {/* Now each category section (product grid) */}
+        {!loading && !error && (
+          <>
+            {categories.map(cat => (
+              <section key={cat.id} style={{ marginBottom: 36 }}>
+                <h2 style={{ margin: '12px 0', fontSize: '1.6rem' }}>{cat.nombre}</h2>
+                <div className="grid">
+                  {(productsByCategory[cat.id] || []).map(prod => (
+                    <ProductCard key={prod.id} producto={prod} />
+                  ))}
+
+                  {((productsByCategory[cat.id] || []).length === 0) && (
+                    <div className="card" style={{ padding: 20 }}>
+                      <div className="card-body">
+                        <p>No hay productos en esta categoría.</p>
+                        <Link to="/productos" className="btn btn-ghost">Ver todos</Link>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </section>
+            ))}
+
+            {productsByCategory[0] && productsByCategory[0].length > 0 && (
+              <section style={{ marginBottom: 36 }}>
+                <h2 style={{ margin: '12px 0', fontSize: '1.6rem' }}>Otros</h2>
+                <div className="grid">
+                  {productsByCategory[0].map(prod => (
+                    <ProductCard key={prod.id} producto={prod} />
+                  ))}
+                </div>
+              </section>
+            )}
+          </>
+        )}
+
+        {/* Loading / error fallback when still busy */}
+        {loading && <div className="card"><div className="card-body"><p>Cargando...</p></div></div>}
+        {error && <div className="card"><div className="card-body"><p style={{ color: 'red' }}>{error}</p></div></div>}
+
       </div>
     </main>
   );
