@@ -23,6 +23,8 @@ function Header() {
         <nav className="nav" role="navigation" aria-label="Main navigation">
           <Link to="/">Home</Link>
           <Link to="/productos">Productos</Link>
+          <Link to="/categorias">Categorías</Link>
+          <Link to="/ofertas">Ofertas</Link>          
           <Link to="/nosotros">Nosotros</Link>
           <Link to="/blog">Blog</Link>
         </nav>
@@ -83,11 +85,10 @@ function Header() {
         >
           <Link to="/" onClick={handleLinkClick}>Home</Link>
           <Link to="/productos" onClick={handleLinkClick}>Productos</Link>
+          <Link to="/categorias" onClick={handleLinkClick}>Categorías</Link>
+          <Link to="/ofertas" onClick={handleLinkClick}>Ofertas</Link>
           <Link to="/nosotros" onClick={handleLinkClick}>Nosotros</Link>
           <Link to="/blog" onClick={handleLinkClick}>Blog</Link>
-          <Link to="/inicio" onClick={handleLinkClick}>Iniciar Sesión</Link>
-          <Link to="/registro" onClick={handleLinkClick}>Registrarse</Link>
-
           <Link to="/carro" onClick={handleLinkClick} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <BsCart4 /> <span>Carrito ({totalItems})</span>
           </Link>

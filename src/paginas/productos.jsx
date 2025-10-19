@@ -1,82 +1,111 @@
-import React, { useEffect, useState } from 'react';
+// src/paginas/productos.jsx
+import React, { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard/productCard.jsx";
+import { Link } from 'react-router-dom';
 
-function Productos() {
-  const [productos, setProductos] = useState([]);
+export default function Productos() {
+  const [categories, setCategories] = useState([]);
+  const [productsByCategory, setProductsByCategory] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchProductos = async () => {
-    try {
-      const response = await fetch('http://localhost:3001/api/productos');
-      if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
-      const data = await response.json();
-      setProductos(data.data || []);
-      setError(null);
-    } catch (err) {
-      console.error("Fallo al cargar productos:", err);
-      setError("No se pudieron cargar los productos. Asegúrate que tu servidor (Node.js) esté corriendo.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchProductos();
+    // load categories first, then products by category
+    async function loadAll() {
+      try {
+        setLoading(true);
+        const [catsRes, prodsRes] = await Promise.all([
+          fetch('http://localhost:3001/api/categorias'),
+          fetch('http://localhost:3001/api/productos')
+        ]);
 
-    // Use white layer background for products
-    document.body.classList.add('bg-white-layer');
-    return () => {
-      document.body.classList.remove('bg-white-layer');
-    };
+        const catsJson = await catsRes.json();
+        const prodsJson = await prodsRes.json();
+
+        if (!catsRes.ok) throw new Error(catsJson.error || 'Error loading categories');
+        if (!prodsRes.ok) throw new Error(prodsJson.error || 'Error loading products');
+
+        const cats = catsJson.data || [];
+        const prods = prodsJson.data || [];
+
+        // group products by categoria_id (use 0 for uncategorized)
+        const grouped = {};
+        prods.forEach(p => {
+          const key = p.categoria_id || 0;
+          if (!grouped[key]) grouped[key] = [];
+          grouped[key].push({ ...p, imagen: p.imagen_url || p.imagen });
+        });
+
+        setCategories(cats);
+        setProductsByCategory(grouped);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadAll();
   }, []);
-
-  if (loading) {
-    return (
-      <div className="main-content">
-        <div className="container">
-          <h1 className="mb-2">Cargando productos...</h1>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="main-content">
-        <div className="container">
-          <h1 className="mb-2" style={{ color: 'red' }}>{error}</h1>
-        </div>
-      </div>
-    );
-  }
-
-  if (productos.length === 0) {
-    return (
-      <div className="main-content">
-        <div className="container">
-          <h1 className="mb-2">No hay productos disponibles.</h1>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <main className="main-content">
       <div className="container">
-        <h1 className="mb-2" style={{ fontSize: '2.2rem', fontWeight: 800 }}>Nuestros Adorables Peluches</h1>
+        <div className="content-card">
+          <h1 className="productos-title">Nuestros Adorables Peluches</h1>
+          <p className="mb-2" style={{ color: '#6c757d' }}>Explora por categoría o haz clic en "Ver" para ver los detalles.</p>
 
-        <div className="grid">
-          {productos.map(producto => (
-            <ProductCard
-              key={producto.id}
-              producto={{ ...producto, imagen: producto.imagen_url || producto.imagen }}
-            />
-          ))}
+          {loading && <p>Cargando productos y categorías...</p>}
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+
+          {!loading && !error && (
+            <>
+              {/* Category quick links */}
+              <div style={{ marginBottom: 20, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                <Link to="/productos" className="btn btn-ghost">Todos</Link>
+                {categories.map(cat => (
+                  <Link key={cat.id} to={`/categoria/${cat.id}`} className="btn btn-ghost">
+                    {cat.nombre}
+                  </Link>
+                ))}
+              </div>
+
+              {/* For each category: show header + grid */}
+              {categories.map(cat => (
+                <section key={cat.id} style={{ marginBottom: 36 }}>
+                  <h2 style={{ margin: '12px 0', fontSize: '1.6rem' }}>{cat.nombre}</h2>
+                  <div className="grid">
+                    {(productsByCategory[cat.id] || []).map(prod => (
+                      <ProductCard key={prod.id} producto={prod} />
+                    ))}
+                    {/* show friendly message when no products */}
+                    {((productsByCategory[cat.id] || []).length === 0) && (
+                      <div className="card" style={{ padding: 20 }}>
+                        <div className="card-body">
+                          <p>No hay productos en esta categoría.</p>
+                          <Link to="/productos" className="btn btn-ghost">Ver todos</Link>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </section>
+              ))}
+
+              {/* Uncategorized products (categoria_id null/0) */}
+              {productsByCategory[0] && productsByCategory[0].length > 0 && (
+                <section style={{ marginBottom: 36 }}>
+                  <h2 style={{ margin: '12px 0', fontSize: '1.6rem' }}>Otros</h2>
+                  <div className="grid">
+                    {productsByCategory[0].map(prod => (
+                      <ProductCard key={prod.id} producto={prod} />
+                    ))}
+                  </div>
+                </section>
+              )}
+            </>
+          )}
         </div>
       </div>
     </main>
   );
 }
-
-export default Productos;

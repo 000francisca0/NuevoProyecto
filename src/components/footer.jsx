@@ -11,6 +11,8 @@ const Footer = () => {
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             <li><Link to="/">Home</Link></li>
             <li><Link to="/productos">Productos</Link></li>
+            <li><Link to="/categorias">Categorías</Link></li>   {/* new */}
+            <li><Link to="/ofertas">Ofertas</Link></li>         {/* new */}
             <li><Link to="/nosotros">Nosotros</Link></li>
             <li><Link to="/blog">Blog</Link></li>
           </ul>

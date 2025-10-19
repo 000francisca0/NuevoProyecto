@@ -1,11 +1,14 @@
+// src/components/ProductCard/productCard.jsx
 import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../../context/cartContext';
 
 function ProductCard({ producto }) {
   const { addToCart } = useContext(CartContext);
+  const navigate = useNavigate();
 
-  const handleViewDetails = () => {
-    console.log(`Viendo detalles de: ${producto.nombre}`);
+  const goToDetails = () => {
+    navigate(`/producto/${producto.id}`);
   };
 
   const formattedPrice = new Intl.NumberFormat('es-CL', {
@@ -15,8 +18,14 @@ function ProductCard({ producto }) {
 
   return (
     <article className="card" role="article" aria-label={producto.nombre}>
-      {/* media */}
-      <img src={producto.imagen} alt={producto.nombre} className="card-media" />
+      {/* Clickable media */}
+      <button
+        onClick={goToDetails}
+        style={{ border: 'none', padding: 0, background: 'transparent', cursor: 'pointer' }}
+        aria-label={`Ver detalles de ${producto.nombre}`}
+      >
+        <img src={producto.imagen || producto.imagen_url} alt={producto.nombre} className="card-media" />
+      </button>
 
       {/* body */}
       <div className="card-body">
@@ -26,7 +35,7 @@ function ProductCard({ producto }) {
 
       {/* actions */}
       <div className="card-actions">
-        <button type="button" className="btn btn-ghost" onClick={handleViewDetails}>
+        <button type="button" className="btn btn-ghost" onClick={goToDetails}>
           Ver Detalle
         </button>
 
