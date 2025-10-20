@@ -29,7 +29,7 @@ const initialProducts = [
 // ----------------------------------------------------
 // DB MIGRATIONS & TABLE CREATION (safe & idempotent)
 // ----------------------------------------------------
-db.serialize(() => {
+db.serialize(() => { 
   // 1) roles
   db.run(`
     CREATE TABLE IF NOT EXISTS roles (

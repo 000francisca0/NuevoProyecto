@@ -1,9 +1,12 @@
 // src/paginas/detallesProductos.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
+import { CartContext } from '../context/cartContext';
 
 export default function DetallesProductos() {
   const { id } = useParams();
+  const { addToCart } = useContext(CartContext);
+
   const [producto, setProducto] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,9 +19,15 @@ export default function DetallesProductos() {
         const res = await fetch(`http://localhost:3001/api/productos/${id}/details`);
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Error fetching product');
-        setProducto(data.data);
-        const imgs = data.data.images && data.data.images.length ? data.data.images : [data.data.imagen_url || data.data.imagen];
-        setSelectedImage(imgs[0] || null);
+
+        const raw = data.data || {};
+        const imgs = raw.images && raw.images.length ? raw.images : [raw.imagen_url || raw.imagen];
+        setProducto({
+          ...raw,
+          images: imgs,
+          imagen: imgs[0] || raw.imagen_url || raw.imagen,
+        });
+        setSelectedImage(imgs[0] || raw.imagen_url || raw.imagen || null);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -28,60 +37,72 @@ export default function DetallesProductos() {
     load();
   }, [id]);
 
-  if (loading) return <div className="container"><p>Cargando producto...</p></div>;
-  if (error) return <div className="container"><p style={{ color: 'red' }}>{error}</p></div>;
-  if (!producto) return <div className="container"><p>Producto no encontrado.</p></div>;
+  if (loading) return <main className="main-content"><div className="container"><p>Cargando producto...</p></div></main>;
+  if (error) return <main className="main-content"><div className="container"><p style={{ color: 'red' }}>{error}</p></div></main>;
+  if (!producto) return <main className="main-content"><div className="container"><p>Producto no encontrado.</p></div></main>;
 
-  const images = producto.images && producto.images.length ? producto.images : [producto.imagen_url || producto.imagen];
+  const handleAddToCart = () => {
+    const cartProduct = {
+      id: producto.id,
+      nombre: producto.nombre,
+      precio: Number(producto.precio || 0),
+      imagen: producto.imagen || producto.imagen_url || (producto.images && producto.images[0]) || '/placeholder.jpg',
+      stock: Number(producto.stock || 0),
+    };
+    addToCart(cartProduct);
+  };
 
   return (
     <main className="main-content">
       <div className="container">
-        {/* The white background comes from .card (reused) */}
         <article className="card" aria-label={producto.nombre}>
-          <div className="card-body" style={{ padding: '1rem' }}>
+          <div className="card-body">
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, alignItems: 'start' }}>
-              
-              {/* Left column: gallery */}
+              {/* Left: gallery */}
               <div>
-                <div className="card" style={{ padding: 0, marginBottom: 12 }}>
+                <div className="card">
                   {selectedImage ? (
-                    <img src={selectedImage} alt={producto.nombre} className="card-media" style={{ height: 420 }} />
+                    <img src={selectedImage} alt={producto.nombre} className="card-media" />
                   ) : (
-                    <div className="card-media" style={{ height: 420, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f5f5' }}>
+                    <div className="card-media" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f5f5' }}>
                       Sin imagen
                     </div>
                   )}
                 </div>
 
                 <div style={{ display: 'flex', gap: 8, marginTop: 8, flexWrap: 'wrap' }}>
-                  {images.map((img, i) => (
-                    <button key={i} onClick={() => setSelectedImage(img)} className="btn" style={{ padding: 0 }}>
+                  {producto.images && producto.images.map((img, i) => (
+                    <button key={i} onClick={() => setSelectedImage(img)} className="btn" type="button">
                       <img src={img} alt={`${producto.nombre}-thumb-${i}`} style={{ width: 72, height: 72, objectFit: 'cover', borderRadius: '8px' }} />
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* Right column: info */}
+              {/* Right: info */}
               <div>
                 <h1 style={{ marginTop: 0 }}>{producto.nombre}</h1>
-                <p className="card-sub" style={{ marginBottom: 8 }}>{producto.descripcion}</p>
+                <p className="card-sub">{producto.descripcion}</p>
 
                 <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 12 }}>
                   <span style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--brand)' }}>
                     {new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(producto.precio)}
                   </span>
-                  {producto.on_sale ? <span style={{ padding: '4px 8px', background: '#fff3f3', borderRadius: 6, fontWeight: 700 }}>En oferta</span> : null}
+                  {Number(producto.on_sale) === 1 ? <span style={{ padding: '4px 8px', background: '#fff3f3', borderRadius: 6, fontWeight: 700 }}>En oferta</span> : null}
                 </div>
 
                 <p style={{ marginTop: 12 }}><strong>Stock:</strong> {producto.stock}</p>
 
                 <div style={{ marginTop: 18 }}>
-                  <button className="btn btn-primary">Agregar al carrito</button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={handleAddToCart}
+                    disabled={Number(producto.stock || 0) <= 0}
+                  >
+                    {Number(producto.stock || 0) > 0 ? 'Agregar al carrito' : 'Sin stock'}
+                  </button>
                 </div>
               </div>
-
             </div>
           </div>
         </article>
