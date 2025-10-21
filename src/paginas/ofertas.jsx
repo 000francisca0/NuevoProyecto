@@ -1,45 +1,61 @@
-// src/paginas/Sales.jsx
+// src/paginas/ofertas.jsx
 import React, { useEffect, useState } from 'react';
-import ProductCard from "../components/ProductCard/productCard.jsx";
+import { Link } from 'react-router-dom';
 
-function Sales() {
-  const [productos, setProductos] = useState([]);
+const formatPrice = (price) =>
+  new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(price);
+
+export default function Sales() {
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function load() {
+    (async () => {
       try {
-        setLoading(true);
         const res = await fetch('http://localhost:3001/api/productos/on-sale');
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Error fetching');
-        setProductos(data.data || []);
-      } catch (err) {
-        setError(err.message);
+        const json = await res.json();
+        setItems(json?.data || []);
+      } catch (e) {
+        console.error(e);
       } finally {
         setLoading(false);
       }
-    }
-    load();
+    })();
   }, []);
 
-  return (
-    <main className="main-content">
-      <div className="container">
-        <h1 className="mb-2">Ofertas especiales</h1>
-        {loading && <p>Cargando ofertas...</p>}
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        {!loading && productos.length === 0 && <p>No hay productos en oferta por ahora.</p>}
+  if (loading) return <div className="container"><div className="center-card">Cargando ofertas…</div></div>;
 
-        <div className="grid" style={{ marginTop: 16 }}>
-          {productos.map(p => (
-            <ProductCard key={p.id} producto={{...p, imagen: p.imagen_url || p.imagen}} />
+  return (
+    <div className="container main-content">
+      <h1 className="mb-2">Ofertas</h1>
+      {items.length === 0 ? (
+        <div className="center-card">No hay productos en oferta por el momento.</div>
+      ) : (
+        <div className="grid">
+          {items.map(p => (
+            <Link key={p.id} to={`/producto/${p.id}`} className="card">
+              <img className="card-media" src={p.imagen_url} alt={p.nombre} />
+              <div className="card-body">
+                <h3 className="card-title">{p.nombre}</h3>
+                <div>
+                  <div style={{ color: 'var(--muted)', textDecoration: 'line-through' }}>
+                    {formatPrice(p.precio)}
+                  </div>
+                  <div style={{ fontWeight: 800, color: 'var(--brand)', fontSize: '1.2rem' }}>
+                    {formatPrice(p.discounted_price)}
+                  </div>
+                  <div style={{ fontSize: '.9rem', color: 'var(--muted)' }}>
+                    Descuento: {Math.round((p.discount_percentage || 0) * 100)}%
+                  </div>
+                </div>
+              </div>
+              <div className="card-actions">
+                <span className="btn btn-primary">Ver Detalle</span>
+              </div>
+            </Link>
           ))}
         </div>
-      </div>
-    </main>
+      )}
+    </div>
   );
 }
-
-export default Sales;

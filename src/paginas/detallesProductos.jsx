@@ -12,6 +12,8 @@ export default function DetallesProductos() {
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
 
+  const fmt = (n) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(Number(n || 0));
+
   useEffect(() => {
     async function load() {
       try {
@@ -41,11 +43,17 @@ export default function DetallesProductos() {
   if (error) return <main className="main-content"><div className="container"><p style={{ color: 'red' }}>{error}</p></div></main>;
   if (!producto) return <main className="main-content"><div className="container"><p>Producto no encontrado.</p></div></main>;
 
+  const hasDiscount = Number(producto.discount_percentage || 0) > 0;
+  const finalPrice = hasDiscount
+    ? (producto.discounted_price ??
+        Math.round(Number(producto.precio || 0) * (1 - Number(producto.discount_percentage || 0))))
+    : Number(producto.precio || 0);
+
   const handleAddToCart = () => {
     const cartProduct = {
       id: producto.id,
       nombre: producto.nombre,
-      precio: Number(producto.precio || 0),
+      precio: finalPrice, // Usa el precio con descuento si aplica
       imagen: producto.imagen || producto.imagen_url || (producto.images && producto.images[0]) || '/placeholder.jpg',
       stock: Number(producto.stock || 0),
     };
@@ -72,7 +80,7 @@ export default function DetallesProductos() {
 
                 <div style={{ display: 'flex', gap: 8, marginTop: 8, flexWrap: 'wrap' }}>
                   {producto.images && producto.images.map((img, i) => (
-                    <button key={i} onClick={() => setSelectedImage(img)} className="btn" type="button">
+                    <button key={i} onClick={() => setSelectedImage(img)} className="btn" type="button" aria-label={`Imagen ${i + 1}`}>
                       <img src={img} alt={`${producto.nombre}-thumb-${i}`} style={{ width: 72, height: 72, objectFit: 'cover', borderRadius: '8px' }} />
                     </button>
                   ))}
@@ -84,11 +92,32 @@ export default function DetallesProductos() {
                 <h1 style={{ marginTop: 0 }}>{producto.nombre}</h1>
                 <p className="card-sub">{producto.descripcion}</p>
 
+                {/* Precio (con descuento si aplica) */}
                 <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 12 }}>
-                  <span style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--brand)' }}>
-                    {new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(producto.precio)}
-                  </span>
-                  {Number(producto.on_sale) === 1 ? <span style={{ padding: '4px 8px', background: '#fff3f3', borderRadius: 6, fontWeight: 700 }}>En oferta</span> : null}
+                  {hasDiscount ? (
+                    <div>
+                      <div style={{ color: 'var(--muted)', textDecoration: 'line-through' }}>
+                        {fmt(producto.precio)}
+                      </div>
+                      <div style={{ fontWeight: 900, color: 'var(--brand)', fontSize: '1.4rem' }}>
+                        {fmt(finalPrice)}
+                      </div>
+                      <div style={{ fontSize: '.9rem', color: 'var(--muted)' }}>
+                        Ahorro: {Math.round(Number(producto.discount_percentage || 0) * 100)}%
+                      </div>
+                    </div>
+                  ) : (
+                    <span style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--brand)' }}>
+                      {fmt(producto.precio)}
+                    </span>
+                  )}
+
+                  {/* Conserva tu pill si estaba presente */}
+                  {Number(producto.on_sale) === 1 || hasDiscount ? (
+                    <span style={{ padding: '4px 8px', background: '#fff3f3', borderRadius: 6, fontWeight: 700 }}>
+                      En oferta
+                    </span>
+                  ) : null}
                 </div>
 
                 <p style={{ marginTop: 12 }}><strong>Stock:</strong> {producto.stock}</p>

@@ -7,14 +7,13 @@ function ProductCard({ producto }) {
   const { addToCart } = useContext(CartContext);
   const navigate = useNavigate();
 
-  const goToDetails = () => {
-    navigate(`/producto/${producto.id}`);
-  };
+  const goToDetails = () => navigate(`/producto/${producto.id}`);
 
-  const formattedPrice = new Intl.NumberFormat('es-CL', {
-    style: 'currency',
-    currency: 'CLP',
-  }).format(producto.precio);
+  const formatPrice = (n) =>
+    new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(Number(n || 0));
+
+  const hasDiscount = (producto.discount_percentage || 0) > 0;
+  const finalPrice = hasDiscount ? (producto.discounted_price ?? Math.round(producto.precio * (1 - producto.discount_percentage))) : producto.precio;
 
   return (
     <article className="card" role="article" aria-label={producto.nombre}>
@@ -30,7 +29,20 @@ function ProductCard({ producto }) {
       {/* body */}
       <div className="card-body">
         <h3 className="card-title">{producto.nombre}</h3>
-        <p className="card-sub">{formattedPrice}</p>
+
+        {/* Price with discount */}
+        {hasDiscount ? (
+          <div>
+            <div className="card-sub" style={{ textDecoration: 'line-through' }}>
+              {formatPrice(producto.precio)}
+            </div>
+            <div style={{ fontWeight: 800, color: 'var(--brand)', fontSize: '1.1rem' }}>
+              {formatPrice(finalPrice)}
+            </div>
+          </div>
+        ) : (
+          <p className="card-sub" style={{ fontWeight: 800 }}>{formatPrice(producto.precio)}</p>
+        )}
       </div>
 
       {/* actions */}
@@ -42,7 +54,11 @@ function ProductCard({ producto }) {
         <button
           type="button"
           className="btn btn-primary"
-          onClick={() => addToCart(producto)}
+          onClick={() => addToCart({
+            ...producto,
+            precio: finalPrice, // ensure discounted price is added to cart
+            imagen: producto.imagen || producto.imagen_url
+          })}
         >
           Agregar
         </button>
