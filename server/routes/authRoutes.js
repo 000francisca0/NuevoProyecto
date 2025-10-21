@@ -1,112 +1,107 @@
-// server/routes/authRoutes.js
+// server/routes/authRoutes.js (ACTUALIZADO)
 
 import express from 'express';
 import { db } from '../database.js';
 import bcrypt from 'bcryptjs';
 
 const router = express.Router();
+const saltRounds = 10;
 
-// Número de "salt rounds" para el cifrado: 10 es un buen balance entre seguridad y rendimiento.
-const saltRounds = 10; 
-
-// ------------------------------------------------------------------
-// RUTA 1: REGISTRO de Nuevo Usuario (Cliente por defecto) - /api/auth/register
-// ------------------------------------------------------------------
+// Registro de usuario (cliente por defecto) + dirección
 router.post('/register', async (req, res) => {
-  const { nombre, email, password } = req.body;
-  
-  if (!nombre || !email || !password) {
-    return res.status(400).json({ error: "Todos los campos son obligatorios." });
+  const { nombre, apellidos, email, password, calle, depto, region, comuna } = req.body;
+
+  if (!nombre || !apellidos || !email || !password || !calle || !region || !comuna) {
+    return res.status(400).json({ error: "Todos los campos (excepto Depto) son obligatorios." });
   }
 
   try {
-    // 1. Cifrar la contraseña
     const password_hash = await bcrypt.hash(password, saltRounds);
-    
-    // 2. Establecer el rol por defecto (Cliente = 2)
-    const rol_id = 2; // Cliente por defecto
+    const rol_id = 2; // Cliente
 
-    const sql = `INSERT INTO usuarios (nombre, email, password_hash, rol_id) 
-                 VALUES (?, ?, ?, ?)`;
-    const params = [nombre, email, password_hash, rol_id];
+    db.serialize(() => {
+      db.run('BEGIN TRANSACTION;');
 
-    db.run(sql, params, function(err) {
-      if (err) {
-        // Error 19 es el código de SQLite para restricción de unicidad (email ya existe)
-        if (err.errno === 19) {
-          return res.status(409).json({ error: "El correo electrónico ya está registrado." });
+      db.run(
+        `INSERT INTO usuarios (nombre, apellidos, email, password_hash, rol_id) VALUES (?, ?, ?, ?, ?)`,
+        [nombre, apellidos, email, password_hash, rol_id],
+        function (err) {
+          if (err) {
+            db.run('ROLLBACK;');
+            if (err.message.includes('UNIQUE')) {
+              return res.status(409).json({ error: 'El correo ya está registrado.' });
+            }
+            return res.status(500).json({ error: err.message });
+          }
+
+          const usuario_id = this.lastID;
+
+          db.run(
+            `INSERT INTO direcciones (usuario_id, calle, depto, region, comuna) VALUES (?, ?, ?, ?, ?)`,
+            [usuario_id, calle, depto || null, region, comuna],
+            function (err2) {
+              if (err2) {
+                db.run('ROLLBACK;');
+                return res.status(500).json({ error: 'Error al guardar la dirección.' });
+              }
+
+              db.run('COMMIT;', (commitErr) => {
+                if (commitErr) {
+                  db.run('ROLLBACK;');
+                  return res.status(500).json({ error: 'Error de commit.' });
+                }
+                res.json({ message: 'Registro exitoso.', id: usuario_id });
+              });
+            }
+          );
         }
-        return res.status(500).json({ error: err.message });
-      }
-      
-      // Registro exitoso
-      res.status(201).json({ 
-        message: "Usuario registrado exitosamente.",
-        userId: this.lastID,
-        rol: 'Cliente'
-      });
+      );
     });
-
-  } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor al cifrar la contraseña." });
+  } catch (e) {
+    res.status(500).json({ error: 'Error interno del servidor.' });
   }
 });
 
-
-// ------------------------------------------------------------------
-// RUTA 2: INICIO DE SESIÓN - /api/auth/login
-// ------------------------------------------------------------------
-router.post('/login', (req, res) => {
+// Login (devuelve rol y dirección por defecto)
+router.post('/login', async (req, res) => {
   const { email, password } = req.body;
+  if (!email || !password)
+    return res.status(400).json({ error: 'Correo y contraseña son obligatorios.' });
 
-  if (!email || !password) {
-    return res.status(400).json({ error: "Correo y contraseña son obligatorios." });
-  }
-
-  const sql = `SELECT u.id, u.nombre, u.email, u.password_hash, r.nombre AS rol_nombre 
-               FROM usuarios u
-               JOIN roles r ON u.rol_id = r.id
-               WHERE u.email = ?`;
-  
+  const sql = `
+    SELECT u.id, u.nombre, u.apellidos, u.email, u.password_hash, r.nombre AS rol_nombre,
+           d.calle, d.depto, d.region, d.comuna
+    FROM usuarios u
+    JOIN roles r ON u.rol_id = r.id
+    LEFT JOIN direcciones d ON d.usuario_id = u.id
+    WHERE u.email = ?
+  `;
   db.get(sql, [email], async (err, user) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-
-    // 1. Verificar si el usuario existe
-    if (!user) {
-      return res.status(401).json({ error: "Credenciales incorrectas." });
-    }
+    if (err) return res.status(500).json({ error: err.message });
+    if (!user) return res.status(401).json({ error: 'Credenciales incorrectas.' });
 
     try {
-      // 2. Comparar la contraseña ingresada con el hash almacenado
-      const match = await bcrypt.compare(password, user.password_hash);
+      const ok = await bcrypt.compare(password, user.password_hash);
+      if (!ok) return res.status(401).json({ error: 'Credenciales incorrectas.' });
 
-      if (match) {
-        // 3. Inicio de sesión exitoso. Devolver datos del usuario (SIN la contraseña hash)
-        // Normalmente aquí se genera un token JWT para mantener la sesión
-        const userData = {
-          id: user.id,
-          nombre: user.nombre,
-          email: user.email,
-          rol: user.rol_nombre // 'Administrador' o 'Cliente'
-        };
-        
-        res.json({ 
-          message: "Inicio de sesión exitoso.",
-          user: userData,
-        });
-
-      } else {
-        // Contraseña incorrecta
-        res.status(401).json({ error: "Credenciales incorrectas." });
-      }
-
-    } catch (error) {
-      res.status(500).json({ error: "Error interno del servidor al verificar la contraseña." });
+      const userData = {
+        id: user.id,
+        nombre: user.nombre,
+        apellidos: user.apellidos,
+        email: user.email,
+        rol: user.rol_nombre, // 'Administrador' o 'Cliente'
+        direccion_default: {
+          calle: user.calle,
+          depto: user.depto,
+          region: user.region,
+          comuna: user.comuna,
+        },
+      };
+      res.json({ message: 'Inicio de sesión exitoso.', user: userData });
+    } catch {
+      res.status(500).json({ error: 'Error en la verificación de contraseña.' });
     }
   });
 });
-
 
 export default router;
