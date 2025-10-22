@@ -1,8 +1,24 @@
 // server/routes/productRoutes.js
 import express from 'express';
 import { db } from '../database.js';
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
 
 const router = express.Router();
+
+const uploadDir = path.resolve('public', 'uploads');
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+
+const storage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, uploadDir),
+  filename: (_req, file, cb) => {
+    const ext = path.extname(file.originalname || '');
+    const base = path.basename(file.originalname || 'img', ext).replace(/\s+/g, '_');
+    cb(null, `${Date.now()}_${base}${ext}`);
+  }
+});
+const upload = multer({ storage });
 
 const withDiscount = (row) => {
   const discount = row.discount_percentage ?? 0;
@@ -110,6 +126,22 @@ router.delete('/:id', (req, res) => {
     if (this.changes === 0) return res.status(404).json({ error: "Producto no encontrado." });
     res.json({ message: "Producto eliminado exitosamente", changes: this.changes });
   });
+});
+
+// add this near other endpoints
+router.get('/low-stock', (_req, res) => {
+  const threshold = 5; // critical stock level
+  db.all('SELECT * FROM productos WHERE stock <= ? ORDER BY stock ASC', [threshold], (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ data: rows || [] });
+  });
+});
+
+router.post('/upload-image', upload.single('image'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No file' });
+  // static url path
+  const url = `/uploads/${req.file.filename}`;
+  res.json({ url });
 });
 
 export default router;

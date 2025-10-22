@@ -1,5 +1,4 @@
 // src/App.jsx
-
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -33,6 +32,12 @@ import Checkout from './paginas/checkout.jsx';
 
 // Admin (require admin)
 import AdminDashboard from './admin/adminDashboard.jsx';
+import AdminProductos from './admin/adminProductos.jsx';
+import AdminCategorias from './admin/adminCategorias.jsx';
+import AdminUsuarios from './admin/adminUsuarios.jsx';
+import AdminBoletas from './admin/adminBoletas.jsx';
+import AdminReportes from './admin/adminReportes.jsx';
+import AdminPerfil from './admin/adminPerfil.jsx';
 
 function App() {
   return (
@@ -76,7 +81,7 @@ function App() {
                 }
               />
 
-              {/* Require admin */}
+              {/* === ADMIN ROUTES (Protected by RequireAdmin) === */}
               <Route
                 path="/admin"
                 element={
@@ -85,7 +90,55 @@ function App() {
                   </RequireAdmin>
                 }
               />
-            </Route>
+              <Route
+                path="/admin/productos"
+                element={
+                  <RequireAdmin>
+                    <AdminProductos />
+                  </RequireAdmin>
+                }
+              />
+              <Route
+                path="/admin/categorias"
+                element={
+                  <RequireAdmin>
+                    <AdminCategorias />
+                  </RequireAdmin>
+                }
+              />
+              <Route
+                path="/admin/usuarios"
+                element={
+                  <RequireAdmin>
+                    <AdminUsuarios />
+                  </RequireAdmin>
+                }
+              />
+              <Route
+                path="/admin/boletas"
+                element={
+                  <RequireAdmin>
+                    <AdminBoletas />
+                  </RequireAdmin>
+                }
+              />
+              <Route
+                path="/admin/reportes"
+                element={
+                  <RequireAdmin>
+                    <AdminReportes />
+                  </RequireAdmin>
+                }
+              />
+              <Route
+                path="/admin/perfil"
+                element={
+                  <RequireAdmin>
+                    <AdminPerfil />
+                  </RequireAdmin>
+                }
+              />
+            </Route>{/* <-- CLOSE MainLayout wrapper */}
 
             {/* 404 */}
             <Route path="*" element={<h1>404 | Página no encontrada</h1>} />

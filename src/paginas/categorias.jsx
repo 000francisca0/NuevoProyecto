@@ -1,40 +1,69 @@
-// src/paginas/Categorias.jsx
+// src/paginas/categorias.jsx
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+// ✅ Valid Font Awesome icons only — no FaBear duplicates
+import { FaPaw, FaFish, FaHatWizard } from 'react-icons/fa';
+
+const iconFor = (name) => {
+  const n = (name || '').toLowerCase();
+  if (n.includes('oso')) return <FaPaw />;
+  if (n.includes('fant')) return <FaHatWizard />;
+  if (n.includes('mar')) return <FaFish />;
+  return <FaPaw />;
+};
 
 export default function Categorias() {
   const [cats, setCats] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/categorias')
-      .then(res => res.json())
-      .then(json => {
-        setCats(json.data || []);
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
+    (async () => {
+      setLoading(true);
+      const res = await fetch('http://localhost:3001/api/categorias');
+      const data = await res.json();
+      setCats(res.ok ? (data.data || []) : []);
+      setLoading(false);
+    })();
   }, []);
 
   return (
     <main className="main-content">
       <div className="container">
-        <div className="content-card">
-          <h1>Categorías</h1>
-          {loading && <p>Cargando categorías...</p>}
-          <div className="grid" style={{ marginTop: 12 }}>
-            {cats.map(c => (
-              <div key={c.id} className="card">
-                <div className="card-body">
-                  <h3 className="card-title">{c.nombre}</h3>
-                </div>
-                <div className="card-actions">
-                  <Link to={`/categoria/${c.id}`} className="btn btn-ghost">Ver</Link>
-                </div>
-              </div>
-            ))}
+        <div className="card" style={{ marginBottom: 16 }}>
+          <div className="card-body">
+            <h1 style={{ margin: 0 }}>Categorías</h1>
+            <p className="card-sub">Explora por tipo de peluche.</p>
           </div>
         </div>
+
+        {loading ? (
+          <div className="card">
+            <div className="card-body">
+              <p>Cargando...</p>
+            </div>
+          </div>
+        ) : (
+          <section className="grid">
+            {cats.map((c) => (
+              <Link
+                key={c.id}
+                to={`/categoria/${c.id}`}
+                className="card"
+                aria-label={c.nombre}
+              >
+                <div className="card-body" style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 42, opacity: 0.9, marginBottom: 8 }}>
+                    {iconFor(c.nombre)}
+                  </div>
+                  <h3 className="card-title" style={{ textAlign: 'center' }}>
+                    {c.nombre}
+                  </h3>
+                  <p className="card-sub">Ver productos de {c.nombre}</p>
+                </div>
+              </Link>
+            ))}
+          </section>
+        )}
       </div>
     </main>
   );
