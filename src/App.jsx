@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.css';
 
 import { CartProvider } from './context/cartContext';
-import { AuthProvider, RequireAuth, RequireAdmin } from './context/authContext';
+import { AuthProvider, RequireAuth, RequireAdmin } from './context/AuthContext.jsx';
 
 // Layout
 import MainLayout from './components/layout/MainLayout';

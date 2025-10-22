@@ -2,7 +2,7 @@
 import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/cartContext';
-import { useAuth } from '../context/authContext';
+import { useAuth } from '../context/AuthContext';
 import { BsCart4 } from 'react-icons/bs';
 
 function Header() {

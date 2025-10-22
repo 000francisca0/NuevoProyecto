@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaBox, FaTags, FaUsers, FaReceipt, FaChartLine, FaUserCog } from 'react-icons/fa';
-import { useAuth } from '../context/authContext';
+import { useAuth } from '../context/AuthContext';
 
 const AdminTile = ({ to, icon, title, sub }) => (
   <Link to={to} className="card" style={{ textDecoration: 'none' }}>

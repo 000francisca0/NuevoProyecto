@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/cartContext';
-import { useAuth } from '../context/authContext';
+import { useAuth } from '../context/AuthContext';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 
 function Carro() {

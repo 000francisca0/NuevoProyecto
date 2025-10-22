@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { CartContext } from '../context/cartContext';
-import { useAuth } from '../context/authContext';
+import { useAuth } from '../context/AuthContext';
 import { FaMapMarkerAlt, FaHome } from 'react-icons/fa';
 
 const formatPrice = (price) =>

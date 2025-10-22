@@ -1,7 +1,7 @@
 // src/paginas/inicio.jsx
 import React, { useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/authContext';
+import { useAuth } from '../context/AuthContext';
 import { FaEnvelope, FaLock } from 'react-icons/fa';
 
 export default function LoginForm() {
