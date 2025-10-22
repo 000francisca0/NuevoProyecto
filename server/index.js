@@ -26,24 +26,6 @@ app.use('/uploads', express.static(path.resolve('public', 'uploads')));
 // DB SETUP / MIGRATIONS
 // ----------------------------------------------------
 
-// Helper: add a column if it doesn't exist (SQLite)
-function ensureColumn(table, column, type, cb) {
-  db.all(`PRAGMA table_info(${table});`, [], (err, rows) => {
-    if (err) {
-      console.error(`Error reading PRAGMA table_info(${table}):`, err.message);
-      return cb && cb(err);
-    }
-    const hasCol = rows.some(r => r.name === column);
-    if (hasCol) return cb && cb(null);
-
-    const alter = `ALTER TABLE ${table} ADD COLUMN ${column} ${type};`;
-    db.run(alter, [], (e) => {
-      if (e) console.error(`Error adding column ${column} to ${table}:`, e.message);
-      else console.log(`Added column ${column} to ${table}`);
-      cb && cb(e);
-    });
-  });
-}
 
 function initializeDatabase() {
   // Helper: add a column if it doesn't exist (SQLite)
