@@ -96,15 +96,11 @@ export default function Home() {
             </header>
           </div>
 
-          <div
-            onMouseEnter={pause}
-            onMouseLeave={resume}
-            style={{ position: 'relative' }}
-          >
+          <div onMouseEnter={pause} onMouseLeave={resume} style={{ position: 'relative' }}>
             {/* Slide */}
-            <div style={{ height: 360, display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: 16, alignItems: 'stretch', padding: '0 1.25rem 1.25rem' }}>
+            <div className="home-hero-grid">
               {/* Media */}
-              <div className="card" style={{ margin: 0, height: '100%', overflow: 'hidden', display: 'flex' }}>
+              <div className="card home-hero-media" style={{ margin: 0, overflow: 'hidden', display: 'flex' }}>
                 {loadingSale ? (
                   <div className="card-body" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     Cargando ofertas…
@@ -132,7 +128,7 @@ export default function Home() {
               </div>
 
               {/* Info */}
-              <div className="card" style={{ margin: 0, height: '100%', display: 'flex' }}>
+              <div className="card" style={{ margin: 0, display: 'flex' }}>
                 <div className="card-body" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {current ? (
                     <>
@@ -242,7 +238,6 @@ export default function Home() {
                   <img
                     className="card-media"
                     alt={c.nombre}
-                    // Puedes personalizar una imagen por categoría si quieres
                     src={
                       c.nombre.toLowerCase().includes('oso') ? '/osito.jpg'
                       : c.nombre.toLowerCase().includes('fantas') ? '/unicornio.jpg'
@@ -261,7 +256,7 @@ export default function Home() {
         {/* ===================== BLOG HIGHLIGHT ===================== */}
         <section>
           <div className="card">
-            <div className="card-body" style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 16, alignItems: 'center' }}>
+            <div className="card-body home-blog-grid">
               <div>
                 <h2 style={{ marginTop: 0, marginBottom: 6 }}>Consejos para cuidar tus peluches</h2>
                 <p className="card-sub" style={{ marginBottom: 12 }}>

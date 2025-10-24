@@ -11,6 +11,8 @@ function Carro() {
   const { cartItems, addToCart, removeFromCart, removeItem } = useContext(CartContext);
 
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
+  const [notice, setNotice] = useState('');
+
   useEffect(() => {
     const mm = window.matchMedia('(max-width: 768px)');
     const handler = (e) => setIsMobile(e.matches);
@@ -29,24 +31,31 @@ function Carro() {
     return sum + precio * qty;
   }, 0);
 
-  const formatPrice = (price) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(price);
+  const formatPrice = (price) =>
+    new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(price);
 
   const handleGoToCheckout = () => {
     if (!isLoggedIn || !user) {
-      alert('Debes iniciar sesión para finalizar la compra.');
-      navigate('/');
+      setNotice('Debes iniciar sesión para finalizar la compra.');
       return;
     }
     if (cartItems.length === 0) {
-      alert('El carrito está vacío.');
+      setNotice('El carrito está vacío.');
       return;
     }
+    setNotice('');
     navigate('/checkout');
   };
 
   const Summary = () => (
     <aside className="summary card">
       <h2>Resumen de la Compra</h2>
+
+      {notice && (
+        <div className="server-error-message" style={{ marginBottom: 10 }}>
+          {notice}
+        </div>
+      )}
 
       <div className="summary-section">
         <h3 style={{ fontSize: '1.1rem', marginTop: 0 }}>
@@ -124,9 +133,27 @@ function Carro() {
                   </div>
 
                   <div className="qty-controls">
-                    <button onClick={() => removeFromCart(item)} className="btn btn-ghost" aria-label={`Reducir cantidad de ${item.nombre}`}>-</button>
+                    <button
+                      onClick={() => {
+                        setNotice('');
+                        removeFromCart(item);
+                      }}
+                      className="btn btn-ghost"
+                      aria-label={`Reducir cantidad de ${item.nombre}`}
+                    >
+                      -
+                    </button>
                     <span aria-live="polite" style={{ minWidth: 26, textAlign: 'center' }}>{item.quantity || 0}</span>
-                    <button onClick={() => addToCart(item)} className="btn btn-ghost" aria-label={`Aumentar cantidad de ${item.nombre}`}>+</button>
+                    <button
+                      onClick={() => {
+                        setNotice('');
+                        addToCart(item);
+                      }}
+                      className="btn btn-ghost"
+                      aria-label={`Aumentar cantidad de ${item.nombre}`}
+                    >
+                      +
+                    </button>
                   </div>
 
                   <div className="cart-item-subtotal">
@@ -134,7 +161,14 @@ function Carro() {
                   </div>
 
                   <div>
-                    <button className="btn btn-ghost" onClick={() => removeItem(item)} aria-label={`Eliminar ${item.nombre} del carrito`}>
+                    <button
+                      className="btn btn-ghost"
+                      onClick={() => {
+                        setNotice('');
+                        removeItem(item);
+                      }}
+                      aria-label={`Eliminar ${item.nombre} del carrito`}
+                    >
                       Eliminar
                     </button>
                   </div>

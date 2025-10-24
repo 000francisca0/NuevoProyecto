@@ -38,6 +38,8 @@ export default function RegisterForm() {
 
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState('');
+  const [okMsg, setOkMsg] = useState('');
+
   const comunasDisponibles = region ? REGIONES_COMUNAS_CHILE[region] : [];
 
   useEffect(() => { setComuna(''); }, [region]);
@@ -46,8 +48,14 @@ export default function RegisterForm() {
     const e = {};
     if (!nombre || nombre.length < 3) e.nombre = 'El nombre es requerido (min 3).';
     if (!apellidos || apellidos.length < 3) e.apellidos = 'Los apellidos son requeridos (min 3).';
-    if (!email) e.email = 'El correo es requerido.';
-    if (!password || password.length < 4 || password.length > 10) e.password = 'La contraseña debe tener entre 4 y 10 caracteres.';
+
+    if (!email) {
+      e.email = 'El correo es requerido.';
+    }
+
+    if (!password || password.length < 4 || password.length > 10) {
+      e.password = 'La contraseña debe tener entre 4 y 10 caracteres.';
+    }
     if (password !== confirmPassword) e.confirmPassword = 'Las contraseñas no coinciden.';
 
     if (!calle || calle.length < 5) e.calle = 'La calle y numeración son requeridas.';
@@ -61,6 +69,7 @@ export default function RegisterForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setServerError('');
+    setOkMsg('');
     if (!validateForm()) return;
 
     try {
@@ -73,9 +82,9 @@ export default function RegisterForm() {
       if (!resp.ok) {
         setServerError(data?.error || 'Error al registrar el usuario.');
         return;
-    }
-      alert('¡Registro exitoso! Ahora puedes iniciar sesión.');
-      navigate('/');
+      }
+      setOkMsg('¡Registro exitoso! Redirigiendo al inicio de sesión…');
+      setTimeout(() => navigate('/'), 1200);
     } catch {
       setServerError('No se pudo conectar con el servidor.');
     }
@@ -85,15 +94,19 @@ export default function RegisterForm() {
     <div className="container" style={{ paddingTop: '3rem', paddingBottom: '3rem' }}>
       <div className="form-shell">
         <h2>Crear Cuenta</h2>
-        {serverError && <div className="server-error-message">{serverError}</div>}
 
         <form noValidate onSubmit={handleSubmit}>
-          <div className="grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
+          <div className="grid form-grid-2">
             <div className="form-group">
               <label className="form-label">Nombre</label>
               <div className="input-icon-wrapper">
-                <input className="form-control" type="text" placeholder="Tu nombre"
-                  value={nombre} onChange={(e) => setNombre(e.target.value)} />
+                <input
+                  className="form-control"
+                  type="text"
+                  placeholder="Tu nombre"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                />
                 <FaUser className="input-icon" />
               </div>
               {errors.nombre && <div className="error-message">{errors.nombre}</div>}
@@ -102,8 +115,13 @@ export default function RegisterForm() {
             <div className="form-group">
               <label className="form-label">Apellidos</label>
               <div className="input-icon-wrapper">
-                <input className="form-control" type="text" placeholder="Tus apellidos"
-                  value={apellidos} onChange={(e) => setApellidos(e.target.value)} />
+                <input
+                  className="form-control"
+                  type="text"
+                  placeholder="Tus apellidos"
+                  value={apellidos}
+                  onChange={(e) => setApellidos(e.target.value)}
+                />
                 <FaUser className="input-icon" />
               </div>
               {errors.apellidos && <div className="error-message">{errors.apellidos}</div>}
@@ -113,8 +131,13 @@ export default function RegisterForm() {
           <div className="form-group">
             <label className="form-label">Correo</label>
             <div className="input-icon-wrapper">
-              <input className="form-control" type="email" placeholder="ejemplo@duoc.cl"
-                value={email} onChange={(e) => setEmail(e.target.value)} />
+              <input
+                className="form-control"
+                type="email"
+                placeholder="ejemplo@duoc.cl"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
               <FaEnvelope className="input-icon" />
             </div>
             {errors.email && <div className="error-message">{errors.email}</div>}
@@ -122,13 +145,21 @@ export default function RegisterForm() {
 
           <h4 className="mb-2">Dirección de Envío</h4>
 
-          <div className="grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
+          <div className="grid form-grid-2">
             <div className="form-group">
               <label className="form-label">Región</label>
               <div className="input-icon-wrapper">
-                <select className="form-control" value={region} onChange={(e) => setRegion(e.target.value)}>
+                <select
+                  className="form-control"
+                  value={region}
+                  onChange={(e) => setRegion(e.target.value)}
+                >
                   <option value="">Selecciona una Región</option>
-                  {REGIONES.map(r => <option key={r} value={r}>{r}</option>)}
+                  {REGIONES.map((r) => (
+                    <option key={r} value={r}>
+                      {r}
+                    </option>
+                  ))}
                 </select>
                 <FaMapMarkerAlt className="input-icon" />
               </div>
@@ -138,9 +169,18 @@ export default function RegisterForm() {
             <div className="form-group">
               <label className="form-label">Comuna</label>
               <div className="input-icon-wrapper">
-                <select className="form-control" value={comuna} onChange={(e) => setComuna(e.target.value)} disabled={!region}>
+                <select
+                  className="form-control"
+                  value={comuna}
+                  onChange={(e) => setComuna(e.target.value)}
+                  disabled={!region}
+                >
                   <option value="">Selecciona una Comuna</option>
-                  {comunasDisponibles.sort().map(c => <option key={c} value={c}>{c}</option>)}
+                  {comunasDisponibles.sort().map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
                 </select>
                 <FaMapMarkerAlt className="input-icon" />
               </div>
@@ -151,8 +191,13 @@ export default function RegisterForm() {
           <div className="form-group">
             <label className="form-label">Calle y Numeración</label>
             <div className="input-icon-wrapper">
-              <input className="form-control" type="text" placeholder="Ej: Av. Vicuña Mackenna 4860"
-                value={calle} onChange={(e) => setCalle(e.target.value)} />
+              <input
+                className="form-control"
+                type="text"
+                placeholder="Ej: Av. Vicuña Mackenna 4860"
+                value={calle}
+                onChange={(e) => setCalle(e.target.value)}
+              />
               <FaHome className="input-icon" />
             </div>
             {errors.calle && <div className="error-message">{errors.calle}</div>}
@@ -161,18 +206,28 @@ export default function RegisterForm() {
           <div className="form-group">
             <label className="form-label">Departamento / Casa (Opcional)</label>
             <div className="input-icon-wrapper">
-              <input className="form-control" type="text" placeholder="Ej: Depto 501"
-                value={depto} onChange={(e) => setDepto(e.target.value)} />
+              <input
+                className="form-control"
+                type="text"
+                placeholder="Ej: Depto 501"
+                value={depto}
+                onChange={(e) => setDepto(e.target.value)}
+              />
               <FaHome className="input-icon" />
             </div>
           </div>
 
-          <div className="grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
+          <div className="grid form-grid-2">
             <div className="form-group">
               <label className="form-label">Contraseña</label>
               <div className="input-icon-wrapper">
-                <input className="form-control" type="password" placeholder="Crea tu contraseña"
-                  value={password} onChange={(e) => setPassword(e.target.value)} />
+                <input
+                  className="form-control"
+                  type="password"
+                  placeholder="Crea tu contraseña"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
                 <FaLock className="input-icon" />
               </div>
               {errors.password && <div className="error-message">{errors.password}</div>}
@@ -181,8 +236,13 @@ export default function RegisterForm() {
             <div className="form-group">
               <label className="form-label">Confirmar Contraseña</label>
               <div className="input-icon-wrapper">
-                <input className="form-control" type="password" placeholder="Repite la contraseña"
-                  value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+                <input
+                  className="form-control"
+                  type="password"
+                  placeholder="Repite la contraseña"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
                 <FaLock className="input-icon" />
               </div>
               {errors.confirmPassword && <div className="error-message">{errors.confirmPassword}</div>}
@@ -196,6 +256,25 @@ export default function RegisterForm() {
           <Link to="/" className="text-center" style={{ display: 'block', marginTop: 16 }}>
             ¿Ya tienes cuenta? Inicia Sesión
           </Link>
+
+          {serverError && (
+            <div className="server-error-message" style={{ marginTop: 12 }}>
+              {serverError}
+            </div>
+          )}
+          {okMsg && (
+            <div
+              style={{
+                background: 'rgba(25,135,84,.08)',
+                color: '#198754',
+                padding: '.6rem .8rem',
+                borderRadius: 8,
+                marginTop: 12
+              }}
+            >
+              {okMsg}
+            </div>
+          )}
         </form>
       </div>
     </div>

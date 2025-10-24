@@ -76,14 +76,38 @@ export default function Checkout() {
       const data = await resp.json();
       if (!resp.ok) {
         setIsProcessing(false);
-        return setError(data?.error || 'Ocurrió un error al procesar la compra.');
+        // Do NOT clear cart; send data to "rechazado"
+        navigate('/checkout/rechazado', {
+          state: {
+            items: simplifiedCart,
+            total,
+            address: { calle, depto: depto || null, region, comuna },
+            errorMessage: data?.error || 'Ocurrió un error al procesar la compra.',
+            attemptedAt: new Date().toISOString(),
+          },
+        });
+        return;
       }
       setBoletaId(data.boletaId);
       clearCart();
       setIsProcessing(false);
     } catch {
-      setIsProcessing(false);
-      setError('No se pudo conectar con el servidor o ocurrió un error interno.');
+        setIsProcessing(false);
+        navigate('/checkout/rechazado', {
+          state: {
+            items: cartItems.map((item) => ({
+              id: item.id,
+              nombre: item.nombre,
+              precio: Number(item.precio),
+              quantity: Number(item.quantity),
+              imagen: item.imagen,
+            })),
+            total,
+            address: { calle, depto: depto || null, region, comuna },
+            errorMessage: 'No se pudo conectar con el servidor o ocurrió un error interno.',
+            attemptedAt: new Date().toISOString(),
+          },
+        });
     }
   };
 

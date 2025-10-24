@@ -29,7 +29,7 @@ import HistoriaOsoTeddy from './paginas/blogs/historiaOsoTeddy.jsx';
 // Cart / Checkout (require auth)
 import Carro from './paginas/carro.jsx';
 import Checkout from './paginas/checkout.jsx';
-
+import CheckoutRechazado from './paginas/checkoutRechazado.jsx';
 // Admin (require admin)
 import AdminDashboard from './admin/adminDashboard.jsx';
 import AdminProductos from './admin/adminProductos.jsx';
@@ -48,6 +48,7 @@ function App() {
             {/* AUTH ROUTES (NO LAYOUT) */}
             <Route path="/" element={<LoginForm />} />
             <Route path="/registro" element={<RegisterForm />} />
+            <Route path="/inicio" element={<LoginForm />} />  {/* <— add this */}
 
             {/* ROUTES WITH LAYOUT */}
             <Route element={<MainLayout />}>
@@ -57,7 +58,7 @@ function App() {
               <Route path="/nosotros" element={<Nosotros />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/cuidado-de-peluches" element={<CuidadoPeluches />} />
-              <Route path="/blog/historia-oso-teddy" element={<HistoriaOsoTeddy />} />
+              <Route path="/blog/historia-oso-teddy" element={<HistoriaOsoTeddy />} />  
               <Route path="/categorias" element={<Categorias />} />
               <Route path="/categoria/:categoryId" element={<Category />} />
               <Route path="/ofertas" element={<Sales />} />
@@ -72,6 +73,10 @@ function App() {
                   </RequireAuth>
                 }
               />
+              <Route path="/checkout/rechazado" element={
+                <RequireAuth>
+                  <CheckoutRechazado />
+                </RequireAuth>} />
               <Route
                 path="/checkout"
                 element={
