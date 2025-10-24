@@ -1,8 +1,8 @@
-// src/paginas/registro.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaUser, FaEnvelope, FaLock, FaMapMarkerAlt, FaHome } from 'react-icons/fa';
 
+// ... (REGIONES_COMUNAS_CHILE y REGIONES siguen igual)
 const REGIONES_COMUNAS_CHILE = {
   "Región de Arica y Parinacota": ["Arica", "Camarones", "Putre", "General Lagos"],
   "Región de Tarapacá": ["Iquique", "Alto Hospicio", "Pozo Almonte", "Pica", "Huara", "Camiña", "Colchane"],
@@ -43,6 +43,7 @@ export default function RegisterForm() {
   useEffect(() => { setComuna(''); }, [region]);
 
   const validateForm = () => {
+    // ... (la función validateForm sigue igual)
     const e = {};
     if (!nombre || nombre.length < 3) e.nombre = 'El nombre es requerido (min 3).';
     if (!apellidos || apellidos.length < 3) e.apellidos = 'Los apellidos son requeridos (min 3).';
@@ -59,6 +60,7 @@ export default function RegisterForm() {
   };
 
   const handleSubmit = async (event) => {
+    // ... (la función handleSubmit sigue igual)
     event.preventDefault();
     setServerError('');
     if (!validateForm()) return;
@@ -90,9 +92,11 @@ export default function RegisterForm() {
         <form noValidate onSubmit={handleSubmit}>
           <div className="grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
             <div className="form-group">
-              <label className="form-label">Nombre</label>
+              {/* --- ARREGLO AQUÍ --- */}
+              <label className="form-label" htmlFor="nombre">Nombre</label>
               <div className="input-icon-wrapper">
                 <input className="form-control" type="text" placeholder="Tu nombre"
+                  id="nombre"
                   value={nombre} onChange={(e) => setNombre(e.target.value)} />
                 <FaUser className="input-icon" />
               </div>
@@ -100,9 +104,11 @@ export default function RegisterForm() {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Apellidos</label>
+              {/* --- ARREGLO AQUÍ --- */}
+              <label className="form-label" htmlFor="apellidos">Apellidos</label>
               <div className="input-icon-wrapper">
                 <input className="form-control" type="text" placeholder="Tus apellidos"
+                  id="apellidos"
                   value={apellidos} onChange={(e) => setApellidos(e.target.value)} />
                 <FaUser className="input-icon" />
               </div>
@@ -111,9 +117,11 @@ export default function RegisterForm() {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Correo</label>
+            {/* --- ARREGLO AQUÍ --- */}
+            <label className="form-label" htmlFor="email">Correo</label>
             <div className="input-icon-wrapper">
               <input className="form-control" type="email" placeholder="ejemplo@duoc.cl"
+                id="email"
                 value={email} onChange={(e) => setEmail(e.target.value)} />
               <FaEnvelope className="input-icon" />
             </div>
@@ -124,9 +132,12 @@ export default function RegisterForm() {
 
           <div className="grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
             <div className="form-group">
-              <label className="form-label">Región</label>
+              {/* --- ARREGLO AQUÍ --- */}
+              <label className="form-label" htmlFor="region">Región</label>
               <div className="input-icon-wrapper">
-                <select className="form-control" value={region} onChange={(e) => setRegion(e.target.value)}>
+                <select className="form-control"
+                  id="region"
+                  value={region} onChange={(e) => setRegion(e.target.value)}>
                   <option value="">Selecciona una Región</option>
                   {REGIONES.map(r => <option key={r} value={r}>{r}</option>)}
                 </select>
@@ -136,9 +147,12 @@ export default function RegisterForm() {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Comuna</label>
+              {/* --- ARREGLO AQUÍ --- */}
+              <label className="form-label" htmlFor="comuna">Comuna</label>
               <div className="input-icon-wrapper">
-                <select className="form-control" value={comuna} onChange={(e) => setComuna(e.target.value)} disabled={!region}>
+                <select className="form-control"
+                  id="comuna"
+                  value={comuna} onChange={(e) => setComuna(e.target.value)} disabled={!region}>
                   <option value="">Selecciona una Comuna</option>
                   {comunasDisponibles.sort().map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
@@ -149,9 +163,11 @@ export default function RegisterForm() {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Calle y Numeración</label>
+            {/* --- ARREGLO AQUÍ --- */}
+            <label className="form-label" htmlFor="calle">Calle y Numeración</label>
             <div className="input-icon-wrapper">
               <input className="form-control" type="text" placeholder="Ej: Av. Vicuña Mackenna 4860"
+                id="calle"
                 value={calle} onChange={(e) => setCalle(e.target.value)} />
               <FaHome className="input-icon" />
             </div>
@@ -159,9 +175,11 @@ export default function RegisterForm() {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Departamento / Casa (Opcional)</label>
+            {/* --- ARREGLO AQUÍ --- */}
+            <label className="form-label" htmlFor="depto">Departamento / Casa (Opcional)</label>
             <div className="input-icon-wrapper">
               <input className="form-control" type="text" placeholder="Ej: Depto 501"
+                id="depto"
                 value={depto} onChange={(e) => setDepto(e.target.value)} />
               <FaHome className="input-icon" />
             </div>
@@ -169,9 +187,11 @@ export default function RegisterForm() {
 
           <div className="grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
             <div className="form-group">
-              <label className="form-label">Contraseña</label>
+              {/* --- ARREGLO AQUÍ --- */}
+              <label className="form-label" htmlFor="password">Contraseña</label>
               <div className="input-icon-wrapper">
                 <input className="form-control" type="password" placeholder="Crea tu contraseña"
+                  id="password"
                   value={password} onChange={(e) => setPassword(e.target.value)} />
                 <FaLock className="input-icon" />
               </div>
@@ -179,9 +199,11 @@ export default function RegisterForm() {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Confirmar Contraseña</label>
+              {/* --- ARREGLO AQUÍ --- */}
+              <label className="form-label" htmlFor="confirmPassword">Confirmar Contraseña</label>
               <div className="input-icon-wrapper">
                 <input className="form-control" type="password" placeholder="Repite la contraseña"
+                  id="confirmPassword"
                   value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
                 <FaLock className="input-icon" />
               </div>
