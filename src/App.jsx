@@ -30,6 +30,7 @@ import HistoriaOsoTeddy from './paginas/blogs/historiaOsoTeddy.jsx';
 import Carro from './paginas/carro.jsx';
 import Checkout from './paginas/checkout.jsx';
 import CheckoutRechazado from './paginas/checkoutRechazado.jsx';
+
 // Admin (require admin)
 import AdminDashboard from './admin/adminDashboard.jsx';
 import AdminProductos from './admin/adminProductos.jsx';
