@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { CartContext } from '../context/cartContext';
+import { API_BASE } from '../lib/api.js';
 
 export default function DetallesProductos() {
   const { id } = useParams();
@@ -18,7 +19,7 @@ export default function DetallesProductos() {
     async function load() {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:3001/api/productos/${id}/details`);
+        const res = await fetch(`${API_BASE}/productos/${id}/details`)
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Error fetching product');
 

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard/productCard.jsx";
 import { Link } from 'react-router-dom';
+import { API_BASE } from '../lib/api.js';
 
 export default function Productos() {
   const [categories, setCategories] = useState([]);
@@ -15,8 +16,8 @@ export default function Productos() {
       try {
         setLoading(true);
         const [catsRes, prodsRes] = await Promise.all([
-          fetch('http://localhost:3001/api/categorias'),
-          fetch('http://localhost:3001/api/productos')
+          fetch(`${API_BASE}/categorias`),
+          fetch(`${API_BASE}/productos`)
         ]);
 
         const catsJson = await catsRes.json();

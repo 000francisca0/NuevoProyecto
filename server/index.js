@@ -1,4 +1,4 @@
-// server/index.js (ACTUALIZADO: migraciones completas + seeding + rutas)
+// server/index.js (PROD-ready: env HOST/PORT + keeps your migrations/seeding)
 
 import express from 'express';
 import cors from 'cors';
@@ -13,22 +13,23 @@ import boletaRoutes from './routes/boletaRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
 import path from 'path';
 
-
 const app = express();
-const PORT = 3001;
+
+// ▶ CHANGES: make port/host configurable for systemd/EC2
+const PORT = process.env.PORT || 4000;
+const HOST = process.env.HOST || '0.0.0.0';
 
 app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static(path.resolve('public', 'uploads')));
 
+// Static uploads served by Express (Nginx will still front the site)
+app.use('/uploads', express.static(path.resolve('public', 'uploads')));
 
 // ----------------------------------------------------
 // DB SETUP / MIGRATIONS
 // ----------------------------------------------------
 
-
 function initializeDatabase() {
-  // Helper: add a column if it doesn't exist (SQLite)
   function ensureColumn(table, column, type, cb) {
     db.all(`PRAGMA table_info(${table});`, [], (err, rows) => {
       if (err) return cb && cb(err);
@@ -38,7 +39,6 @@ function initializeDatabase() {
     });
   }
 
-  // ---- STEP 0: Create schema ----
   db.serialize(() => {
     // 1. Roles
     db.run(`CREATE TABLE IF NOT EXISTS roles (
@@ -73,7 +73,7 @@ function initializeDatabase() {
       imagen_url TEXT,
       categoria_id INTEGER,
       on_sale INTEGER NOT NULL DEFAULT 0,
-      discount_percentage REAL,         -- 0..1 (nullable)
+      discount_percentage REAL,
       FOREIGN KEY (categoria_id) REFERENCES categorias(id)
     );`);
 
@@ -125,8 +125,7 @@ function initializeDatabase() {
       FOREIGN KEY (producto_id) REFERENCES productos(id)
     );`);
 
-    // ---- STEP 1..N: Seed in strict order with callbacks ----
-
+    // ---- Seeds (unchanged) ----
     const seedRoles = (cb) => {
       db.get('SELECT COUNT(*) AS count FROM roles', (err, row) => {
         if (err) return cb(err);
@@ -156,12 +155,12 @@ function initializeDatabase() {
 
     const seedProductos = (cb) => {
       const initialProducts = [
-        { nombre: 'Oso Clásico de Peluche',       descripcion: 'El clásico y fiel amigo de peluche.', precio: 19990, stock: 15, imagen_url: '/osito.jpg',      categoria_id: 1, on_sale: 0, discount_percentage: 0.25 },
-        { nombre: 'Conejo Saltarin Suave',        descripcion: 'Ideal para abrazar, orejas largas.',  precio: 15990, stock: 22, imagen_url: '/conejo.jpg',     categoria_id: 2, on_sale: 0, discount_percentage: 0.00 },
-        { nombre: 'Dinosaurio Rex Amigable',      descripcion: 'Un T-Rex muy amigable.',              precio: 22990, stock: 5,  imagen_url: '/dinosaurio.jpg', categoria_id: 2, on_sale: 0, discount_percentage: 0.10 },
-        { nombre: 'Unicornio Mágico Brillante',   descripcion: 'Brilla con magia.',                   precio: 24990, stock: 8,  imagen_url: '/unicornio.jpg',  categoria_id: 3, on_sale: 0, discount_percentage: 0.15 },
-        { nombre: 'Panda',                         descripcion: 'Panda de bambú suave.',              precio: 18990, stock: 12, imagen_url: '/panda.jpg',       categoria_id: 1, on_sale: 0, discount_percentage: 0.20 },
-        { nombre: 'Perezoso',                      descripcion: 'Para abrazos lentos.',               precio: 21990, stock: 10, imagen_url: '/peresozo.jpg',    categoria_id: 2, on_sale: 0, discount_percentage: null },
+        { nombre: 'Oso Clásico de Peluche', descripcion: 'El clásico y fiel amigo de peluche.', precio: 19990, stock: 15, imagen_url: '/osito.jpg', categoria_id: 1, on_sale: 0, discount_percentage: 0.25 },
+        { nombre: 'Conejo Saltarin Suave', descripcion: 'Ideal para abrazar, orejas largas.', precio: 15990, stock: 22, imagen_url: '/conejo.jpg', categoria_id: 2, on_sale: 0, discount_percentage: 0.00 },
+        { nombre: 'Dinosaurio Rex Amigable', descripcion: 'Un T-Rex muy amigable.', precio: 22990, stock: 5, imagen_url: '/dinosaurio.jpg', categoria_id: 2, on_sale: 0, discount_percentage: 0.10 },
+        { nombre: 'Unicornio Mágico Brillante', descripcion: 'Brilla con magia.', precio: 24990, stock: 8, imagen_url: '/unicornio.jpg', categoria_id: 3, on_sale: 0, discount_percentage: 0.15 },
+        { nombre: 'Panda', descripcion: 'Panda de bambú suave.', precio: 18990, stock: 12, imagen_url: '/panda.jpg', categoria_id: 1, on_sale: 0, discount_percentage: 0.20 },
+        { nombre: 'Perezoso', descripcion: 'Para abrazos lentos.', precio: 21990, stock: 10, imagen_url: '/peresozo.jpg', categoria_id: 2, on_sale: 0, discount_percentage: null },
       ];
 
       db.get('SELECT COUNT(*) AS count FROM productos', (err, row) => {
@@ -240,7 +239,7 @@ function initializeDatabase() {
       const ensureSales = (uid, done) => {
         db.get('SELECT COUNT(*) AS c FROM boletas', (be, br) => {
           if (be) return done(be);
-          if ((br?.c || 0) > 0) return done(null); // already have sales
+          if ((br?.c || 0) > 0) return done(null);
 
           db.all('SELECT id, nombre, precio, imagen_url FROM productos LIMIT 3', (pe, prs) => {
             if (pe) return done(pe);
@@ -281,7 +280,6 @@ function initializeDatabase() {
         });
       };
 
-      // ensure Cliente role id
       db.get("SELECT id FROM roles WHERE nombre='Cliente'", (re, rr) => {
         if (re) return cb(re);
         if (!rr) return cb(new Error('Cliente role missing'));
@@ -315,7 +313,7 @@ function initializeDatabase() {
       });
     };
 
-    // Chain everything in order:
+    // Chain everything:
     seedRoles((e1) => {
       if (e1) return console.error('Seed roles error:', e1.message);
       seedCategorias((e2) => {
@@ -337,7 +335,6 @@ function initializeDatabase() {
 
 initializeDatabase();
 
-
 // ----------------------------------------------------
 // RUTAS
 // ----------------------------------------------------
@@ -352,8 +349,8 @@ app.use('/api/boletas', boletaRoutes);
 app.use('/api/reportes', reportRoutes);
 
 // ----------------------------------------------------
-// START
+// START (bind to HOST for systemd/nginx proxy)
 // ----------------------------------------------------
-app.listen(PORT, () => {
-  console.log(`Servidor Express escuchando en http://localhost:${PORT}`);
+app.listen(PORT, HOST, () => {
+  console.log(`Servidor Express escuchando en http://${HOST}:${PORT}`);
 });

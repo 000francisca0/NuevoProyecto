@@ -12,7 +12,7 @@ export default function Sales() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch('http://localhost:3001/api/productos/on-sale');
+        const res = await fetch(`${API_BASE}/productos/on-sale`);
         const json = await res.json();
         setItems(json?.data || []);
       } catch (e) {

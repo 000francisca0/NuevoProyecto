@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaUser, FaEnvelope, FaLock, FaMapMarkerAlt, FaHome } from 'react-icons/fa';
+import { API_BASE } from '../lib/api.js';
 
 // ... (REGIONES_COMUNAS_CHILE y REGIONES siguen igual)
 const REGIONES_COMUNAS_CHILE = {
@@ -75,7 +76,7 @@ export default function RegisterForm() {
     if (!validateForm()) return;
 
     try {
-      const resp = await fetch('http://localhost:3001/api/auth/register', {
+      const resp = await fetch(`${API_BASE}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nombre, apellidos, email, password, calle, depto: depto || null, region, comuna }),

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard/productCard.jsx';
+import { API_BASE } from '../lib/api.js';
 
 export default function Categoria() {
   const { categoryId } = useParams();
@@ -13,7 +14,7 @@ export default function Categoria() {
     async function load() {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:3001/api/productos/category/${categoryId}`);
+        const res = await fetch(`${API_BASE}/productos/category/${categoryId}`);
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Error fetching');
         setProductos(data.data || []);

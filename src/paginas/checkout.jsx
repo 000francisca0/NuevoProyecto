@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { CartContext } from '../context/cartContext';
 import { useAuth } from '../context/AuthContext';
 import { FaMapMarkerAlt, FaHome } from 'react-icons/fa';
+import { API_BASE } from '../lib/api.js';
 
 const formatPrice = (price) =>
   new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(price || 0);
@@ -68,7 +69,7 @@ export default function Checkout() {
         shippingAddress: { calle, depto: depto || null, region, comuna },
       };
 
-      const resp = await fetch('http://localhost:3001/api/checkout/purchase', {
+      const resp = await fetch(`${API_BASE}/checkout/purchase`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

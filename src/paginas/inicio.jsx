@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FaEnvelope, FaLock } from 'react-icons/fa';
+import { API_BASE } from '../lib/api.js';
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function LoginForm() {
     }
     setIsLoading(true);
     try {
-      const resp = await fetch('http://localhost:3001/api/auth/login', {
+      const resp = await fetch(`${API_BASE}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

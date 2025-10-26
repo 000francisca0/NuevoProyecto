@@ -1,8 +1,8 @@
 // src/paginas/categorias.jsx
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-// ✅ Valid Font Awesome icons only — no FaBear duplicates
 import { FaPaw, FaFish, FaHatWizard } from 'react-icons/fa';
+import { API_BASE } from '../lib/api.js';
 
 const iconFor = (name) => {
   const n = (name || '').toLowerCase();
@@ -19,7 +19,7 @@ export default function Categorias() {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const res = await fetch('http://localhost:3001/api/categorias');
+      const res = await fetch(`${API_BASE}/categorias`);
       const data = await res.json();
       setCats(res.ok ? (data.data || []) : []);
       setLoading(false);

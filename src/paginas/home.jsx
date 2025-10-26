@@ -1,6 +1,7 @@
 // src/paginas/home.jsx
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { API_BASE } from '../lib/api.js';
 
 const CLP = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' });
 const fmt = (n) => CLP.format(Number(n || 0));
@@ -46,7 +47,7 @@ export default function Home() {
     (async () => {
       try {
         setLoadingSale(true);
-        const res = await fetch('http://localhost:3001/api/productos/on-sale');
+        const res = await fetch(`${API_BASE}/productos/on-sale`);
         const json = await res.json();
         if (!res.ok) throw new Error(json.error || 'Error cargando ofertas');
         const data = (json.data || []).map(p => ({
@@ -68,7 +69,7 @@ export default function Home() {
     (async () => {
       try {
         setLoadingCats(true);
-        const res = await fetch('http://localhost:3001/api/categorias');
+        const res = await fetch(`${API_BASE}/categorias`);
         const json = await res.json();
         if (!res.ok) throw new Error(json.error || 'Error cargando categorías');
         setCategories(json.data || []);
