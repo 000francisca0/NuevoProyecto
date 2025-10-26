@@ -29,7 +29,7 @@ import HistoriaOsoTeddy from './paginas/blogs/historiaOsoTeddy.jsx';
 // Cart / Checkout (require auth)
 import Carro from './paginas/carro.jsx';
 import Checkout from './paginas/checkout.jsx';
-import CheckoutRechazado from './paginas/checkoutRechazado.jsx';
+import CheckoutRechazado from './paginas/pagoRechazado.jsx';
 
 // Admin (require admin)
 import AdminDashboard from './admin/adminDashboard.jsx';
