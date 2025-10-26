@@ -1,8 +1,8 @@
-// src/paginas/registro.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaUser, FaEnvelope, FaLock, FaMapMarkerAlt, FaHome } from 'react-icons/fa';
 
+// ... (REGIONES_COMUNAS_CHILE y REGIONES siguen igual)
 const REGIONES_COMUNAS_CHILE = {
   "Región de Arica y Parinacota": ["Arica", "Camarones", "Putre", "General Lagos"],
   "Región de Tarapacá": ["Iquique", "Alto Hospicio", "Pozo Almonte", "Pica", "Huara", "Camiña", "Colchane"],
@@ -45,6 +45,7 @@ export default function RegisterForm() {
   useEffect(() => { setComuna(''); }, [region]);
 
   const validateForm = () => {
+    // ... (la función validateForm sigue igual)
     const e = {};
     if (!nombre || nombre.length < 3) e.nombre = 'El nombre es requerido (min 3).';
     if (!apellidos || apellidos.length < 3) e.apellidos = 'Los apellidos son requeridos (min 3).';
@@ -67,6 +68,7 @@ export default function RegisterForm() {
   };
 
   const handleSubmit = async (event) => {
+    // ... (la función handleSubmit sigue igual)
     event.preventDefault();
     setServerError('');
     setOkMsg('');
@@ -98,7 +100,8 @@ export default function RegisterForm() {
         <form noValidate onSubmit={handleSubmit}>
           <div className="grid form-grid-2">
             <div className="form-group">
-              <label className="form-label">Nombre</label>
+              {/* --- ARREGLO AQUÍ --- */}
+              <label className="form-label" htmlFor="nombre">Nombre</label>
               <div className="input-icon-wrapper">
                 <input
                   className="form-control"
@@ -113,7 +116,8 @@ export default function RegisterForm() {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Apellidos</label>
+              {/* --- ARREGLO AQUÍ --- */}
+              <label className="form-label" htmlFor="apellidos">Apellidos</label>
               <div className="input-icon-wrapper">
                 <input
                   className="form-control"
@@ -129,7 +133,8 @@ export default function RegisterForm() {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Correo</label>
+            {/* --- ARREGLO AQUÍ --- */}
+            <label className="form-label" htmlFor="email">Correo</label>
             <div className="input-icon-wrapper">
               <input
                 className="form-control"
@@ -147,7 +152,8 @@ export default function RegisterForm() {
 
           <div className="grid form-grid-2">
             <div className="form-group">
-              <label className="form-label">Región</label>
+              {/* --- ARREGLO AQUÍ --- */}
+              <label className="form-label" htmlFor="region">Región</label>
               <div className="input-icon-wrapper">
                 <select
                   className="form-control"
@@ -167,7 +173,8 @@ export default function RegisterForm() {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Comuna</label>
+              {/* --- ARREGLO AQUÍ --- */}
+              <label className="form-label" htmlFor="comuna">Comuna</label>
               <div className="input-icon-wrapper">
                 <select
                   className="form-control"
@@ -189,7 +196,8 @@ export default function RegisterForm() {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Calle y Numeración</label>
+            {/* --- ARREGLO AQUÍ --- */}
+            <label className="form-label" htmlFor="calle">Calle y Numeración</label>
             <div className="input-icon-wrapper">
               <input
                 className="form-control"
@@ -204,7 +212,8 @@ export default function RegisterForm() {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Departamento / Casa (Opcional)</label>
+            {/* --- ARREGLO AQUÍ --- */}
+            <label className="form-label" htmlFor="depto">Departamento / Casa (Opcional)</label>
             <div className="input-icon-wrapper">
               <input
                 className="form-control"
@@ -219,7 +228,8 @@ export default function RegisterForm() {
 
           <div className="grid form-grid-2">
             <div className="form-group">
-              <label className="form-label">Contraseña</label>
+              {/* --- ARREGLO AQUÍ --- */}
+              <label className="form-label" htmlFor="password">Contraseña</label>
               <div className="input-icon-wrapper">
                 <input
                   className="form-control"
@@ -234,7 +244,8 @@ export default function RegisterForm() {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Confirmar Contraseña</label>
+              {/* --- ARREGLO AQUÍ --- */}
+              <label className="form-label" htmlFor="confirmPassword">Confirmar Contraseña</label>
               <div className="input-icon-wrapper">
                 <input
                   className="form-control"
