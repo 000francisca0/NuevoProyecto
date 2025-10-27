@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { FaBox, FaTags, FaUsers, FaReceipt, FaChartLine, FaUserCog } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 
+
 const AdminTile = ({ to, icon, title, sub }) => (
   <Link to={to} className="card" style={{ textDecoration: 'none' }}>
     <div className="card-body" style={{ display: 'grid', gridTemplateColumns: '52px 1fr', gap: 12, alignItems: 'center' }}>
