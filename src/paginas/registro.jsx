@@ -1,9 +1,11 @@
+// src/paginas/registro.jsx
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaUser, FaEnvelope, FaLock, FaMapMarkerAlt, FaHome } from 'react-icons/fa';
-import { API_BASE } from '../lib/api.js';
+import { API_BASE } from '../lib/api.js'; 
 
-// ... (REGIONES_COMUNAS_CHILE y REGIONES siguen igual)
+// ... (Tu objeto REGIONES_COMUNAS_CHILE va aquí) ...
 const REGIONES_COMUNAS_CHILE = {
   "Región de Arica y Parinacota": ["Arica", "Camarones", "Putre", "General Lagos"],
   "Región de Tarapacá": ["Iquique", "Alto Hospicio", "Pozo Almonte", "Pica", "Huara", "Camiña", "Colchane"],
@@ -23,6 +25,7 @@ const REGIONES_COMUNAS_CHILE = {
   "Región de Magallanes y de la Antártica Chilena": ["Punta Arenas","Puerto Natales","Porvenir","Puerto Williams"]
 };
 const REGIONES = Object.keys(REGIONES_COMUNAS_CHILE);
+
 
 export default function RegisterForm() {
   const navigate = useNavigate();
@@ -46,7 +49,6 @@ export default function RegisterForm() {
   useEffect(() => { setComuna(''); }, [region]);
 
   const validateForm = () => {
-    // ... (la función validateForm sigue igual)
     const e = {};
     if (!nombre || nombre.length < 3) e.nombre = 'El nombre es requerido (min 3).';
     if (!apellidos || apellidos.length < 3) e.apellidos = 'Los apellidos son requeridos (min 3).';
@@ -69,7 +71,6 @@ export default function RegisterForm() {
   };
 
   const handleSubmit = async (event) => {
-    // ... (la función handleSubmit sigue igual)
     event.preventDefault();
     setServerError('');
     setOkMsg('');
@@ -101,10 +102,10 @@ export default function RegisterForm() {
         <form noValidate onSubmit={handleSubmit}>
           <div className="grid form-grid-2">
             <div className="form-group">
-              {/* --- ARREGLO AQUÍ --- */}
               <label className="form-label" htmlFor="nombre">Nombre</label>
               <div className="input-icon-wrapper">
                 <input
+                  id="nombre" // <-- AÑADIDO
                   className="form-control"
                   type="text"
                   placeholder="Tu nombre"
@@ -117,10 +118,10 @@ export default function RegisterForm() {
             </div>
 
             <div className="form-group">
-              {/* --- ARREGLO AQUÍ --- */}
               <label className="form-label" htmlFor="apellidos">Apellidos</label>
               <div className="input-icon-wrapper">
                 <input
+                  id="apellidos" // <-- AÑADIDO
                   className="form-control"
                   type="text"
                   placeholder="Tus apellidos"
@@ -134,10 +135,10 @@ export default function RegisterForm() {
           </div>
 
           <div className="form-group">
-            {/* --- ARREGLO AQUÍ --- */}
             <label className="form-label" htmlFor="email">Correo</label>
             <div className="input-icon-wrapper">
               <input
+                id="email" // <-- AÑADIDO
                 className="form-control"
                 type="email"
                 placeholder="ejemplo@duoc.cl"
@@ -153,10 +154,10 @@ export default function RegisterForm() {
 
           <div className="grid form-grid-2">
             <div className="form-group">
-              {/* --- ARREGLO AQUÍ --- */}
               <label className="form-label" htmlFor="region">Región</label>
               <div className="input-icon-wrapper">
                 <select
+                  id="region" // <-- AÑADIDO
                   className="form-control"
                   value={region}
                   onChange={(e) => setRegion(e.target.value)}
@@ -174,10 +175,10 @@ export default function RegisterForm() {
             </div>
 
             <div className="form-group">
-              {/* --- ARREGLO AQUÍ --- */}
               <label className="form-label" htmlFor="comuna">Comuna</label>
               <div className="input-icon-wrapper">
                 <select
+                  id="comuna" // <-- AÑADIDO
                   className="form-control"
                   value={comuna}
                   onChange={(e) => setComuna(e.target.value)}
@@ -197,10 +198,10 @@ export default function RegisterForm() {
           </div>
 
           <div className="form-group">
-            {/* --- ARREGLO AQUÍ --- */}
             <label className="form-label" htmlFor="calle">Calle y Numeración</label>
             <div className="input-icon-wrapper">
               <input
+                id="calle" // <-- AÑADIDO
                 className="form-control"
                 type="text"
                 placeholder="Ej: Av. Vicuña Mackenna 4860"
@@ -213,10 +214,10 @@ export default function RegisterForm() {
           </div>
 
           <div className="form-group">
-            {/* --- ARREGLO AQUÍ --- */}
             <label className="form-label" htmlFor="depto">Departamento / Casa (Opcional)</label>
             <div className="input-icon-wrapper">
               <input
+                id="depto" // <-- AÑADIDO
                 className="form-control"
                 type="text"
                 placeholder="Ej: Depto 501"
@@ -229,10 +230,10 @@ export default function RegisterForm() {
 
           <div className="grid form-grid-2">
             <div className="form-group">
-              {/* --- ARREGLO AQUÍ --- */}
               <label className="form-label" htmlFor="password">Contraseña</label>
               <div className="input-icon-wrapper">
                 <input
+                  id="password" // <-- AÑADIDO
                   className="form-control"
                   type="password"
                   placeholder="Crea tu contraseña"
@@ -245,10 +246,10 @@ export default function RegisterForm() {
             </div>
 
             <div className="form-group">
-              {/* --- ARREGLO AQUÍ --- */}
               <label className="form-label" htmlFor="confirmPassword">Confirmar Contraseña</label>
               <div className="input-icon-wrapper">
                 <input
+                  id="confirmPassword" // <-- AÑADIDO
                   className="form-control"
                   type="password"
                   placeholder="Repite la contraseña"
