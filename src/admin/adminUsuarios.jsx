@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { API_BASE } from '../lib/api.js';
+
 
 export default function AdminUsuarios() {
   const [users, setUsers] = useState([]);
@@ -7,19 +9,19 @@ export default function AdminUsuarios() {
 
   useEffect(()=>{ load(); },[]);
   async function load(){
-    const r = await fetch('http://localhost:3001/api/users');
+    const r = await fetch(`${API_BASE}/users`);
     const j = await r.json();
     setUsers(j.data || []);
   }
 
   async function openUser(u){
-    const r = await fetch(`http://localhost:3001/api/users/${u.id}/boletas`);
+    const r = await fetch(`${API_BASE}/users/${u.id}/boletas`);
     const j = await r.json();
     setView({ ...u, boletas: j.data || [] });
   }
 
   async function saveEdit(){
-    await fetch(`http://localhost:3001/api/users/${editing.id}`, {
+    await fetch(`${API_BASE}/users/${editing.id}`, {
       method:'PUT', headers:{'Content-Type':'application/json'},
       body: JSON.stringify(editing)
     });

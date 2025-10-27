@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { API_BASE } from '../lib/api.js';
+
 
 export default function AdminBoletas() {
   const [boletas, setBoletas] = useState([]);
@@ -6,13 +8,13 @@ export default function AdminBoletas() {
 
   useEffect(()=>{ load(); },[]);
   async function load(){
-    const r = await fetch('http://localhost:3001/api/boletas');
+    const r = await fetch(`${API_BASE}/boletas`);
     const j = await r.json();
     setBoletas(j.data || []);
   }
 
   async function open(id){
-    const r = await fetch(`http://localhost:3001/api/boletas/${id}`);
+    const r = await fetch(`${API_BASE}/boletas/${id}`);
     const j = await r.json();
     setView(j.data);
   }

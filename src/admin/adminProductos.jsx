@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { API_BASE } from '../lib/api.js';
+
 
 export default function AdminProductos() {
   const [productos, setProductos] = useState([]);
@@ -17,9 +19,9 @@ export default function AdminProductos() {
 
   async function loadAll() {
     const [p, c, l] = await Promise.all([
-      fetch('http://localhost:3001/api/productos').then(r=>r.json()),
-      fetch('http://localhost:3001/api/categorias').then(r=>r.json()),
-      fetch('http://localhost:3001/api/productos/low-stock').then(r=>r.json()),
+      fetch(`${API_BASE}/productos`).then(r=>r.json()),
+      fetch(`${API_BASE}/categorias`).then(r=>r.json()),
+      fetch(`${API_BASE}/productos/low-stock`).then(r=>r.json()),
     ]);
     setProductos(p.data || []);
     setCategorias(c.data || []);
@@ -27,7 +29,7 @@ export default function AdminProductos() {
   }
 
   async function crearProducto() {
-    await fetch('http://localhost:3001/api/productos', {
+    await fetch(`${API_BASE}/productos`, {
       method: 'POST',
       headers: { 'Content-Type':'application/json' },
       body: JSON.stringify({
@@ -43,12 +45,12 @@ export default function AdminProductos() {
 
   async function eliminarProducto(id) {
     if (!window.confirm('¿Eliminar producto?')) return;
-    await fetch(`http://localhost:3001/api/productos/${id}`, { method:'DELETE' });
+    await fetch(`${API_BASE}/productos/${id}`, { method:'DELETE' });
     loadAll();
   }
 
   async function guardarEdicion() {
-    await fetch(`http://localhost:3001/api/productos/${editando.id}`, {
+    await fetch(`${API_BASE}/productos/${editando.id}`, {
       method: 'PUT',
       headers: { 'Content-Type':'application/json' },
       body: JSON.stringify({
@@ -67,7 +69,7 @@ export default function AdminProductos() {
     fd.append('image', file);
     try {
       setUploading(true);
-      const res = await fetch('http://localhost:3001/api/productos/upload-image', {
+      const res = await fetch(`${API_BASE}/productos/upload-image`, {
         method:'POST',
         body: fd,
       });

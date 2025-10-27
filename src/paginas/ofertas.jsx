@@ -1,6 +1,8 @@
 // src/paginas/ofertas.jsx
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { API_BASE } from '../lib/api.js';
+
 
 const formatPrice = (price) =>
   new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(price);

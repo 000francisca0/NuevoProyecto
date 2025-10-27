@@ -1,6 +1,7 @@
 // src/admin/adminCategorias.jsx
 import React, { useEffect, useState } from 'react';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import { API_BASE } from '../lib/api.js';
 
 export default function AdminCategorias() {
   const [cats, setCats] = useState([]);
@@ -13,7 +14,7 @@ export default function AdminCategorias() {
   const load = async () => {
     try {
       setLoading(true);
-      const res = await fetch('http://localhost:3001/api/categorias');
+      const res = await fetch(`${API_BASE}/categorias`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Error al cargar categorías');
       setCats(data.data || []);
@@ -29,7 +30,7 @@ export default function AdminCategorias() {
   const createCat = async () => {
     setErr('');
     try {
-      const res = await fetch('http://localhost:3001/api/categorias', {
+      const res = await fetch(`${API_BASE}/categorias`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ nombre: newName })

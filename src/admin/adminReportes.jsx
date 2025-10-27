@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { API_BASE } from '../lib/api.js';
+
 
 export default function AdminReportes() {
   const [from, setFrom] = useState('');
@@ -11,8 +13,8 @@ export default function AdminReportes() {
   async function run() {
     const qs = (from && to) ? `?from=${from}&to=${to}` : '';
     const [s, t] = await Promise.all([
-      fetch(`http://localhost:3001/api/reportes/sales${qs}`).then(r=>r.json()),
-      fetch(`http://localhost:3001/api/reportes/top-products${qs}`).then(r=>r.json()),
+      fetch(`${API_BASE}/reportes/sales${qs}`).then(r=>r.json()),
+      fetch(`${API_BASE}/reportes/top-products${qs}`).then(r=>r.json()),
     ]);
     setSales(s.data || null);
     setTops(t.data || []);
