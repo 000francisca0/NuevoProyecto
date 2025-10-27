@@ -11,6 +11,13 @@ export default defineConfig(({ mode }) => ({
   server: { /* ... */ },
   define: { /* ... */ },
 
+  server: {
+    proxy: {
+      '/api': 'http://localhost:4000'
+    }
+  },
+  
+
   test: {
     globals: true,
     environment: 'jsdom',

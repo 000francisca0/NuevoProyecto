@@ -43,11 +43,23 @@ export default function AdminProductos() {
     loadAll();
   }
 
+  // --- MODIFICACIÓN AQUÍ ---
+  // Se eliminó window.confirm y se agregó manejo de errores
   async function eliminarProducto(id) {
-    if (!window.confirm('¿Eliminar producto?')) return;
-    await fetch(`${API_BASE}/productos/${id}`, { method:'DELETE' });
-    loadAll();
+    try {
+      const res = await fetch(`${API_BASE}/productos/${id}`, { method: 'DELETE' });
+      if (!res.ok) {
+        // Si hay un error, intenta leerlo y mostrarlo
+        const data = await res.json().catch(() => ({})); // Evita error si no hay JSON
+        throw new Error(data.error || 'Error al eliminar el producto');
+      }
+      loadAll(); // Recarga solo si la eliminación fue exitosa
+    } catch (e) {
+      // Muestra el error en un alert, similar a como lo hace `subirImagen`
+      alert(e.message);
+    }
   }
+  // --- FIN DE LA MODIFICACIÓN ---
 
   async function guardarEdicion() {
     await fetch(`${API_BASE}/productos/${editando.id}`, {

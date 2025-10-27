@@ -47,7 +47,7 @@ export default function AdminCategorias() {
   const updateCat = async (id) => {
     setErr('');
     try {
-      const res = await fetch(`http://localhost:3001/api/categorias/${id}`, {
+      const res = await fetch(`${API_BASE}/categorias/${id}`, {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ nombre: editName })
@@ -62,11 +62,13 @@ export default function AdminCategorias() {
     }
   };
 
+  // --- MODIFICACIÓN AQUÍ ---
+  // Se eliminó la ventana de confirmación
   const deleteCat = async (id) => {
-    if (!confirm('¿Eliminar categoría?')) return;
+    // if (!confirm('¿Eliminar categoría?')) return;  <-- LÍNEA ELIMINADA
     setErr('');
     try {
-      const res = await fetch(`http://localhost:3001/api/categorias/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${API_BASE}/categorias/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Error al eliminar');
       load();
@@ -74,6 +76,7 @@ export default function AdminCategorias() {
       setErr(e.message);
     }
   };
+  // --- FIN DE LA MODIFICACIÓN ---
 
   return (
     <main className="main-content">
