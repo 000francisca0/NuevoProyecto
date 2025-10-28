@@ -8,15 +8,13 @@ export default defineConfig(({ mode }) => ({
   // ... (plugins, resolve, server, define) ...
   plugins: [react()],
   resolve: { alias: { '@': SRC } },
-  server: { /* ... */ },
-  define: { /* ... */ },
-
-  server: {
+    server: {
     proxy: {
       '/api': 'http://localhost:4000'
     }
   },
   
+  define: { /* ... */ },
 
   test: {
     globals: true,
