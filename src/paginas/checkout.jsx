@@ -16,10 +16,22 @@ export default function Checkout() {
 
   const [boletaId, setBoletaId] = useState(null);
 
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
   useEffect(() => {
-    // Only redirect if not logged in, OR there is no cart AND no recent boleta
+    const mm = window.matchMedia('(max-width: 768px)');
+    const handler = (e) => setIsMobile(e.matches);
+    setIsMobile(mm.matches);
+    if (mm.addEventListener) mm.addEventListener('change', handler);
+    else mm.addListener(handler);
+    return () => {
+      if (mm.removeEventListener) mm.removeEventListener('change', handler);
+      else mm.removeListener(handler);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!isLoggedIn) {
-      navigate('/');
+      navigate('/inicio');
       return;
     }
     if (cartItems.length === 0 && !boletaId) {
@@ -77,7 +89,6 @@ export default function Checkout() {
       const data = await resp.json();
       if (!resp.ok) {
         setIsProcessing(false);
-        // Do NOT clear cart; send data to "rechazado"
         navigate('/checkout/rechazado', {
           state: {
             items: simplifiedCart,
@@ -112,6 +123,32 @@ export default function Checkout() {
     }
   };
 
+  // Barra fija para MÓVIL
+  const MobileSummaryBar = () => (
+    <div style={{
+      position: 'fixed', bottom: 0, left: 0, right: 0,
+      backgroundColor: 'var(--card-bg, #fff)', padding: '1rem',
+      boxShadow: '0 -2px 10px rgba(0,0,0,0.1)', zIndex: 1000,
+      display: 'flex', justifyContent: 'space-between',
+      alignItems: 'center', gap: '1rem'
+    }}>
+      <div>
+        <span style={{ color: 'var(--muted)', fontSize: '0.9rem', display: 'block' }}>Total</span>
+        <strong style={{ fontSize: '1.3rem', color: 'var(--text, #000)' }}>{formatPrice(total)}</strong>
+      </div>
+      <button
+        type="submit"
+        form="checkout-form"
+        className="btn btn-primary"
+        disabled={isProcessing}
+        style={{ minWidth: '160px', flexShrink: 0 }}
+      >
+        {isProcessing ? 'Procesando...' : 'Confirmar y Pagar'}
+      </button>
+    </div>
+  );
+
+  // Pantalla de Éxito
   if (boletaId) {
     return (
       <div className="container" style={{ paddingTop: '3rem', paddingBottom: '3rem' }}>
@@ -126,7 +163,7 @@ export default function Checkout() {
           <p className="mb-2">
             {calle} {depto ? `(${depto})` : ''}
           </p>
-          <Link to="/home" className="btn btn-primary" style={{ marginTop: '1rem' }}>
+          <Link to="/" className="btn btn-primary" style={{ marginTop: '1rem' }}>
             Volver a Home
           </Link>
         </div>
@@ -134,18 +171,24 @@ export default function Checkout() {
     );
   }
 
+  // Renderizado principal del Formulario y Resumen
   return (
-    <div className="container" style={{ paddingTop: '3rem', paddingBottom: '3rem' }}>
+    <div className="container" style={{ paddingTop: '3rem', paddingBottom: isMobile ? '120px' : '3rem' }}>
       <h1 className="mb-2">Checkout</h1>
 
-      <div className="cart-grid">
-        {/* Form */}
+      <div 
+        className="cart-grid"
+        style={{
+          gridTemplateColumns: isMobile ? '1fr' : undefined 
+        }}
+      >
+        {/* Formulario */}
         <section>
           <div className="form-shell">
             <h2 style={{ marginTop: 0 }}>Dirección de Envío</h2>
             {error && <div className="server-error-message">{error}</div>}
 
-            <form onSubmit={handlePurchase} noValidate>
+            <form onSubmit={handlePurchase} noValidate id="checkout-form">
               <div className="form-group">
                 <label className="form-label" htmlFor="chkRegion">Región</label>
                 <div className="input-icon-wrapper">
@@ -154,7 +197,6 @@ export default function Checkout() {
                   <FaMapMarkerAlt className="input-icon" />
                 </div>
               </div>
-
               <div className="form-group">
                 <label className="form-label" htmlFor="chkComuna">Comuna</label>
                 <div className="input-icon-wrapper">
@@ -163,7 +205,6 @@ export default function Checkout() {
                   <FaMapMarkerAlt className="input-icon" />
                 </div>
               </div>
-
               <div className="form-group">
                 <label className="form-label" htmlFor="chkCalle">Calle y Numeración</label>
                 <div className="input-icon-wrapper">
@@ -172,7 +213,6 @@ export default function Checkout() {
                   <FaHome className="input-icon" />
                 </div>
               </div>
-
               <div className="form-group">
                 <label className="form-label" htmlFor="chkDepto">Departamento / Casa (Opcional)</label>
                 <div className="input-icon-wrapper">
@@ -182,10 +222,12 @@ export default function Checkout() {
                 </div>
               </div>
 
-              <button className="btn btn-primary btn-block" type="submit" disabled={isProcessing}>
-                {isProcessing ? 'Procesando compra...' : 'Confirmar y Pagar'}
-              </button>
-
+              {!isMobile && (
+                <button className="btn btn-primary btn-block" type="submit" disabled={isProcessing}>
+                  {isProcessing ? 'Procesando compra...' : 'Confirmar y Pagar'}
+                </button>
+              )}
+              
               <Link to="/carro" className="text-center" style={{ display: 'block', marginTop: 12 }}>
                 Volver al Carrito
               </Link>
@@ -217,11 +259,18 @@ export default function Checkout() {
             <span>Total</span>
             <span style={{ fontWeight: 800, fontSize: '1.2rem' }}>{formatPrice(total)}</span>
           </div>
+
+          {/* 👇 --- ¡AQUÍ ESTÁ EL CAMBIO DE TEXTO! --- 👇 */}
           <div style={{ marginTop: '.75rem', fontSize: '.9rem', color: 'var(--brand-hover)' }}>
-            *El envío usa tu dirección indicada a la izquierda.
+            *El envío usará la dirección de envío indicada.
           </div>
+          {/* --- FIN DEL CAMBIO --- */}
+
         </aside>
       </div>
+
+      {/* Añadimos la barra fija MÓVIL al final */}
+      {isMobile && <MobileSummaryBar />}
     </div>
   );
 }

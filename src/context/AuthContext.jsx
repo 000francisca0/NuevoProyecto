@@ -54,7 +54,14 @@ export const RequireAuth = ({ children }) => {
   const { isLoggedIn, loading } = useAuth();
   const location = useLocation();
   if (loading) return null;
-  if (!isLoggedIn) return <Navigate to="/" replace state={{ from: location }} />;
+
+  // 👇 --- ¡CAMBIO 1: AQUÍ ESTÁ EL ARREGLO! ---
+  // Si no está logueado, redirige a "/inicio" (Login) en lugar de "/" (Home).
+  if (!isLoggedIn) {
+    return <Navigate to="/inicio" replace state={{ from: location }} />;
+  }
+  // --- FIN DEL CAMBIO ---
+
   return children;
 };
 
@@ -62,7 +69,19 @@ export const RequireAdmin = ({ children }) => {
   const { isLoggedIn, role, loading } = useAuth();
   const location = useLocation();
   if (loading) return null;
-  if (!isLoggedIn) return <Navigate to="/" replace state={{ from: location }} />;
-  if (role !== 'Administrador') return <Navigate to="/home" replace state={{ from: location }} />;
+  
+  // 👇 --- CAMBIO 2: También arreglamos esto ---
+  // Redirige a "/inicio" si no está logueado
+  if (!isLoggedIn) {
+    return <Navigate to="/inicio" replace state={{ from: location }} />;
+  }
+
+  // 👇 --- CAMBIO 3: Redirige a "/" (Home) si no es admin ---
+  // (En lugar de "/home" que ya no existe o es un redirect)
+  if (role !== 'Administrador') {
+    return <Navigate to="/" replace state={{ from: location }} />;
+  }
+  // --- FIN DE LOS CAMBIOS ---
+  
   return children;
 };

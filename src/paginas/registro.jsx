@@ -266,7 +266,7 @@ export default function RegisterForm() {
             Registrarme
           </button>
 
-          <Link to="/" className="text-center" style={{ display: 'block', marginTop: 16 }}>
+          <Link to="/inicio" className="text-center" style={{ display: 'block', marginTop: 16 }}>
             ¿Ya tienes cuenta? Inicia Sesión
           </Link>
 

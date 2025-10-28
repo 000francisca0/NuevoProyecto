@@ -27,7 +27,12 @@ body{
   margin:0;
   color:var(--text);
   line-height:1.45;
-  background: url('/oso5.jpg') center/cover no-repeat fixed;
+  
+  /* 👇 --- PRUEBA ESTE VALOR --- 👇 */
+  /* Cambié 0.85 por 0.80 para que sea un poco menos blanco */
+  background: linear-gradient(rgba(255, 255, 255, 0.80), rgba(255, 255, 255, 0.80)), url('/oso5.jpg') center/cover no-repeat fixed;
+  /* 👆 --- FIN DEL CAMBIO --- 👆 */
+
   background-color: #fff; 
   min-height: 100vh;  transition: background-image .4s ease;
   -webkit-font-smoothing:antialiased;
@@ -212,7 +217,7 @@ body{
   padding: .6rem 2.5rem; background: #fff; box-shadow:0 2px 5px rgba(0,0,0,.08); z-index:1000;
 }
 .header-left{ display:flex; align-items:center; gap:1rem; }
-.logo{ height:50px; display:block; }
+.logo{ height:65px; display:block; }
 .nav{ display:flex; gap: .9rem; align-items:center; }
 .nav a{ text-decoration:none; color:#333; font-weight:600; font-size:0.98rem; }
 .nav a:hover{ color: var(--brand-hover); }

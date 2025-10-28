@@ -1,6 +1,7 @@
 // src/App.jsx
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+// 👇 CAMBIO 1: Importa 'Navigate' de react-router-dom
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import './index.css';
 
@@ -47,19 +48,25 @@ function App() {
         <BrowserRouter>
           <Routes>
             {/* AUTH ROUTES (NO LAYOUT) */}
-            <Route path="/" element={<LoginForm />} />
+            {/* 👇 CAMBIO 2: La ruta raíz "/" ya NO muestra el LoginForm */}
+            {/* <Route path="/" element={<LoginForm />} /> */}
             <Route path="/registro" element={<RegisterForm />} />
-            <Route path="/inicio" element={<LoginForm />} />  {/* <— add this */}
+            {/* Mantenemos /inicio para el login */}
+            <Route path="/inicio" element={<LoginForm />} />
 
             {/* ROUTES WITH LAYOUT */}
             <Route element={<MainLayout />}>
+              {/* 👇 CAMBIO 3: Ahora la ruta raíz "/" muestra el Home */}
+              <Route path="/" element={<Home />} />
+              {/* (Opcional pero recomendado) Redirigimos /home a / por si usas ese enlace en otro lado */}
+              <Route path="/home" element={<Navigate to="/" replace />} />
+
               {/* Public */}
-              <Route path="/home" element={<Home />} />
               <Route path="/productos" element={<Productos />} />
               <Route path="/nosotros" element={<Nosotros />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/cuidado-de-peluches" element={<CuidadoPeluches />} />
-              <Route path="/blog/historia-oso-teddy" element={<HistoriaOsoTeddy />} />  
+              <Route path="/blog/historia-oso-teddy" element={<HistoriaOsoTeddy />} />
               <Route path="/categorias" element={<Categorias />} />
               <Route path="/categoria/:categoryId" element={<Category />} />
               <Route path="/ofertas" element={<Sales />} />
@@ -96,7 +103,8 @@ function App() {
                   </RequireAdmin>
                 }
               />
-              <Route
+              {/* ... (resto de rutas admin sin cambios) ... */}
+               <Route
                 path="/admin/productos"
                 element={
                   <RequireAdmin>

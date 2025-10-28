@@ -24,7 +24,7 @@ function Header() {
       <header className="header-fixed" role="banner">
         <div className="header-left">
           <Link to="/home" onClick={handleLinkClick}>
-            <img src="/oso5.jpg" alt="Logo Peluchemania" className="logo" />
+            <img src="/peluchemania.png" alt="Logo Peluchemania" className="logo" />
           </Link>
         </div>
 

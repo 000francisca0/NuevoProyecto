@@ -43,7 +43,7 @@ export default function LoginForm() {
         return;
       }
       if (data.user.rol === 'Administrador') navigate('/admin', { replace: true });
-      else navigate('/home', { replace: true });
+      else navigate('/', { replace: true });
     } catch {
       setServerError('No se pudo conectar con el servidor.');
       setIsLoading(false);
@@ -87,13 +87,33 @@ export default function LoginForm() {
             </div>
           </div>
 
-          <button type="submit" className="btn btn-primary btn-block" disabled={isLoading}>
-            {isLoading ? 'Ingresando...' : 'Ingresar'}
-          </button>
+          {/* --- 👇 CAMBIO AQUÍ --- */}
+          {/* 1. Agregamos un div contenedor para los dos botones */}
+          <div className="form-group" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', alignItems: 'center' }}>
+            
+            {/* 2. Movimos el Link de "Volver a Home" aquí y le dimos estilo de botón */}
+            <Link 
+              to="/" 
+              className="btn btn-ghost" // Le damos estilo de botón fantasma
+              style={{ textAlign: 'center' }} // Aseguramos que el texto esté centrado
+            >
+              Volver a Home
+            </Link>
+
+            {/* 3. Quitamos la clase 'btn-block' del botón de Ingresar */}
+            <button type="submit" className="btn btn-primary" disabled={isLoading}>
+              {isLoading ? 'Ingresando...' : 'Ingresar'}
+            </button>
+          </div>
+          {/* --- FIN DEL CAMBIO --- */}
+
 
           <Link to="/registro" className="text-center" style={{ display: 'block', marginTop: 12 }}>
             ¿No tienes cuenta? Regístrate
           </Link>
+
+          {/* 4. Eliminamos el Link de "Volver a Home" que estaba aquí abajo */}
+          
         </form>
       </div>
     </div>
