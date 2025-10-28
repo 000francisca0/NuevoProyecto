@@ -1,4 +1,3 @@
-// src/paginas/carro.jsx
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/cartContext';
@@ -54,7 +53,7 @@ function Carro() {
 
   // --- COMPONENTES DE RESUMEN ---
   
-  // (Resumen para ESCRITORIO - sin cambios)
+  // (Resumen para ESCRITORIO)
   const Summary = () => (
     <aside className={`summary card ${isMobile ? 'sticky-mobile' : ''}`}>
       <h2>Resumen de la Compra</h2>
@@ -108,7 +107,7 @@ function Carro() {
     </aside>
   );
 
-  // (Barra fija para MÓVIL - sin cambios)
+  // (Barra fija para MÓVIL)
   const MobileSummaryBar = () => (
     <div style={{
       position: 'fixed', bottom: 0, left: 0, right: 0,
@@ -149,24 +148,20 @@ function Carro() {
           </div>
         ) : (
           <div className="cart-grid">
-            {/* 👇 --- INICIO DE CAMBIOS EN EL ITEM DEL CARRITO --- 👇
-            */}
             <div>
               {cartItems.map((item) => (
                 <div 
                   key={item.id} 
-                  // 1. Quita la clase 'card' (que fuerza la columna) y usa 'cart-item'
-                  //    que ya es flex (de tu index.css)
                   className="cart-item" 
                   style={{ 
                     width: '100%', 
-                    alignItems: 'center', // Centra verticalmente
+                    alignItems: 'center', 
                     padding: '1rem',
-                    borderBottom: '1px solid #eee' // Separador
+                    borderBottom: '1px solid #eee' 
                   }}
                 >
                   
-                  {/* 2. Hacemos la imagen un poco más grande */}
+                  {/* 2. Imagen del ítem */}
                   <img 
                     src={item.imagen} 
                     alt={item.nombre} 
@@ -174,49 +169,25 @@ function Carro() {
                     style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '8px' }} 
                   />
 
-                  {/* 3. La información crece para empujar los controles a la derecha */}
+                  {/* 3. La información del producto */}
                   <div className="cart-item-info" style={{ flexGrow: 1, padding: '0 1rem' }}>
                     <span className="cart-item-name" style={{ fontSize: '1.1rem', fontWeight: 600 }}>{item.nombre}</span>
                     <span className="cart-item-price-unit">{formatPrice(item.precio)} c/u</span>
                   </div>
 
-                  <div className="qty-controls">
-                    <button
-                      onClick={() => {
-                        setNotice('');
-                        removeFromCart(item);
-                      }}
-                      className="btn btn-ghost btn-qty"
-                      aria-label={`Reducir cantidad de ${item.nombre}`}
-                    >
-                      -
-                    </button>
-                    <span aria-live="polite" style={{ minWidth: 26, textAlign: 'center' }}>{item.quantity || 0}</span>
-                    <button
-                      onClick={() => {
-                        setNotice('');
-                        addToCart(item);
-                      }}
-                      className="btn btn-ghost btn-qty"
-                      aria-label={`Aumentar cantidad de ${item.nombre}`}
-                    >
-                      +
-                    </button>
-                  </div>
-                  {/* 4. Agrupamos TODOS los controles en un nuevo div */}
+                  {/* 4. BLOQUE DE CONTROLES COMPLETO (SOLO UNO) */}
                   <div className="cart-item-controls-group" style={{ 
                     display: 'flex', 
-                    flexDirection: 'column', // Los apilamos verticalmente
-                    alignItems: 'flex-end', // Los alineamos a la derecha
+                    flexDirection: 'column', 
+                    alignItems: 'flex-end', 
                     gap: '0.5rem', 
-                    minWidth: '150px' // Damos un ancho mínimo
+                    minWidth: '150px' 
                   }}>
 
-                    {/* Controles de Cantidad con botones más pequeños */}
+                    {/* Controles de Cantidad */}
                     <div className="qty-controls">
                       <button
                         onClick={() => { setNotice(''); removeFromCart(item); }}
-                        // 5. Estilo de botón más pequeño
                         className="btn" 
                         style={{ padding: '0.25rem 0.75rem', fontSize: '1rem' }}
                         aria-label={`Reducir cantidad de ${item.nombre}`}
@@ -226,7 +197,6 @@ function Carro() {
                       <span aria-live="polite" style={{ minWidth: 26, textAlign: 'center' }}>{item.quantity || 0}</span>
                       <button
                         onClick={() => { setNotice(''); addToCart(item); }}
-                        // 5. Estilo de botón más pequeño
                         className="btn"
                         style={{ padding: '0.25rem 0.75rem', fontSize: '1rem' }}
                         aria-label={`Aumentar cantidad de ${item.nombre}`}
@@ -242,10 +212,9 @@ function Carro() {
                       </strong>
                     </div>
 
-                    {/* Botón Eliminar (más sutil) */}
+                    {/* Botón Eliminar */}
                     <div>
                       <button
-                        // 5. Botón más sutil (sin fondo ni borde)
                         className="btn" 
                         style={{ 
                           padding: '0.25rem', 
@@ -262,13 +231,10 @@ function Carro() {
                       </button>
                     </div>
                   </div> 
-                  {/* --- Fin del nuevo div de controles --- */}
+                  {/* --- Fin del div de controles --- */}
                 </div> // Fin de cart-item
               ))}
             </div>
-            {/* 👆 --- FIN DE CAMBIOS EN EL ITEM DEL CARRITO --- 👆
-            */}
-
             {/* Resumen (Desktop) */}
             {!isMobile && <Summary />}
           </div>
