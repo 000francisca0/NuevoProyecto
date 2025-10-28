@@ -1,5 +1,3 @@
-// server/index.js (PROD-ready: env HOST/PORT + keeps your migrations/seeding)
-
 import express from 'express';
 import cors from 'cors';
 import { db } from './database.js';
@@ -17,26 +15,36 @@ import { fileURLToPath } from 'url';
 
 const app = express();
 
-// ▶ CHANGES: make port/host configurable for systemd/EC2
+// ----------------------------------------------------
+// CONFIG
+// ----------------------------------------------------
 const PORT = process.env.PORT || 4000;
 const HOST = process.env.HOST || '0.0.0.0';
-
 app.use(cors());
 app.use(express.json());
 
-// === FIX: serve uploads from an absolute folder at BOTH /uploads and /api/uploads ===
+// ----------------------------------------------------
+// STATIC FILES (IDENTICAL TO LOCAL)
+// ----------------------------------------------------
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const UPLOADS_DIR = path.join(__dirname, '..', 'public', 'uploads');
+
+// ✅ Serve everything in /public (so /osito.jpg etc. works)
+const PUBLIC_DIR = path.join(__dirname, '..', 'public');
+app.use(express.static(PUBLIC_DIR));
+
+// ✅ Create uploads folder inside /public and serve it too
+const UPLOADS_DIR = path.join(PUBLIC_DIR, 'uploads');
 fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 
+// /uploads/...  → serves public/uploads/
+// /api/uploads/...  → also works for API_BASE + '/uploads/...'
 app.use('/uploads', express.static(UPLOADS_DIR));
-app.use('/api/uploads', express.static(UPLOADS_DIR)); // covers IMG src built as API_BASE + '/uploads/...'
+app.use('/api/uploads', express.static(UPLOADS_DIR));
 
 // ----------------------------------------------------
-// DB SETUP / MIGRATIONS
+// DATABASE + SEEDING
 // ----------------------------------------------------
-
 function initializeDatabase() {
   function ensureColumn(table, column, type, cb) {
     db.all(`PRAGMA table_info(${table});`, [], (err, rows) => {
