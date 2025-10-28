@@ -48,7 +48,7 @@ function Carro() {
   };
 
   const Summary = () => (
-    <aside className="summary card">
+    <aside className={`summary card ${isMobile ? 'sticky-mobile' : ''}`}>
       <h2>Resumen de la Compra</h2>
 
       {notice && (
@@ -138,7 +138,7 @@ function Carro() {
                         setNotice('');
                         removeFromCart(item);
                       }}
-                      className="btn btn-ghost"
+                      className="btn btn-ghost btn-qty"
                       aria-label={`Reducir cantidad de ${item.nombre}`}
                     >
                       -
@@ -149,7 +149,7 @@ function Carro() {
                         setNotice('');
                         addToCart(item);
                       }}
-                      className="btn btn-ghost"
+                      className="btn btn-ghost btn-qty"
                       aria-label={`Aumentar cantidad de ${item.nombre}`}
                     >
                       +

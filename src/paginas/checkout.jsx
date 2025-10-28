@@ -194,7 +194,7 @@ export default function Checkout() {
         </section>
 
         {/* Summary */}
-        <aside className="summary card">
+        <aside className="summary card sticky-mobile">
           <h2>Resumen</h2>
           <div>
             {cartItems.map((it) => (

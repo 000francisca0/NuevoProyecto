@@ -4,16 +4,20 @@ import { db } from '../database.js';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 
 const router = express.Router();
 
-const uploadDir = path.resolve('public', 'uploads');
-if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+// === FIX: use absolute uploads dir tied to this file ===
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const uploadDir = path.join(__dirname, '..', '..', 'public', 'uploads');
+fs.mkdirSync(uploadDir, { recursive: true });
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, uploadDir),
   filename: (_req, file, cb) => {
-    const ext = path.extname(file.originalname || '');
+    const ext = path.extname(file.originalname || '').toLowerCase();
     const base = path.basename(file.originalname || 'img', ext).replace(/\s+/g, '_');
     cb(null, `${Date.now()}_${base}${ext}`);
   }
@@ -128,19 +132,19 @@ router.delete('/:id', (req, res) => {
   });
 });
 
-// add this near other endpoints
+// Low stock
 router.get('/low-stock', (_req, res) => {
-  const threshold = 5; // critical stock level
+  const threshold = 5;
   db.all('SELECT * FROM productos WHERE stock <= ? ORDER BY stock ASC', [threshold], (err, rows) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json({ data: rows || [] });
   });
 });
 
+// Upload image -> returns relative web path that works on EC2 & local
 router.post('/upload-image', upload.single('image'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file' });
-  // static url path
-  const url = `/uploads/${req.file.filename}`;
+  const url = `/uploads/${req.file.filename}`; // front can use API_BASE + url or just url
   res.json({ url });
 });
 

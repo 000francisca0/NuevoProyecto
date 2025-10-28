@@ -373,3 +373,34 @@ body{
 
   .home-blog-grid{ grid-template-columns:1fr; }
 }
+
+/* ===========================
+   APPENDED: mobile-first cart/checkout tweaks
+   =========================== */
+
+/* page shells that allow sticky bottom summary */
+.cart-page, .checkout-page { display:flex; flex-direction:column; min-height:100dvh; }
+.cart-content, .checkout-content { flex:1 1 auto; padding-bottom:96px; }
+
+/* sticky summary bar at bottom */
+.sticky-summary {
+  position: sticky;
+  bottom: 0;
+  z-index: 30;
+  background: #fff;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  padding: 12px 16px;
+  display: grid;
+  gap: 8px;
+}
+
+/* compact qty buttons */
+.btn-qty { padding:4px 8px; min-width:28px; height:28px; line-height:20px; border-radius:8px; font-weight:700; }
+
+/* make item row more image-forward on mobile */
+@media (max-width: 768px) {
+  .cart-grid { grid-template-columns: 1fr; }
+  .cart-item { gap: 12px; }
+  .cart-item img { width:96px; height:96px; border-radius:12px; }
+  .summary { margin-top: 12px; } /* non-sticky variant spacing */
+}

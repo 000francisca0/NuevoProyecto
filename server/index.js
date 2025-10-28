@@ -12,6 +12,8 @@ import userRoutes from './routes/userRoutes.js';
 import boletaRoutes from './routes/boletaRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
 import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 
 const app = express();
 
@@ -22,8 +24,14 @@ const HOST = process.env.HOST || '0.0.0.0';
 app.use(cors());
 app.use(express.json());
 
-// Static uploads served by Express (Nginx will still front the site)
-app.use('/uploads', express.static(path.resolve('public', 'uploads')));
+// === FIX: serve uploads from an absolute folder at BOTH /uploads and /api/uploads ===
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const UPLOADS_DIR = path.join(__dirname, '..', 'public', 'uploads');
+fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+
+app.use('/uploads', express.static(UPLOADS_DIR));
+app.use('/api/uploads', express.static(UPLOADS_DIR)); // covers IMG src built as API_BASE + '/uploads/...'
 
 // ----------------------------------------------------
 // DB SETUP / MIGRATIONS
