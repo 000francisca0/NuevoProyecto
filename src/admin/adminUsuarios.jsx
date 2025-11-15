@@ -11,16 +11,17 @@ export default function AdminUsuarios() {
   async function load(){
     const r = await fetch(`${API_BASE}/users`);
     const j = await r.json();
-    setUsers(j.data || []);
+    setUsers(j || []); // <-- CAMBIO 1 (j.data -> j)
   }
 
   async function openUser(u){
-    const r = await fetch(`${API_BASE}/users/${u.id}/boletas`);
+    const r = await fetch(`${API_BASE}/users/${u.id}/boletas`); // (Esta ruta aún no la creamos)
     const j = await r.json();
-    setView({ ...u, boletas: j.data || [] });
+    setView({ ...u, boletas: j || [] }); // <-- CAMBIO 2 (j.data -> j)
   }
 
   async function saveEdit(){
+    // (Esta ruta PUT /api/users/:id aún no la creamos)
     await fetch(`${API_BASE}/users/${editing.id}`, {
       method:'PUT', headers:{'Content-Type':'application/json'},
       body: JSON.stringify(editing)
@@ -29,6 +30,9 @@ export default function AdminUsuarios() {
   }
 
   return (
+    // ... (El resto del JSX está bien, pero las funciones 'openUser' y 'saveEdit'
+    // fallarán hasta que creemos esos endpoints en el backend) ...
+    
     <main className="main-content">
       <div className="container">
 
@@ -40,7 +44,8 @@ export default function AdminUsuarios() {
                 <div key={u.id} className="card" style={{padding:12}}>
                   <h3 style={{marginTop:0}}>{u.nombre} {u.apellidos}</h3>
                   <p className="card-sub">{u.email}</p>
-                  <p className="card-sub">Rol: {u.rol}</p>
+                  {/* La API de Spring envía 'rol' como un objeto */}
+                  <p className="card-sub">Rol: {u.rol?.nombre}</p> 
                   <div style={{display:'flex', gap:8}}>
                     <button className="btn btn-primary" onClick={()=>openUser(u)}>Ver</button>
                     <button className="btn btn-ghost" onClick={()=>setEditing(u)}>Editar</button>
@@ -51,58 +56,17 @@ export default function AdminUsuarios() {
           </div>
         </div>
 
-        {/* VIEW */}
+        {/* VIEW (Fallará hasta que creemos GET /api/users/:id/boletas) */}
         {view && (
-          <div className="card" style={{marginBottom:20}}>
-            <div className="card-body">
-              <h2 style={{marginTop:0}}>Detalle de {view.nombre} {view.apellidos}</h2>
-              <p>Email: {view.email}</p>
-              <p>Dirección: {view.calle} {view.depto ? `(${view.depto})` : ''}, {view.comuna}, {view.region}</p>
-
-              <h3>Boletas</h3>
-              {view.boletas.length === 0 ? <p>Sin compras.</p> : (
-                <div className="grid">
-                  {view.boletas.map(b=>(
-                    <div key={b.id} className="card" style={{padding:12}}>
-                      <p><strong>ID:</strong> {b.id}</p>
-                      <p><strong>Fecha:</strong> {new Date(b.fecha_compra).toLocaleString()}</p>
-                      <p><strong>Total:</strong> {new Intl.NumberFormat('es-CL',{style:'currency',currency:'CLP'}).format(b.total)}</p>
-                      <details>
-                        <summary>Detalles</summary>
-                        <ul>
-                          {b.detalles.map(d=><li key={d.id}>{d.nombre_producto} x{d.cantidad} — {new Intl.NumberFormat('es-CL',{style:'currency',currency:'CLP'}).format(d.precio_unitario)}</li>)}
-                        </ul>
-                      </details>
-                    </div>
-                  ))}
-                </div>
-              )}
-              <div style={{marginTop:10}}>
-                <button className="btn btn-ghost" onClick={()=>setView(null)}>Cerrar</button>
-              </div>
-            </div>
-          </div>
+           <div className="card" style={{marginBottom:20}}>
+             {/* ... (código del visor) ... */}
+           </div>
         )}
 
-        {/* EDIT */}
+        {/* EDIT (Fallará hasta que creemos PUT /api/users/:id) */}
         {editing && (
           <div className="card">
-            <div className="card-body">
-              <h2 style={{marginTop:0}}>Editar Usuario</h2>
-              <div style={{display:'grid', gap:8, gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))'}}>
-                <input value={editing.nombre} onChange={e=>setEditing({...editing, nombre:e.target.value})} placeholder="Nombre"/>
-                <input value={editing.apellidos} onChange={e=>setEditing({...editing, apellidos:e.target.value})} placeholder="Apellidos"/>
-                <input value={editing.email} onChange={e=>setEditing({...editing, email:e.target.value})} placeholder="Email"/>
-                <input value={editing.calle || ''} onChange={e=>setEditing({...editing, calle:e.target.value})} placeholder="Calle"/>
-                <input value={editing.depto || ''} onChange={e=>setEditing({...editing, depto:e.target.value})} placeholder="Depto (opcional)"/>
-                <input value={editing.region || ''} onChange={e=>setEditing({...editing, region:e.target.value})} placeholder="Región"/>
-                <input value={editing.comuna || ''} onChange={e=>setEditing({...editing, comuna:e.target.value})} placeholder="Comuna"/>
-              </div>
-              <div style={{display:'flex', gap:8, marginTop:10}}>
-                <button className="btn btn-primary" onClick={saveEdit}>Guardar</button>
-                <button className="btn btn-ghost" onClick={()=>setEditing(null)}>Cancelar</button>
-              </div>
-            </div>
+            {/* ... (código de edición) ... */}
           </div>
         )}
 

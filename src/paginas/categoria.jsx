@@ -14,10 +14,15 @@ export default function Categoria() {
     async function load() {
       try {
         setLoading(true);
+        // Esta URL /api/productos/category/... ¡AÚN NO EXISTE EN SPRING!
+        // Seguirá dando error hasta que la creemos en el backend.
         const res = await fetch(`${API_BASE}/productos/category/${categoryId}`);
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Error fetching');
-        setProductos(data.data || []);
+        
+        // --- CAMBIO 1: Quitar .data ---
+        // Spring envía un array directo, no data.data
+        setProductos(data || []);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -38,7 +43,8 @@ export default function Categoria() {
         <div className="grid" style={{ marginTop: 16 }}>
           {productos.length > 0 ? (
             productos.map(p => (
-              <ProductCard key={p.id} producto={{ ...p, imagen: p.imagen_url || p.imagen }} />
+              // --- CAMBIO 2: p.imagenUrl (camelCase) ---
+              <ProductCard key={p.id} producto={{ ...p, imagen: p.imagenUrl || p.imagen_url || p.imagen }} />
             ))
           ) : (
             <div className="card">

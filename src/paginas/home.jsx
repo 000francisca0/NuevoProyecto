@@ -1,4 +1,3 @@
-// src/paginas/home.jsx
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { API_BASE } from '../lib/api.js';
@@ -6,6 +5,7 @@ import { API_BASE } from '../lib/api.js';
 const CLP = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' });
 const fmt = (n) => CLP.format(Number(n || 0));
 
+// ... (toda la función 'useAutoSlide' está perfecta, no se toca) ...
 function useAutoSlide(length, delay = 4000) {
   const [index, setIndex] = useState(0);
   const timerRef = useRef(null);
@@ -33,6 +33,7 @@ function useAutoSlide(length, delay = 4000) {
   return { index, goto, next, prev, pause, resume };
 }
 
+
 export default function Home() {
   const [onSale, setOnSale] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -50,10 +51,14 @@ export default function Home() {
         const res = await fetch(`${API_BASE}/productos/on-sale`);
         const json = await res.json();
         if (!res.ok) throw new Error(json.error || 'Error cargando ofertas');
-        const data = (json.data || []).map(p => ({
+        
+        // El JSON de Spring es un array directo, no json.data
+        const data = (json || []).map(p => ({ // <-- CAMBIO 1: de 'json.data' a 'json'
           ...p,
-          imagen: p.imagen_url || p.imagen,
-          finalPrice: p.discounted_price ?? Math.round(Number(p.precio || 0) * (1 - Number(p.discount_percentage || 0)))
+          // La API de Spring usa 'imagenUrl' (camelCase)
+          imagen: p.imagenUrl || p.imagen_url || p.imagen, // <-- CAMBIO 2: Añadido 'p.imagenUrl'
+          // La API de Spring usa 'discountPercentage' (camelCase)
+          finalPrice: p.discounted_price ?? Math.round(Number(p.precio || 0) * (1 - Number(p.discountPercentage || 0))) // <-- CAMBIO 3: de 'p.discount_percentage' a 'p.discountPercentage'
         }));
         setOnSale(data);
       } catch (e) {
@@ -72,7 +77,9 @@ export default function Home() {
         const res = await fetch(`${API_BASE}/categorias`);
         const json = await res.json();
         if (!res.ok) throw new Error(json.error || 'Error cargando categorías');
-        setCategories(json.data || []);
+        
+        // El JSON de Spring es un array directo, no json.data
+        setCategories(json || []); // <-- CAMBIO 4: de 'json.data' a 'json'
       } catch (e) {
         setErrorCats(e.message);
       } finally {
@@ -85,6 +92,7 @@ export default function Home() {
   const current = useMemo(() => onSale[index] || null, [onSale, index]);
 
   return (
+    // ... (todo el resto de tu código HTML/JSX está perfecto, no se toca) ...
     <main className="main-content">
       <div className="container">
 
@@ -146,7 +154,7 @@ export default function Home() {
                           {fmt(current.finalPrice)}
                         </span>
                         <span style={{ padding: '4px 8px', background: '#fff3f3', borderRadius: 8, fontWeight: 700 }}>
-                          -{Math.round((current.discount_percentage || 0) * 100)}%
+                          -{Math.round((current.discountPercentage || 0) * 100)}%
                         </span>
                       </div>
 

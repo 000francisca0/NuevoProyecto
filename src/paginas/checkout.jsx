@@ -16,6 +16,7 @@ export default function Checkout() {
 
   const [boletaId, setBoletaId] = useState(null);
 
+  // ... (código de isMobile, useEffects de navegación, etc. - todo eso está bien) ...
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
   useEffect(() => {
     const mm = window.matchMedia('(max-width: 768px)');
@@ -39,7 +40,12 @@ export default function Checkout() {
     }
   }, [isLoggedIn, cartItems.length, boletaId, navigate]);
 
-  const defaults = user?.direccion_default || {};
+
+  // --- ¡CAMBIO IMPORTANTE AQUÍ! ---
+  // Arreglamos el nombre de la variable de 'direccion_default' a 'direccionDefault'
+  const defaults = user?.direccionDefault || {};
+  // --- FIN DEL CAMBIO ---
+
   const [calle, setCalle] = useState(defaults.calle || '');
   const [depto, setDepto] = useState(defaults.depto || '');
   const [region, setRegion] = useState(defaults.region || '');
@@ -81,6 +87,7 @@ export default function Checkout() {
         shippingAddress: { calle, depto: depto || null, region, comuna },
       };
 
+      // Esta petición fallaba con 403 (Prohibido)
       const resp = await fetch(`${API_BASE}/checkout/purchase`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -123,6 +130,8 @@ export default function Checkout() {
     }
   };
 
+  // ... (El resto del archivo: MobileSummaryBar, Pantalla de Éxito, y el JSX del formulario están perfectos) ...
+  
   // Barra fija para MÓVIL
   const MobileSummaryBar = () => (
     <div style={{

@@ -1,4 +1,3 @@
-// src/paginas/productos.jsx
 import React, { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard/productCard.jsx";
 import { Link } from 'react-router-dom';
@@ -26,15 +25,23 @@ export default function Productos() {
         if (!catsRes.ok) throw new Error(catsJson.error || 'Error loading categories');
         if (!prodsRes.ok) throw new Error(prodsJson.error || 'Error loading products');
 
-        const cats = catsJson.data || [];
-        const prods = prodsJson.data || [];
+        // --- CAMBIOS AQUÍ ---
+        // 1. Quitar .data, Spring envía un array directo
+        const cats = catsJson || [];
+        // 2. Quitar .data, Spring envía un array directo
+        const prods = prodsJson || []; 
+        // --- FIN DE CAMBIOS ---
 
         // group products by categoria_id (use 0 for uncategorized)
         const grouped = {};
         prods.forEach(p => {
-          const key = p.categoria_id || 0;
+          // --- CAMBIOS AQUÍ ---
+          // 3. Spring envía un objeto 'categoria', no un 'categoria_id'
+          const key = p.categoria ? p.categoria.id : 0;
           if (!grouped[key]) grouped[key] = [];
-          grouped[key].push({ ...p, imagen: p.imagen_url || p.imagen });
+          // 4. Spring envía 'imagenUrl' (camelCase)
+          grouped[key].push({ ...p, imagen: p.imagenUrl || p.imagen_url || p.imagen });
+          // --- FIN DE CAMBIOS ---
         });
 
         setCategories(cats);
@@ -50,6 +57,7 @@ export default function Productos() {
   }, []);
 
   return (
+    // ... (El resto de tu JSX está perfecto) ...
     <main className="main-content">
       <div className="container">
 

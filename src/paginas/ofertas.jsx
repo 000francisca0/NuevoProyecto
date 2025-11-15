@@ -16,7 +16,9 @@ export default function Sales() {
       try {
         const res = await fetch(`${API_BASE}/productos/on-sale`);
         const json = await res.json();
-        setItems(json?.data || []);
+        // --- ¡CAMBIO 1 AQUÍ! ---
+        // La API de Spring envía un array directo, no json.data
+        setItems(json || []);
       } catch (e) {
         console.error(e);
       } finally {
@@ -34,28 +36,40 @@ export default function Sales() {
         <div className="center-card">No hay productos en oferta por el momento.</div>
       ) : (
         <div className="grid">
-          {items.map(p => (
-            <Link key={p.id} to={`/producto/${p.id}`} className="card">
-              <img className="card-media" src={p.imagen_url} alt={p.nombre} />
-              <div className="card-body">
-                <h3 className="card-title">{p.nombre}</h3>
-                <div>
-                  <div style={{ color: 'var(--muted)', textDecoration: 'line-through' }}>
-                    {formatPrice(p.precio)}
-                  </div>
-                  <div style={{ fontWeight: 800, color: 'var(--brand)', fontSize: '1.2rem' }}>
-                    {formatPrice(p.discounted_price)}
-                  </div>
-                  <div style={{ fontSize: '.9rem', color: 'var(--muted)' }}>
-                    Descuento: {Math.round((p.discount_percentage || 0) * 100)}%
+          {items.map(p => {
+            // --- ¡CAMBIO 2 AQUÍ! ---
+            // Calculamos el precio final como en home.jsx
+            const finalPrice = Math.round(Number(p.precio || 0) * (1 - Number(p.discountPercentage || 0)));
+            
+            return (
+              <Link key={p.id} to={`/producto/${p.id}`} className="card">
+                {/* --- ¡CAMBIO 3 AQUÍ! --- */}
+                {/* Usamos 'imagenUrl' (camelCase) */}
+                <img className="card-media" src={p.imagenUrl} alt={p.nombre} />
+                <div className="card-body">
+                  <h3 className="card-title">{p.nombre}</h3>
+                  <div>
+                    <div style={{ color: 'var(--muted)', textDecoration: 'line-through' }}>
+                      {formatPrice(p.precio)}
+                    </div>
+                    <div style={{ fontWeight: 800, color: 'var(--brand)', fontSize: '1.2rem' }}>
+                      {/* --- ¡CAMBIO 4 AQUÍ! --- */}
+                      {/* Mostramos el precio final calculado */}
+                      {formatPrice(finalPrice)}
+                    </div>
+                    <div style={{ fontSize: '.9rem', color: 'var(--muted)' }}>
+                      {/* --- ¡CAMBIO 5 AQUÍ! --- */}
+                      {/* Usamos 'discountPercentage' (camelCase) */}
+                      Descuento: {Math.round((p.discountPercentage || 0) * 100)}%
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="card-actions">
-                <span className="btn btn-primary">Ver Detalle</span>
-              </div>
-            </Link>
-          ))}
+                <div className="card-actions">
+                  <span className="btn btn-primary">Ver Detalle</span>
+                </div>
+              </Link>
+            )
+          })}
         </div>
       )}
     </div>

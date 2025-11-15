@@ -74,20 +74,22 @@ function Carro() {
             <Link to="/inicio" style={{ fontWeight: 700 }}>Inicia sesión</Link> para ver tu dirección.
           </p>
         )}
-        {isLoggedIn && user?.direccion_default && (
+        
+        {/* Usamos 'direccionDefault' (camelCase) que viene de la API de Spring */}
+        {isLoggedIn && user?.direccionDefault && (
           <div className="address-info">
             <p className="mb-0">
-              <strong>{user.direccion_default.region}</strong>, {user.direccion_default.comuna}
+              <strong>{user.direccionDefault.region}</strong>, {user.direccionDefault.comuna}
             </p>
             <p className="mb-0">
-              {user.direccion_default.calle} {user.direccion_default.depto ? `(${user.direccion_default.depto})` : ''}
+              {user.direccionDefault.calle} {user.direccionDefault.depto ? `(${user.direccionDefault.depto})` : ''}
             </p>
             <p style={{ fontSize: '0.85rem', color: 'var(--brand-hover)' }}>
               *Dirección registrada.
             </p>
           </div>
         )}
-        {isLoggedIn && !user?.direccion_default && (
+        {isLoggedIn && !user?.direccionDefault && (
           <p style={{ color: 'red' }}>Error: No hay dirección registrada.</p>
         )}
       </div>
@@ -286,4 +288,6 @@ function Carro() {
   );
 }
 
+// --- ¡CAMBIO AQUÍ! ---
+// Eliminamos el 'export default Carro;' duplicado que estaba aquí y causaba el error.
 export default Carro;

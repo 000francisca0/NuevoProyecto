@@ -16,8 +16,11 @@ export default function AdminReportes() {
       fetch(`${API_BASE}/reportes/sales${qs}`).then(r=>r.json()),
       fetch(`${API_BASE}/reportes/top-products${qs}`).then(r=>r.json()),
     ]);
-    setSales(s.data || null);
-    setTops(t.data || []);
+    
+    // --- CAMBIOS AQUÍ ---
+    setSales(s || null); // Arreglado (antes era s.data)
+    setTops(t || []);   // Arreglado (antes era t.data)
+    // --- FIN DE CAMBIOS ---
   }
 
   return (

@@ -1,4 +1,3 @@
-// src/paginas/inicio.jsx
 import React, { useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -29,22 +28,29 @@ export default function LoginForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-      const data = await resp.json();
+      const data = await resp.json(); // 'data' ES el objeto de usuario
       if (!resp.ok) {
         setServerError(data?.error || 'Credenciales incorrectas.');
         setIsLoading(false);
         return;
       }
-      login(data.user);
+      
+      // --- CAMBIO 1 AQUÍ ---
+      // El objeto 'data' ES el usuario, no 'data.user'
+      login(data);
 
       const from = location.state?.from?.pathname;
       if (from) {
         navigate(from, { replace: true });
         return;
       }
-      if (data.user.rol === 'Administrador') navigate('/admin', { replace: true });
+
+      // --- CAMBIO 2 AQUÍ ---
+      // Leemos 'data.rol' directamente
+      if (data.rol === 'Administrador') navigate('/admin', { replace: true });
       else navigate('/', { replace: true });
-    } catch {
+
+    } catch (err) { // El TypeError (data.user.rol) caía aquí
       setServerError('No se pudo conectar con el servidor.');
       setIsLoading(false);
     }
@@ -86,33 +92,21 @@ export default function LoginForm() {
               <FaLock className="input-icon" />
             </div>
           </div>
-
-          {/* --- 👇 CAMBIO AQUÍ --- */}
-          {/* 1. Agregamos un div contenedor para los dos botones */}
-          <div className="form-group" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', alignItems: 'center' }}>
-            
-            {/* 2. Movimos el Link de "Volver a Home" aquí y le dimos estilo de botón */}
-            <Link 
-              to="/" 
-              className="btn btn-ghost" // Le damos estilo de botón fantasma
-              style={{ textAlign: 'center' }} // Aseguramos que el texto esté centrado
-            >
-              Volver a Home
-            </Link>
-
-            {/* 3. Quitamos la clase 'btn-block' del botón de Ingresar */}
-            <button type="submit" className="btn btn-primary" disabled={isLoading}>
+          
+          {/* Dejé los botones como estaban en tu código original */}
+          <div className="form-group">
+            <button type="submit" className="btn btn-primary btn-block" disabled={isLoading}>
               {isLoading ? 'Ingresando...' : 'Ingresar'}
             </button>
           </div>
-          {/* --- FIN DEL CAMBIO --- */}
-
 
           <Link to="/registro" className="text-center" style={{ display: 'block', marginTop: 12 }}>
             ¿No tienes cuenta? Regístrate
           </Link>
 
-          {/* 4. Eliminamos el Link de "Volver a Home" que estaba aquí abajo */}
+          <Link to="/" className="text-center" style={{ display: 'block', marginTop: 8 }}>
+            Volver a Home
+          </Link>
           
         </form>
       </div>

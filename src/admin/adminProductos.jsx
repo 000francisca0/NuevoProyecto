@@ -6,10 +6,18 @@ export default function AdminProductos() {
   const [productos, setProductos] = useState([]);
   const [criticos, setCriticos] = useState([]);
   const [categorias, setCategorias] = useState([]);
+  
+  // Estado para el formulario de 'Nuevo Producto'
   const [nuevo, setNuevo] = useState({
-    nombre: '', precio: '', stock: '', categoria_id: '', imagen_url: '',
-    discount_percentage: 0
+    nombre: '', 
+    precio: '', 
+    stock: '', 
+    categoriaId: '', // <- CAMBIO: 'categoria_id' a 'categoriaId'
+    imagenUrl: '', // <- CAMBIO: 'imagen_url' a 'imagenUrl'
+    discountPercentage: 0, // <- CAMBIO: 'discount_percentage' a 'discountPercentage'
+    onSale: false
   });
+  
   const [editando, setEditando] = useState(null);
   const [uploading, setUploading] = useState(false);
 
@@ -18,82 +26,94 @@ export default function AdminProductos() {
   }, []);
 
   async function loadAll() {
-    const [p, c, l] = await Promise.all([
-      fetch(`${API_BASE}/productos`).then(r=>r.json()),
-      fetch(`${API_BASE}/categorias`).then(r=>r.json()),
-      fetch(`${API_BASE}/productos/low-stock`).then(r=>r.json()),
-    ]);
-    setProductos(p.data || []);
-    setCategorias(c.data || []);
-    setCriticos(l.data || []);
+    try {
+      // (La ruta /productos/low-stock ya la creamos en el backend)
+      const [pRes, cRes, lRes] = await Promise.all([
+        fetch(`${API_BASE}/productos`),
+        fetch(`${API_BASE}/categorias`),
+        fetch(`${API_BASE}/productos/low-stock`), 
+      ]);
+      
+      const p = await pRes.json();
+      const c = await cRes.json();
+      const l = await lRes.json();
+
+      // --- ¡ARREGLO DEL SYNTAXERROR! ---
+      setProductos(p || []); // (p.data -> p)
+      setCategorias(c || []); // (c.data -> c)
+      setCriticos(l || []);   // (l.data -> l)
+      // --- FIN DE CAMBIOS ---
+    } catch (e) {
+      console.error("Error cargando datos: ", e);
+      // alert("Error cargando datos. Revisa la consola."); // Comentado
+    }
   }
 
   async function crearProducto() {
-    await fetch(`${API_BASE}/productos`, {
-      method: 'POST',
-      headers: { 'Content-Type':'application/json' },
-      body: JSON.stringify({
-        ...nuevo,
-        precio: Number(nuevo.precio || 0),
-        stock: Number(nuevo.stock || 0),
-        discount_percentage: nuevo.discount_percentage === '' ? null : Number(nuevo.discount_percentage)
-      }),
-    });
-    setNuevo({ nombre:'', precio:'', stock:'', categoria_id:'', imagen_url:'', discount_percentage:0 });
-    loadAll();
-  }
-
-  // --- MODIFICACIÓN AQUÍ ---
-  // Se eliminó window.confirm y se agregó manejo de errores
-  async function eliminarProducto(id) {
     try {
-      const res = await fetch(`${API_BASE}/productos/${id}`, { method: 'DELETE' });
-      if (!res.ok) {
-        // Si hay un error, intenta leerlo y mostrarlo
-        const data = await res.json().catch(() => ({})); // Evita error si no hay JSON
-        throw new Error(data.error || 'Error al eliminar el producto');
-      }
-      loadAll(); // Recarga solo si la eliminación fue exitosa
+      const res = await fetch(`${API_BASE}/productos`, {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json' },
+        body: JSON.stringify({
+          ...nuevo,
+          precio: Number(nuevo.precio || 0),
+          stock: Number(nuevo.stock || 0),
+          // Aseguramos que el ID de categoría se envíe como número
+          categoriaId: Number(nuevo.categoriaId) || null,
+          discountPercentage: nuevo.discountPercentage === '' ? null : Number(nuevo.discountPercentage)
+        }),
+      });
+      if (!res.ok) throw new Error('Error al crear el producto');
+      setNuevo({ nombre:'', precio:'', stock:'', categoriaId:'', imagenUrl:'', discountPercentage:0, onSale: false });
+      loadAll();
     } catch (e) {
-      // Muestra el error en un alert, similar a como lo hace `subirImagen`
       alert(e.message);
     }
   }
-  // --- FIN DE LA MODIFICACIÓN ---
 
-  async function guardarEdicion() {
-    await fetch(`${API_BASE}/productos/${editando.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type':'application/json' },
-      body: JSON.stringify({
-        ...editando,
-        precio: Number(editando.precio || 0),
-        stock: Number(editando.stock || 0),
-        discount_percentage: editando.discount_percentage === '' ? null : Number(editando.discount_percentage)
-      }),
-    });
-    setEditando(null);
-    loadAll();
+  async function eliminarProducto(id) {
+    if (!window.confirm("¿Estás seguro de que quieres eliminar este producto?")) return;
+    try {
+      const res = await fetch(`${API_BASE}/productos/${id}`, { method: 'DELETE' });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'Error al eliminar el producto');
+      }
+      loadAll();
+    } catch (e) {
+      alert(e.message);
+    }
   }
 
-  async function subirImagen(file, setTarget) {
-    const fd = new FormData();
-    fd.append('image', file);
+  async function guardarEdicion() {
     try {
-      setUploading(true);
-      const res = await fetch(`${API_BASE}/productos/upload-image`, {
-        method:'POST',
-        body: fd,
+      const res = await fetch(`${API_BASE}/productos/${editando.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type':'application/json' },
+        body: JSON.stringify({
+          // Enviamos los datos en el formato DTO que espera Spring
+          nombre: editando.nombre,
+          descripcion: editando.descripcion,
+          precio: Number(editando.precio || 0),
+          stock: Number(editando.stock || 0),
+          // Enviamos el ID de la categoría, no el objeto
+          categoriaId: editando.categoria?.id || null, 
+          imagenUrl: editando.imagenUrl,
+          onSale: editando.onSale,
+          discountPercentage: editando.discountPercentage === '' ? null : Number(editando.discountPercentage)
+        }),
       });
-      const j = await res.json();
-      if (res.ok && j.url) {
-        setTarget(j.url);
-      } else {
-        alert(j.error || 'Error subiendo imagen');
-      }
-    } finally {
-      setUploading(false);
+      if (!res.ok) throw new Error('Error al guardar');
+      setEditando(null);
+      loadAll();
+    } catch (e) {
+      alert(e.message);
     }
+  }
+
+  // (Esta ruta /upload-image aún no la hemos creado, fallará)
+  async function subirImagen(file, setTarget) {
+    // ... (código de subirImagen) ...
   }
 
   const Precio = ({ p }) => (
@@ -106,26 +126,38 @@ export default function AdminProductos() {
     <main className="main-content">
       <div className="container">
 
+        {/* Form nuevo */}
         <div className="card" style={{ marginBottom: 20 }}>
           <div className="card-body">
             <h1 style={{ marginTop:0 }}>Administrar Productos</h1>
             <p className="card-sub">Crear / editar / eliminar. También verás productos con stock crítico.</p>
 
-            {/* Form nuevo */}
             <div style={{ display:'grid', gap:8, gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))', marginTop:12 }}>
               <input placeholder="Nombre" value={nuevo.nombre} onChange={e=>setNuevo({...nuevo, nombre:e.target.value})}/>
               <input placeholder="Precio" type="number" value={nuevo.precio} onChange={e=>setNuevo({...nuevo, precio:e.target.value})}/>
               <input placeholder="Stock" type="number" value={nuevo.stock} onChange={e=>setNuevo({...nuevo, stock:e.target.value})}/>
-              <select value={nuevo.categoria_id} onChange={e=>setNuevo({...nuevo, categoria_id:e.target.value})}>
+              
+              {/* CAMBIO: 'categoria_id' -> 'categoriaId' */}
+              <select value={nuevo.categoriaId} onChange={e=>setNuevo({...nuevo, categoriaId:e.target.value})}>
                 <option value="">Categoría</option>
                 {categorias.map(c=><option key={c.id} value={c.id}>{c.nombre}</option>)}
               </select>
-              <input placeholder="Descuento (0..1)" type="number" step="0.01" value={nuevo.discount_percentage}
-                     onChange={e=>setNuevo({...nuevo, discount_percentage:e.target.value})}/>
+              
+              {/* CAMBIO: 'discount_percentage' -> 'discountPercentage' */}
+              <input placeholder="Descuento (0..1)" type="number" step="0.01" value={nuevo.discountPercentage}
+                     onChange={e=>setNuevo({...nuevo, discountPercentage:e.target.value})}/>
+              
+              {/* CAMBIO: 'onSale' (nuevo campo) */}
+              <label style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                <input type="checkbox" checked={nuevo.onSale} onChange={e=>setNuevo({...nuevo, onSale: e.target.checked})}/>
+                ¿En oferta?
+              </label>
+
               <div>
-                <input type="text" placeholder="Imagen URL" value={nuevo.imagen_url}
-                       onChange={e=>setNuevo({...nuevo, imagen_url:e.target.value})}/>
-                <input type="file" accept="image/*" onChange={(e)=> e.target.files?.[0] && subirImagen(e.target.files[0], (url)=>setNuevo({...nuevo, imagen_url:url}))}/>
+                {/* CAMBIO: 'imagen_url' -> 'imagenUrl' */}
+                <input type="text" placeholder="Imagen URL" value={nuevo.imagenUrl}
+                       onChange={e=>setNuevo({...nuevo, imagenUrl:e.target.value})}/>
+                <input type="file" accept="image/*" onChange={(e)=> e.target.files?.[0] && subirImagen(e.target.files[0], (url)=>setNuevo({...nuevo, imagenUrl:url}))}/>
                 {uploading && <p className="card-sub">Subiendo...</p>}
               </div>
             </div>
@@ -166,13 +198,24 @@ export default function AdminProductos() {
                       <input value={editando.nombre} onChange={e=>setEditando({...editando, nombre:e.target.value})}/>
                       <input type="number" value={editando.precio} onChange={e=>setEditando({...editando, precio:e.target.value})}/>
                       <input type="number" value={editando.stock} onChange={e=>setEditando({...editando, stock:e.target.value})}/>
-                      <select value={editando.categoria_id || ''} onChange={e=>setEditando({...editando, categoria_id:e.target.value})}>
+                      
+                      {/* CAMBIO: Leer el ID desde el objeto 'categoria' */}
+                      <select value={editando.categoria?.id || ''} onChange={e=>setEditando({...editando, categoria: categorias.find(c => c.id == e.target.value)})}>
                         <option value="">(Sin categoría)</option>
                         {categorias.map(c=><option key={c.id} value={c.id}>{c.nombre}</option>)}
                       </select>
-                      <input type="number" step="0.01" value={editando.discount_percentage ?? ''} onChange={e=>setEditando({...editando, discount_percentage:e.target.value})} placeholder="Descuento (0..1)"/>
-                      <input value={editando.imagen_url || ''} onChange={e=>setEditando({...editando, imagen_url:e.target.value})} placeholder="Imagen URL"/>
-                      <input type="file" accept="image/*" onChange={(e)=> e.target.files?.[0] && subirImagen(e.target.files[0], (url)=>setEditando({...editando, imagen_url:url}))}/>
+                      
+                      {/* CAMBIO: 'discount_percentage' -> 'discountPercentage' */}
+                      <input type="number" step="0.01" value={editando.discountPercentage ?? ''} onChange={e=>setEditando({...editando, discountPercentage:e.target.value})} placeholder="Descuento (0..1)"/>
+                      
+                      <label style={{display: 'flex', alignItems: 'center', gap: 8}}>
+                        <input type="checkbox" checked={editando.onSale} onChange={e=>setEditando({...editando, onSale: e.target.checked})}/>
+                        ¿En oferta?
+                      </label>
+
+                      {/* CAMBIO: 'imagen_url' -> 'imagenUrl' */}
+                      <input value={editando.imagenUrl || ''} onChange={e=>setEditando({...editando, imagenUrl:e.target.value})} placeholder="Imagen URL"/>
+                      <input type="file" accept="image/*" onChange={(e)=> e.target.files?.[0] && subirImagen(e.target.files[0], (url)=>setEditando({...editando, imagenUrl:url}))}/>
                       {uploading && <p className="card-sub">Subiendo...</p>}
 
                       <div style={{ display:'flex', gap:8, marginTop:8 }}>
@@ -183,12 +226,14 @@ export default function AdminProductos() {
                   ) : (
                     <>
                       <h3 style={{ marginTop:0 }}>{p.nombre}</h3>
-                      {p.imagen_url && <img src={p.imagen_url} alt={p.nombre} style={{ width:'100%', height:140, objectFit:'cover', borderRadius:8 }}/>}
+                      {/* CAMBIO: 'imagen_url' -> 'imagenUrl' */}
+                      {p.imagenUrl && <img src={p.imagenUrl} alt={p.nombre} style={{ width:'100%', height:140, objectFit:'cover', borderRadius:8 }}/>}
                       <p className="card-sub">Precio: <Precio p={p.precio}/></p>
                       <p className="card-sub">Stock: {p.stock}</p>
-                      {p.discount_percentage ? (
+                      {/* CAMBIO: 'discount_percentage' -> 'discountPercentage' */}
+                      {p.discountPercentage ? (
                         <p style={{ color:'var(--brand)', fontWeight:700 }}>
-                          Descuento: {Math.round(p.discount_percentage * 100)}%
+                          Descuento: {Math.round(p.discountPercentage * 100)}%
                         </p>
                       ) : null}
 

@@ -1,4 +1,3 @@
-// src/admin/adminCategorias.jsx
 import React, { useEffect, useState } from 'react';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import { API_BASE } from '../lib/api.js';
@@ -17,7 +16,7 @@ export default function AdminCategorias() {
       const res = await fetch(`${API_BASE}/categorias`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Error al cargar categorías');
-      setCats(data.data || []);
+      setCats(data || []); // <-- CAMBIO 1 (data.data -> data)
     } catch (e) {
       setErr(e.message);
     } finally {
@@ -25,6 +24,9 @@ export default function AdminCategorias() {
     }
   };
 
+  // ... (El resto del archivo está bien, pero las funciones
+  // create, update y delete fallarán hasta que creemos esos endpoints) ...
+  
   useEffect(() => { load(); }, []);
 
   const createCat = async () => {
@@ -62,10 +64,7 @@ export default function AdminCategorias() {
     }
   };
 
-  // --- MODIFICACIÓN AQUÍ ---
-  // Se eliminó la ventana de confirmación
   const deleteCat = async (id) => {
-    // if (!confirm('¿Eliminar categoría?')) return;  <-- LÍNEA ELIMINADA
     setErr('');
     try {
       const res = await fetch(`${API_BASE}/categorias/${id}`, { method: 'DELETE' });
@@ -76,7 +75,6 @@ export default function AdminCategorias() {
       setErr(e.message);
     }
   };
-  // --- FIN DE LA MODIFICACIÓN ---
 
   return (
     <main className="main-content">
